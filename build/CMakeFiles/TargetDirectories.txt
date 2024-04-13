@@ -1,0 +1,4 @@
+/home/quark/pace/pace2024/build/CMakeFiles/common.dir
+/home/quark/pace/pace2024/build/CMakeFiles/pace.dir
+/home/quark/pace/pace2024/build/CMakeFiles/edit_cache.dir
+/home/quark/pace/pace2024/build/CMakeFiles/rebuild_cache.dir
