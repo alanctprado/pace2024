@@ -24,7 +24,8 @@
 /**
  * Basic graph class.
  */
-class Graph : public TGraph<int> {
+class Graph : public TGraph<int>
+{
  protected:
   std::vector<std::vector<bool>> m_adjacencyMatrix;
   std::vector<unsigned> m_vertexDegrees;

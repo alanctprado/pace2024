@@ -1,0 +1,49 @@
+/******************************************************************************
+ * Top contributors (to current version):
+ *   Alan Prado
+ *
+ * This file is part of Banana, a one-sided crossing minimization solver.
+ *
+ * Copyright (c) 2024 by the authors listed in the file AUTHORS in the
+ * top-level source directory and their institutional affiliations. All rights
+ * reserved. See the file LICENSE.md in the top-level source directory for
+ * licensing information.
+ * ****************************************************************************
+ *
+ * Bipartite graph class.
+ */
+
+#ifndef __PACE2024__BIPARTITE_GRAPH_H
+#define __PACE2024__BIPARTITE_GRAPH_H
+
+#include "graph.h"
+
+/**
+ * Bipartite graph class.
+ *
+ * A graph whose vertices can be divided into two disjoint and independent sets
+ * A and B, that is, every edge connects a vertex in A to one in B. Suitable
+ * for defining methods that are exclusive to or useful on bipartite graphs.
+ */
+class BipartiteGraph : public Graph
+{
+ public:
+  BipartiteGraph(int n0, int n1);
+  BipartiteGraph(const BipartiteGraph& H);  // Copy constructor
+  ~BipartiteGraph() = default;
+
+  /** Get the number of vertices in part A */
+  unsigned countVerticesA();
+  /** Get the number of vertices in part B */
+  unsigned countVerticesB();
+  /**
+   * Builds a crossing matrix (edge crosses between each pair of vertices)
+   * indexed by the vertices in part B.
+   * */
+  std::vector<std::vector<int>> buildCrossingMatrix();
+
+ protected:
+  std::vector<int> m_partA, m_partB;
+};
+
+#endif  // __PACE2024__BIPARTITE_GRAPH_HPP
