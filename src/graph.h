@@ -18,15 +18,22 @@
 
 #include "abstract_graph.h"
 
+#include <memory>
 #include <vector>
 
 /**
  * Basic graph class.
  */
 class Graph : public TGraph<int> {
+ protected:
+  std::vector<std::vector<bool>> m_adjacencyMatrix;
+  std::vector<unsigned> m_vertexDegrees;
+  std::vector<int> m_vertexLabels;
+  unsigned m_edgeCount;
+
  public:
   Graph(int n);
-  Graph(const Graph& H);
+  Graph(const Graph& H);  // Copy constructor
   ~Graph() = default;
 
   /** Adds edge (u, v) to graph */
@@ -37,6 +44,9 @@ class Graph : public TGraph<int> {
   bool hasEdge(int u, int v) const override;
   /** Get the number of edges in the graph */
   unsigned countEdges() const override;
+  /** Edge set of the graph. */
+  std::vector<Edge> edges() const override;
+
   /** Get the number of vertices in the graph */
   unsigned countVertices() const override;
   /** Get the neighbors of vertex 'u' */
@@ -49,22 +59,20 @@ class Graph : public TGraph<int> {
    * which are neighbors of either 'u' or 'v', but not both.
    */
   std::vector<int> symmetricDifference(int u, int v) const override;
-  /** Get the adjacency list representation of the graph. */
-  std::vector<std::vector<int>> adjacencyList() const override;
-  /** Edge set of the graph. */
-  std::vector<Edge> edges() const override;
   /** Get the degree of vertex 'u'. */
   unsigned degree(int u) const override;
   /** Get the degree vector of the graph. */
   std::vector<unsigned> degree() const override;
   /** Get the label corresponding to a vertex 'u' */
   unsigned label(int u) const override;
+
   /** Checks if the graph is connected */
   bool isConnected() const override;
   /** Checks if the graph is a tree */
   bool isTree() const override;
   /** Checks if the graph is bipartite */
   bool isBipartite() const override;
+
   /**
    * Creates the complement (inverse) of the graph.
    *
@@ -72,10 +80,10 @@ class Graph : public TGraph<int> {
    * vertices are adjacent if and only if they are not adjacent in the original
    * graph.
    */
-  TGraph complement() const override;
+  std::unique_ptr<TGraph> complement() const override;
   /** Divides a graph into disjoint subgraphs */
-  std::vector<TGraph>
-    disjointSubgraphs(std::vector<std::vector<int>> subsets) const override;
+  std::vector<std::unique_ptr<TGraph>>
+  disjointSubgraphs(std::vector<std::vector<int>>& subsets) const override;
   /**
    * Creates the quotient graph from 'partition'.
    *
@@ -83,12 +91,17 @@ class Graph : public TGraph<int> {
    * adjacent to another if some vertex in it is adjacent to some vertex in the
    * other with respect to the edge set of the original graph.
    */
-  TGraph quotient(std::vector<std::vector<int>>& partition) const override;
+  std::unique_ptr<TGraph>
+  quotient(std::vector<std::vector<int>>& partition) const override;
+
   /** TO-DO */
   std::vector<std::vector<int>>
-  modularPartition(std::vector<std::vector<int>> &P) const override;
+  modularPartition(std::vector<std::vector<int>>& partition) const override;
   /** TO-DO */
   std::vector<std::vector<int>> primeDecomposition() const override;
+
+  /** Get the adjacency list representation of the graph. */
+  std::vector<std::vector<int>> adjacencyList() const override;
 };
 
 #endif  // __PACE2024__GRAPH_HPP

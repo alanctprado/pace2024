@@ -16,6 +16,7 @@
 #ifndef __PACE2024__ABSTRACT_GRAPH_HPP
 #define __PACE2024__ABSTRACT_GRAPH_HPP
 
+#include <memory>
 #include <vector>
 
 /**
@@ -29,8 +30,7 @@ class TGraph {
   typedef std::pair<T, T> Edge;
 
  public:
-  TGraph(int n) {}
-  TGraph(const TGraph& H) {} // Copy constructor
+  TGraph() {}
   virtual ~TGraph() {}
 
   /** Adds edge (u, v) to graph */
@@ -76,10 +76,10 @@ class TGraph {
    * vertices are adjacent if and only if they are not adjacent in the original
    * graph.
    */
-  virtual TGraph<T> complement() const = 0;
+  virtual std::unique_ptr<TGraph> complement() const = 0;
   /** Divides a graph into disjoint subgraphs */
-  virtual std::vector<TGraph<T>>
-    disjointSubgraphs(std::vector<std::vector<T>> subsets) const = 0;
+  virtual std::vector<std::unique_ptr<TGraph>>
+  disjointSubgraphs(std::vector<std::vector<T>>& subsets) const = 0;
   /**
    * Creates the quotient graph from 'partition'.
    *
@@ -87,7 +87,8 @@ class TGraph {
    * adjacent to another if some vertex in it is adjacent to some vertex in the
    * other with respect to the edge set of the original graph.
    */
-  virtual TGraph<T> quotient(std::vector<std::vector<T>>& partition) const;
+  virtual std::unique_ptr<TGraph> 
+  quotient(std::vector<std::vector<T>>& partition) const = 0;
   /** TO-DO */
   virtual std::vector<std::vector<T>>
   modularPartition(std::vector<std::vector<T>> &P) const = 0;
