@@ -145,6 +145,11 @@ bool Graph::isConnected() const
   return true;
 }
 
+bool Graph::isTree() const
+{
+    return isConnected() && (countEdges() == countVertices() - 1);
+}
+
 bool Graph::isBipartite() const
 {
   int n = countVertices();
@@ -375,4 +380,18 @@ std::vector<std::vector<int>> Graph::primeDecomposition() const
     }
   }
   return ret;
+}
+
+std::vector<std::vector<int>> Graph::adjacencyList() const
+{
+  int n = countVertices();
+  std::vector<std::vector<int>> adjacency_list(n);
+  for (int u = 0; u < n; u++)
+  {
+    for (int v : neighborhood(u))
+    {
+      adjacency_list[u].push_back(v);
+    }
+  }
+  return adjacency_list;
 }

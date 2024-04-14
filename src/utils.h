@@ -23,7 +23,8 @@
 inline void readNextLine(std::istringstream& in)
 {
   std::string line;
-  while (std::getline(std::cin, line)) {
+  while (std::getline(std::cin, line))
+  {
     if (line[0] == 'c') continue;
     in = std::istringstream(line);
     return;
@@ -31,7 +32,7 @@ inline void readNextLine(std::istringstream& in)
   assert(false);
 }
 
-inline void readBipartiteGraph(std::unique_ptr<BipartiteGraph> input_graph)
+inline void readBipartiteGraph(std::unique_ptr<BipartiteGraph>& input_graph)
 {
   std::istringstream in;
   readNextLine(in);

@@ -41,6 +41,9 @@ class TGraph {
   virtual bool hasEdge(T u, T v) const = 0;
   /** Get the number of edges in the graph */
   virtual unsigned countEdges() const = 0;
+  /** Edge set of the graph. */
+  virtual std::vector<Edge> edges() const = 0;
+
   /** Get the number of vertices in the graph */
   virtual unsigned countVertices() const = 0;
   /** Get the neighbors of vertex 'u' */
@@ -53,22 +56,20 @@ class TGraph {
    * which are neighbors of either 'u' or 'v', but not both.
    */
   virtual std::vector<T> symmetricDifference(T u, T v) const = 0;
-  /** Get the adjacency list representation of the graph. */
-  virtual std::vector<std::vector<T>> adjacencyList() const = 0;
-  /** Edge set of the graph. */
-  virtual std::vector<Edge> edges() const = 0;
   /** Get the degree of vertex 'u'. */
   virtual unsigned degree(T u) const = 0;
   /** Get the degree vector of the graph. */
   virtual std::vector<unsigned> degree() const = 0;
   /** Get the label corresponding to a vertex 'u' */
   virtual unsigned label(T u) const = 0;
+
   /** Checks if the graph is connected */
   virtual bool isConnected() const = 0;
   /** Checks if the graph is a tree */
   virtual bool isTree() const = 0;
   /** Checks if the graph is bipartite */
   virtual bool isBipartite() const = 0;
+
   /**
    * Creates the complement (inverse) of the graph.
    *
@@ -94,6 +95,9 @@ class TGraph {
   modularPartition(std::vector<std::vector<T>> &P) const = 0;
   /** TO-DO */
   virtual std::vector<std::vector<T>> primeDecomposition() const = 0;
+
+  /** Get the adjacency list representation of the graph. */
+  virtual std::vector<std::vector<T>> adjacencyList() const = 0;
 };
 
 #endif  // __PACE2024__ABSTRACT_GRAPH_HPP
