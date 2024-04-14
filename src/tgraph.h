@@ -10,7 +10,7 @@
  * licensing information.
  * ****************************************************************************
  *
- * Basic Graph class
+ * Basic Graph template
  */
 
 #ifndef __PACE2024__TGRAPH_HPP
@@ -27,12 +27,6 @@ template <class T> // Define, someday, a Vertex class? Rita? 👀
 class TGraph {
  protected:
   typedef std::pair<T, T> Edge;
-  typedef std::vector<Edge> ContractionSequence;
-
-  std::vector<std::vector<bool>> m_graph;
-  std::vector<unsigned> m_degrees;
-  std::vector<unsigned> m_labels;
-  int m_edgeCount;
 
  public:
   TGraph(int n);
@@ -83,17 +77,22 @@ class TGraph {
    * graph.
    */
   virtual TGraph<T> complement() const = 0;
+  /** Divides a graph into disjoint subgraphs */
   virtual std::vector<TGraph<T>>
-    subdivision(std::vector<std::vector<T>> classes) const = 0;
+    disjointSubgraphs(std::vector<std::vector<T>> subsets) const = 0;
+  /**
+   * Creates the quotient graph from 'partition'.
+   *
+   * The quotient graph vertices are the blocks of 'partition', and a block is
+   * adjacent to another if some vertex in it is adjacent to some vertex in the
+   * other with respect to the edge set of the original graph.
+   */
   virtual TGraph<T> quotient(std::vector<std::vector<T>>& partition) const;
-  std::vector<std::vector<int>> refine(std::vector<std::vector<int>> &partition, std::vector<int> pivot) const;
-  std::vector<std::vector<int>> modular_partition(std::vector<std::vector<int>> &P) const;
-  std::vector<std::vector<int>> prime_decomposition() const;
-  std::pair<std::vector<Graph>, std::vector<std::pair<int, std::vector<int>>>> decompose() const;
-  void decompose(std::vector<Graph>& g,  std::vector<std::pair<int, std::vector<int>>>& modular_tree, int parent) const;
-  ContractionSequence recompose(std::vector<std::pair<ContractionSequence, int>>& seq, std::vector<std::pair<int, std::vector<int>>>& modular_tree) const;
-	std::pair<int, std::vector<Edge>> greedy_upper_bound() const;
-	int greedy_lower_bound() const;
+  /** TO-DO */
+  virtual std::vector<std::vector<int>>
+  modularPartition(std::vector<std::vector<int>> &P) const = 0;
+  /** TO-DO */
+  virtual std::vector<std::vector<int>> primeDecomposition() const = 0;
 };
 
 #endif  // __PACE2024__GRAPH_HPP
