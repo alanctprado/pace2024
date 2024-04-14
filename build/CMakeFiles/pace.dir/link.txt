@@ -1,1 +1,0 @@
-/usr/bin/c++ -Ofast CMakeFiles/pace.dir/src/main.cpp.o CMakeFiles/common.dir/src/graph.cpp.o -o pace 
