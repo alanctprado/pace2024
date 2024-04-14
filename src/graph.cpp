@@ -7,10 +7,10 @@
 
 Graph::Graph(int n) : TGraph<int>()
 {
-    m_adjacencyMatrix.assign(n, std::vector<bool>(n, false));
-    m_vertexDegrees.assign(n, 0);
-    std::iota(m_vertexLabels.begin(), m_vertexLabels.end(), 0);
-    m_edgeCount = 0;
+  m_adjacencyMatrix.assign(n, std::vector<bool>(n, false));
+  m_vertexDegrees.assign(n, 0);
+  std::iota(m_vertexLabels.begin(), m_vertexLabels.end(), 0);
+  m_edgeCount = 0;
 }
 
 Graph::Graph(const Graph &H)
@@ -23,20 +23,20 @@ Graph::Graph(const Graph &H)
 
 void Graph::addEdge(int u, int v)
 {
-    assert(u != v);
-    if (m_adjacencyMatrix[u][v]) return;
-    m_adjacencyMatrix[u][v] = m_adjacencyMatrix[v][u] = true;
-    m_vertexDegrees[u]++, m_vertexDegrees[v]++;
-    m_edgeCount++;
+  assert(u != v);
+  if (m_adjacencyMatrix[u][v]) return;
+  m_adjacencyMatrix[u][v] = m_adjacencyMatrix[v][u] = true;
+  m_vertexDegrees[u]++, m_vertexDegrees[v]++;
+  m_edgeCount++;
 }
 
 void Graph::removeEdge(int u, int v)
 {
-    assert(u != v);
-    if (!m_adjacencyMatrix[u][v]) return;
-    m_adjacencyMatrix[u][v] = m_adjacencyMatrix[v][u] = false;
-    m_vertexDegrees[u]--, m_vertexDegrees[v]--;
-    m_edgeCount--;
+  assert(u != v);
+  if (!m_adjacencyMatrix[u][v]) return;
+  m_adjacencyMatrix[u][v] = m_adjacencyMatrix[v][u] = false;
+  m_vertexDegrees[u]--, m_vertexDegrees[v]--;
+  m_edgeCount--;
 }
 
 bool Graph::hasEdge(int u, int v) const
@@ -47,7 +47,7 @@ bool Graph::hasEdge(int u, int v) const
 
 unsigned Graph::countEdges() const
 {
-    return m_edgeCount;
+  return m_edgeCount;
 }
 
 unsigned Graph::countVertices() const
@@ -70,8 +70,7 @@ std::vector<int> Graph::symmetricDifference(int u, int v) const
   std::vector<int> symmetric_difference;
   for (unsigned i = 0; i < countVertices(); i++)
   {
-    if (i != u && i != v &&
-        m_adjacencyMatrix[u][i] != m_adjacencyMatrix[v][i])
+    if (i != u && i != v && m_adjacencyMatrix[u][i] != m_adjacencyMatrix[v][i])
     {
       symmetric_difference.push_back(i);
     }
@@ -84,10 +83,10 @@ std::vector<Graph::Edge> Graph::edges() const
   std::vector<Edge> edge_set;
   for (unsigned i = 0; i < countVertices(); i++)
   {
-      for (int j = i + 1; j < countVertices(); j++)
+    for (int j = i + 1; j < countVertices(); j++)
     {
-          if (m_adjacencyMatrix[i][j]) { edge_set.emplace_back(i, j); }
-      }
+      if (m_adjacencyMatrix[i][j]) { edge_set.emplace_back(i, j); }
+    }
   }
   return edge_set;
 }
@@ -170,7 +169,8 @@ std::unique_ptr<TGraph<int>> Graph::complement() const
 }
 
 std::vector<std::unique_ptr<TGraph<int>>>
-Graph::disjointSubgraphs(std::vector<std::vector<int>>& subsets) const {
+Graph::disjointSubgraphs(std::vector<std::vector<int>>& subsets) const
+{
   std::vector<int> new_label(countVertices());
   std::vector<int> subset_id(countVertices());
 
