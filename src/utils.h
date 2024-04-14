@@ -22,31 +22,31 @@
 
 inline void readNextLine(std::istringstream& in)
 {
-	std::string line;
-	while (std::getline(std::cin, line)) {
-		if (line[0] == 'c') continue;
-		in = std::istringstream(line);
-		return;
-	}
-	assert(false);
+  std::string line;
+  while (std::getline(std::cin, line)) {
+    if (line[0] == 'c') continue;
+    in = std::istringstream(line);
+    return;
+  }
+  assert(false);
 }
 
 inline void readBipartiteGraph(std::unique_ptr<BipartiteGraph> input_graph)
 {
-	std::istringstream in;
-	readNextLine(in);
+  std::istringstream in;
+  readNextLine(in);
 
-	std::string discard;
-	int n_a, n_b, edge_count;
-	in >> discard >> discard >> n_a >> n_b >> edge_count;
+  std::string discard;
+  int n_a, n_b, edge_count;
+  in >> discard >> discard >> n_a >> n_b >> edge_count;
 
-	input_graph = std::make_unique<BipartiteGraph> (n_a, n_b);
+  input_graph = std::make_unique<BipartiteGraph> (n_a, n_b);
 
-	for (unsigned i = 0; i < (unsigned) edge_count; i++)
+  for (unsigned i = 0; i < (unsigned) edge_count; i++)
   {
-		readNextLine(in);
-		int a, b;
-		in >> a >> b;
-		input_graph->addEdge(a - 1, b - 1);
-	}
+    readNextLine(in);
+    int a, b;
+    in >> a >> b;
+    input_graph->addEdge(a - 1, b - 1);
+  }
 }
