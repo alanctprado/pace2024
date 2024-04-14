@@ -1,6 +1,6 @@
 /******************************************************************************
  * Top contributors (to current version):
- *   Emanuel Juliano, Alan Prado, Kaio Vieira, Guilherme Gomes
+ *   Alan Prado, Kaio Vieira, Laila Lopes, Guilherme Gomes
  *
  * This file is part of Banana, a one-sided crossing minimization solver.
  *
@@ -10,7 +10,7 @@
  * licensing information.
  * ****************************************************************************
  *
- * Basic Graph template
+ * Definition of an abstract graph class
  */
 
 #ifndef __PACE2024__TGRAPH_HPP
@@ -19,7 +19,7 @@
 #include <vector>
 
 /**
- * The Graph class.
+ * Abstract graph class.
  * The fundamental building block of life, the Universe and everything.
  */
 
@@ -29,8 +29,8 @@ class TGraph {
   typedef std::pair<T, T> Edge;
 
  public:
-  TGraph(int n);
-  TGraph(const TGraph& H);  // Copy constructor
+  TGraph(int n) {}
+  TGraph(const TGraph& H) {} // Copy constructor
   virtual ~TGraph() {}
 
   /** Adds edge (u, v) to graph */
