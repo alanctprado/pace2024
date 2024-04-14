@@ -13,19 +13,18 @@ A description of the our approach is available [here]().
 
 ## Build Application 
 
-1. Create a build directory: `mkdir build && cd build`
+1. Run `make` in the top-level source directory
 
-2. Run cmake: `cmake ..`
-
-3. Run make: `make`
+[comment]: # (Change to cmake in the future)
 
 ## Run Tests
 To run the tests, pass the name of a test file, as shown below (from build
 folder):
 
-`./pace < <test file>`
+`./a < <test file>`
 
 ## Requirements
 - A 64-bit Linux operating system.
 - A compiler that supports C++17.
-- The [cmake](www.cmake.org) build system.
+
+[comment]: # (- The [cmake](www.cmake.org) build system.)
