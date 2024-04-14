@@ -27,4 +27,4 @@ folder):
 - A 64-bit Linux operating system.
 - A compiler that supports C++17.
 
-[comment]: # (- The [cmake](www.cmake.org) build system.)
+[comment]: # (\- The \[cmake\]\(www.cmake.org\) build system.)
