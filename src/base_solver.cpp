@@ -15,7 +15,8 @@
 
 #include "base_solver.h"
 
-BaseSolver::BaseSolver(BipartiteGraph G)
-    : m_ipSolver(new IntegerProgrammingSolver(G)),
+BaseSolver::BaseSolver(BipartiteGraph graph)
+    : m_ipSolver(new IntegerProgrammingSolver(graph)),
+      m_graph(graph)
 {
 }

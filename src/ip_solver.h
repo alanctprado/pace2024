@@ -22,7 +22,7 @@
 /**
  * TO-DO
  */
-class IntegerProgrammingSolver : MetaSolver<int>
+class IntegerProgrammingSolver : public MetaSolver<int>
 {
  public:
   IntegerProgrammingSolver(BipartiteGraph G);

@@ -14,6 +14,7 @@
  */
 
 #include "bipartite_graph.h"
+#include "graph.h"
 
 BipartiteGraph::BipartiteGraph(int n0, int n1) : Graph(n0 + n1)
 {
@@ -24,6 +25,18 @@ BipartiteGraph::BipartiteGraph(int n0, int n1) : Graph(n0 + n1)
   for (unsigned i = n0; i < (unsigned) (n0 + n1); i++)
   {
     m_partB.push_back(i);
+  }
+}
+
+BipartiteGraph::BipartiteGraph(const BipartiteGraph& H) : Graph(H)
+{
+  for (int a : H.m_partA)
+  {
+    m_partA.push_back(a);
+  }
+  for (int b : H.m_partB)
+  {
+    m_partB.push_back(b);
   }
 }
 

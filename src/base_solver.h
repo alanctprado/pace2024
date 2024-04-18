@@ -17,6 +17,7 @@
 #define __PACE2024__BASE_SOLVER_HPP
 
 #include "bipartite_graph.h"
+#include "ip_solver.h"
 
 #include <memory>
 
@@ -26,10 +27,11 @@
 class BaseSolver
 {
  public:
-  BaseSolver(BipartiteGraph G);
+  BaseSolver(BipartiteGraph graph);
   ~BaseSolver() = default;
   /** Integer programming solver. */
   std::unique_ptr<IntegerProgrammingSolver> m_ipSolver;
+  const BipartiteGraph m_graph;
 
 };
 

@@ -32,7 +32,7 @@ class MetaSolver
   MetaSolver(BipartiteGraph G) : m_graph(G) {}
   virtual ~MetaSolver() {}
 
-  virtual int solve();
+  virtual int solve() = 0;
   void explain(std::vector<T>& order);
   bool verify(std::vector<T>& order, int expected_crossings);
 
