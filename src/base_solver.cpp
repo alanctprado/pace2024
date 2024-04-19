@@ -15,8 +15,27 @@
 
 #include "base_solver.h"
 
-BaseSolver::BaseSolver(BipartiteGraph graph)
-    : m_ipSolver(new IntegerProgrammingSolver(graph)),
+#include <iostream>
+
+namespace banana {
+namespace solver {
+
+BaseSolver::BaseSolver(graph::BipartiteGraph graph)
+    : m_ipSolver(new ip::IntegerProgrammingSolver(graph)),
       m_graph(graph)
 {
 }
+
+void BaseSolver::runBanana()
+{
+  int crossings = m_ipSolver->solve();
+  std::vector<int> order;
+  m_ipSolver->explain(order);
+  for (int vertex : order)
+  {
+    std::cout << vertex << "\n";
+  }
+}
+
+} // namespace solver
+} // namespace banana

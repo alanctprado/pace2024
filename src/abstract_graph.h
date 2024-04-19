@@ -19,6 +19,9 @@
 #include <memory>
 #include <vector>
 
+namespace banana {
+namespace graph {
+
 /**
  * Abstract graph class.
  *
@@ -99,5 +102,8 @@ class TGraph {
   /** Get the adjacency list representation of the graph. */
   virtual std::vector<std::vector<T>> adjacencyList() const = 0;
 };
+
+} // namespace graph
+} // namespace banana
 
 #endif  // __PACE2024__ABSTRACT_GRAPH_HPP

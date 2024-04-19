@@ -20,6 +20,9 @@
 #include <memory>
 #include <numeric>
 
+namespace banana {
+namespace graph {
+
 Graph::Graph(int n) : TGraph<int>()
 {
   m_adjacencyMatrix.assign(n, std::vector<bool>(n, false));
@@ -395,3 +398,6 @@ std::vector<std::vector<int>> Graph::adjacencyList() const
   }
   return adjacency_list;
 }
+
+} // namespace graph
+} // namespace banana

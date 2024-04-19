@@ -18,7 +18,8 @@
 
 #include "abstract_graph.h"
 
-#include <memory>
+namespace banana {
+namespace recognizer {
 
 /**
  * TO-DO
@@ -27,12 +28,15 @@ template <class T>
 class Recognizer
 {
  public:
-  Recognizer(TGraph<T>& graph) : m_graph(graph) {}
+  Recognizer(graph::TGraph<T>& graph) : m_graph(graph) {}
   virtual ~Recognizer() {}
   virtual bool check();
 
  protected:
-  const TGraph<T> m_graph;
+  const graph::TGraph<T> m_graph;
 };
+
+} // namespace recognizer
+} // namespace banana
 
 #endif  // __PACE2024__RECOGNIZER_HPP

@@ -22,13 +22,21 @@
 /**
  * TO-DO
  */
+namespace banana {
+namespace solver {
+namespace ip {
+
 class IntegerProgrammingSolver : public MetaSolver<int>
 {
  public:
-  IntegerProgrammingSolver(BipartiteGraph G);
+  IntegerProgrammingSolver(graph::BipartiteGraph G);
   ~IntegerProgrammingSolver() = default;
 
   int solve() override;
 };
+
+} // namespace ip
+} // namespace solver
+} // namespace banana
 
 #endif  // __PACE2024__IP_SOLVER_HPP

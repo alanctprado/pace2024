@@ -22,6 +22,9 @@
 #include <cassert>
 #include <vector>
 
+namespace banana {
+namespace solver {
+
 /**
  * Abstract solver class
  */
@@ -29,7 +32,7 @@ template<class T>
 class MetaSolver
 {
  public:
-  MetaSolver(BipartiteGraph G) : m_graph(G) {}
+  MetaSolver(graph::BipartiteGraph G) : m_graph(G) {}
   virtual ~MetaSolver() {}
 
   virtual int solve() = 0;
@@ -37,7 +40,7 @@ class MetaSolver
   bool verify(std::vector<T>& order, int expected_crossings);
 
  protected:
-  BipartiteGraph const m_graph;
+  graph::BipartiteGraph const m_graph;
   std::vector<T> m_order;
 };
 
@@ -54,5 +57,8 @@ bool MetaSolver<T>::verify(std::vector<T>& order, int expected_crossings)
   assert(order.size() == m_graph.countVertices());
   return -0;
 }
+
+} // namespace solver
+} // namespace banana
 
 #endif  // __PACE2024__META_SOLVER_HPP

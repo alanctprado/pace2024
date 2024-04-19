@@ -14,6 +14,7 @@
  */
 
 #include "bipartite_graph.h"
+#include "base_solver.h"
 #include "utils.h"
 
 #include <memory>
@@ -21,13 +22,10 @@
 
 int main(int argc, char* argv[])
 {
-  std::unique_ptr<BipartiteGraph> input_graph;
-  readBipartiteGraph(input_graph);
-  for (unsigned deg: input_graph->degree())
-  {
-    std::cout << deg << " ";
-  }
-  std::cout << "\n";
+  std::unique_ptr<banana::graph::BipartiteGraph> input_graph;
+  banana::utils::readBipartiteGraph(input_graph);
+  banana::solver::BaseSolver bananao(*input_graph.get());
+  bananao.runBanana();
 
 	exit(0);
 }

@@ -18,6 +18,9 @@
 
 #include "graph.h"
 
+namespace banana {
+namespace graph {
+
 /**
  * Bipartite graph class.
  *
@@ -33,17 +36,20 @@ class BipartiteGraph : public Graph
   ~BipartiteGraph() = default;
 
   /** Get the number of vertices in part A */
-  unsigned countVerticesA();
+  unsigned countVerticesA() const;
   /** Get the number of vertices in part B */
-  unsigned countVerticesB();
+  unsigned countVerticesB() const;
   /**
    * Builds a crossing matrix (edge crosses between each pair of vertices)
    * indexed by the vertices in part B.
    * */
-  std::vector<std::vector<int>> buildCrossingMatrix();
+  std::vector<std::vector<int>> buildCrossingMatrix() const;
 
  protected:
   std::vector<int> m_partA, m_partB;
 };
+
+} // namespace graph
+} // namespace banana
 
 #endif  // __PACE2024__BIPARTITE_GRAPH_HPP

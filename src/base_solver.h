@@ -21,18 +21,25 @@
 
 #include <memory>
 
+namespace banana {
+namespace solver {
+
 /**
  * Implements the main solver logic
  */
 class BaseSolver
 {
  public:
-  BaseSolver(BipartiteGraph graph);
+  BaseSolver(graph::BipartiteGraph graph);
   ~BaseSolver() = default;
+  void runBanana();
+ protected:
   /** Integer programming solver. */
-  std::unique_ptr<IntegerProgrammingSolver> m_ipSolver;
-  const BipartiteGraph m_graph;
-
+  std::unique_ptr<ip::IntegerProgrammingSolver> m_ipSolver;
+  const graph::BipartiteGraph m_graph;
 };
+
+} // namespace solver
+} // namespace banana
 
 #endif  // __PACE2024__BASE_SOLVER_HPP

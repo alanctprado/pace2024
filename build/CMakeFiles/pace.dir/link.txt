@@ -1,0 +1,1 @@
+/usr/bin/c++ -Ofast CMakeFiles/pace.dir/src/main.cpp.o CMakeFiles/common.dir/src/base_solver.cpp.o CMakeFiles/common.dir/src/bipartite_graph.cpp.o CMakeFiles/common.dir/src/graph.cpp.o CMakeFiles/common.dir/src/ip_solver.cpp.o -o pace  /home/quark/pace/pace2024/lp_solve_5.5/lpsolve55/bin/ux64/liblpsolve55.a 

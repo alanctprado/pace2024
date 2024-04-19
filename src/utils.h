@@ -20,6 +20,9 @@
 #include <memory>
 #include <sstream>
 
+namespace banana {
+namespace utils {
+
 inline void readNextLine(std::istringstream& in)
 {
   std::string line;
@@ -32,7 +35,7 @@ inline void readNextLine(std::istringstream& in)
   assert(false);
 }
 
-inline void readBipartiteGraph(std::unique_ptr<BipartiteGraph>& input_graph)
+inline void readBipartiteGraph(std::unique_ptr<graph::BipartiteGraph>& input_graph)
 {
   std::istringstream in;
   readNextLine(in);
@@ -41,7 +44,7 @@ inline void readBipartiteGraph(std::unique_ptr<BipartiteGraph>& input_graph)
   int n_a, n_b, edge_count;
   in >> discard >> discard >> n_a >> n_b >> edge_count;
 
-  input_graph = std::make_unique<BipartiteGraph> (n_a, n_b);
+  input_graph = std::make_unique<graph::BipartiteGraph> (n_a, n_b);
 
   for (unsigned i = 0; i < (unsigned) edge_count; i++)
   {
@@ -51,3 +54,6 @@ inline void readBipartiteGraph(std::unique_ptr<BipartiteGraph>& input_graph)
     input_graph->addEdge(a - 1, b - 1);
   }
 }
+
+} // namespace utils
+} // namespace banana
