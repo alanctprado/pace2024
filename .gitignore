@@ -3,3 +3,4 @@
 a
 obj
 ./lp_solve_5.5/lpsolve55/bin/*
+*.o
