@@ -1,6 +1,6 @@
 /******************************************************************************
  * Top contributors (to current version):
- *   Alan Prado, Kaio Vieira, Luis Higino
+ *   Alan Prado
  *
  * This file is part of Banana, a one-sided crossing minimization solver.
  *
@@ -10,24 +10,30 @@
  * licensing information.
  * ****************************************************************************
  *
- * Main.
+ * Global environment
  */
 
-#include "base_solver.h"
-#include "bipartite_graph.h"
-#include "utils.h"
-#include "environment.h"
+#ifndef __PACE2024__ENVIRONMENT_HPP
+#define __PACE2024__ENVIRONMENT_HPP
+
+#include "options.h"
 
 #include <memory>
-#include <iostream>
 
-int main(int argc, char* argv[])
+namespace banana {
+
+class Environment
 {
-  banana::Environment env;
-  env.setOptions(argc, argv);
-  std::unique_ptr<banana::graph::BipartiteGraph> input_graph;
-  banana::utils::readBipartiteGraph(input_graph);
-  banana::solver::BaseSolver bananao(*input_graph.get());
-  bananao.runBanana();
-	exit(0);
-}
+ public:
+  Environment() = default;
+  ~Environment() = default;
+  static void setOptions(int argc, char* argv[]);
+  static options::Options options();
+
+ protected:
+  static inline options::Options m_options = options::Options();
+};
+
+} // namespace banana
+
+#endif  // __PACE2024__ENVIRONMENT_HPP

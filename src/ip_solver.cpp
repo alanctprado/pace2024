@@ -10,25 +10,42 @@
  * licensing information.
  * ****************************************************************************
  *
- * Integer programming solver. TO-DO.
+ * Integer programming solver.
  */
 
 #include "ip_solver.h"
+#include "environment.h"
 #include "meta_solver.h"
 #include "../lp_solve_5.5/lp_lib.h"
+#include "options.h"
+#include "environment.h"
 
 #include <iostream>
 #include <algorithm>
+#include <stdexcept>
 
 namespace banana {
 namespace solver {
 namespace ip {
 
 IntegerProgrammingSolver::IntegerProgrammingSolver(graph::BipartiteGraph graph)
-    : MetaSolver<int>(graph)
-{}
+  : MetaSolver<int>(graph)
+{
+}
 
 int IntegerProgrammingSolver::solve()
+{
+  switch (Environment::options().ip.solverMode)
+  {
+    case options::IPSolverMode::LPSOLVE:
+      return solveWithLPSolve();
+    default:
+      break;
+  }
+  throw std::runtime_error("Do the L");
+}
+
+int IntegerProgrammingSolver::solveWithLPSolve()
 {
   std::vector<std::vector<int>> cm = m_graph.buildCrossingMatrix();
 

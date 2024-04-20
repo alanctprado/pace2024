@@ -1,6 +1,6 @@
 /******************************************************************************
  * Top contributors (to current version):
- *   Alan Prado, Kaio Vieira, Luis Higino
+ *   Alan Prado
  *
  * This file is part of Banana, a one-sided crossing minimization solver.
  *
@@ -10,24 +10,37 @@
  * licensing information.
  * ****************************************************************************
  *
- * Main.
+ * Contains code for handling command-line options.
  */
 
-#include "base_solver.h"
-#include "bipartite_graph.h"
-#include "utils.h"
-#include "environment.h"
+#ifndef __PACE2024__OPTIONS_HPP
+#define __PACE2024__OPTIONS_HPP
 
-#include <memory>
-#include <iostream>
+namespace banana::options {
 
-int main(int argc, char* argv[])
+enum class IPSolverMode
 {
-  banana::Environment env;
-  env.setOptions(argc, argv);
-  std::unique_ptr<banana::graph::BipartiteGraph> input_graph;
-  banana::utils::readBipartiteGraph(input_graph);
-  banana::solver::BaseSolver bananao(*input_graph.get());
-  bananao.runBanana();
-	exit(0);
-}
+  LPSOLVE, HIGHS, COINOR, GLPK,
+  __MAX_VALUE = LPSOLVE
+};
+
+struct HolderIP
+{
+  IPSolverMode solverMode = IPSolverMode::LPSOLVE;
+};
+
+class Options
+{
+ protected:
+
+ public:
+  Options() = default;
+  void parseArguments(int argc, char* argv[]);
+  ~Options() = default;
+
+  HolderIP ip;
+};
+
+} // namespace banana::options
+
+#endif  // __PACE2024__OPTIONS_HPP

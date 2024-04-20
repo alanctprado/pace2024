@@ -22,8 +22,10 @@ execute_process(
 set(SRC_FILES
   "${PROJECT_SOURCE_DIR}/src/base_solver.cpp"
   "${PROJECT_SOURCE_DIR}/src/bipartite_graph.cpp"
+  "${PROJECT_SOURCE_DIR}/src/environment.cpp"
   "${PROJECT_SOURCE_DIR}/src/graph.cpp"
-  "${PROJECT_SOURCE_DIR}/src/ip_solver.cpp")
+  "${PROJECT_SOURCE_DIR}/src/ip_solver.cpp"
+  "${PROJECT_SOURCE_DIR}/src/options.cpp")
 
 ## Objetos comuns a todos os targets
 add_library(common OBJECT ${SRC_FILES})

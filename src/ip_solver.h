@@ -10,7 +10,7 @@
  * licensing information.
  * ****************************************************************************
  *
- * Integer programming solver. TO-DO.
+ * Integer programming solver.
  */
 
 #ifndef __PACE2024__IP_SOLVER_HPP
@@ -19,20 +19,29 @@
 #include "bipartite_graph.h"
 #include "meta_solver.h"
 
-/**
- * TO-DO
- */
+#include <string>
+
 namespace banana {
 namespace solver {
 namespace ip {
 
+/**
+ * This class defines an integer programming solver for the OSCM problem. The
+ * objective function and constraints are specified in the implementation.
+ *
+ * Currently, the integer programming solvers available are:
+ *   - LP Solve
+ */
 class IntegerProgrammingSolver : public MetaSolver<int>
 {
  public:
   IntegerProgrammingSolver(graph::BipartiteGraph G);
   ~IntegerProgrammingSolver() = default;
-
   int solve() override;
+
+ protected:
+  int solveWithLPSolve();
+  std::string m_solver;
 };
 
 } // namespace ip
