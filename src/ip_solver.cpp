@@ -97,7 +97,7 @@ int IntegerProgrammingSolver::solve()
 
   std::sort(sol.begin(), sol.end());
   for (int i = n - 1; i >=0; i--)
-    m_order.push_back(sol[i].second + offset + 1);
+    m_order.push_back(sol[i].second + offset);
 
   double z = get_objective(lp);
   delete_lp(lp);
