@@ -35,3 +35,13 @@ set(CMAKE_CXX_FLAGS "-Ofast")
 SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 add_executable(pace $<TARGET_OBJECTS:common> "${PROJECT_SOURCE_DIR}/src/main.cpp")
 target_link_libraries(pace "${PROJECT_SOURCE_DIR}/lp_solve_5.5/lpsolve55/bin/ux64/liblpsolve55.a" dl)
+
+add_custom_target(run_tiny
+  COMMAND sh run_set.sh tiny-set
+  WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+)
+
+add_custom_target(run_medium
+  COMMAND sh run_set.sh medium-set
+  WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+)
