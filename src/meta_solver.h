@@ -21,7 +21,6 @@
 #include "fenwick_tree.h"
 
 #include <cassert>
-#include <iostream>
 #include <vector>
 #include <algorithm>
 
@@ -64,13 +63,13 @@ int MetaSolver<T>::numberOfCrossings(const std::vector<T>& order) const
   int nB = m_graph.countVerticesB();
 
   std::vector<int> position(nB);
-  for (int i = 0; i < order.size(); i++) 
+  for (int i = 0; i < order.size(); i++)
   {
     position[order[i] - nA] = i;
   }
 
   auto edges = m_graph.edges();
-  sort(edges.begin(), edges.end(), [&] (auto edge1, auto edge2) 
+  sort(edges.begin(), edges.end(), [&] (auto edge1, auto edge2)
       {
         auto [a1, b1] = edge1;
         auto [a2, b2] = edge2;
@@ -84,7 +83,7 @@ int MetaSolver<T>::numberOfCrossings(const std::vector<T>& order) const
   int crossings = 0;
   library::FenwickTree<int> tree(nA);
 
-  for (int l = 0, r = 0; l < (int)edges.size(); l = r) 
+  for (int l = 0, r = 0; l < (int)edges.size(); l = r)
   {
     while (r < (int)edges.size() && edges[l].second == edges[r].second) r++;
 
@@ -107,7 +106,7 @@ int MetaSolver<T>::numberOfCrossings(const std::vector<T>& order) const
 }
 
 template<class T>
-bool MetaSolver<T>::verify(const std::vector<T>& order, int expected_crossings) 
+bool MetaSolver<T>::verify(const std::vector<T>& order, int expected_crossings)
   const
 {
   assert(order.size() == m_graph.countVerticesB());
