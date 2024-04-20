@@ -16,6 +16,7 @@
 #include "base_solver.h"
 
 #include <iostream>
+#include <cassert>
 
 namespace banana {
 namespace solver {
@@ -31,9 +32,10 @@ void BaseSolver::runBanana()
   int crossings = m_ipSolver->solve();
   std::vector<int> order;
   m_ipSolver->explain(order);
+  assert(m_ipSolver->verify(order, crossings));
   for (int vertex : order)
   {
-    std::cout << vertex << "\n";
+    std::cout << vertex + 1 << "\n";
   }
 }
 

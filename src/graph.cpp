@@ -17,7 +17,6 @@
 
 #include <algorithm>
 #include <cassert>
-#include <memory>
 #include <numeric>
 
 namespace banana {
@@ -31,7 +30,7 @@ Graph::Graph(int n) : TGraph<int>()
   m_edgeCount = 0;
 }
 
-Graph::Graph(const Graph &H)
+Graph::Graph(const Graph& H)
 {
   m_adjacencyMatrix = H.m_adjacencyMatrix;
   m_vertexDegrees = H.m_vertexDegrees;
