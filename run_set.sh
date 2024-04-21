@@ -6,7 +6,7 @@ if [ $# -ne 1 ]; then
 fi
 
 # Run each instance from the given set
-for file in ./test/$1/instances/*; do
+for file in ./test/"$1"/instances/*; do
 
     # Bash shenanigans for getting the file name without extensions
     file=${file##*/}
