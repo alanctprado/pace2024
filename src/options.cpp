@@ -18,17 +18,22 @@
 #include <cstdint>
 #include <cstring>
 #include <getopt.h>
+#include <filesystem>
 #include <stdexcept>
 
 namespace banana::options {
 
 void Options::parseArguments(int argc, char* argv[])
 {
+
   int opt;
 
   struct option longopts[] = {
-    { "ipsolver", required_argument, nullptr,
-      static_cast<uint32_t>(IPSolverMode()) },
+    {"ipsolver", required_argument, nullptr,
+     static_cast<uint32_t>(Flags::IPSolverMode)},
+    {
+      "verify", required_argument, nullptr,
+      static_cast<uint32_t>(Flags::VerifyMode)},
     { 0 }
   };
 
@@ -36,19 +41,26 @@ void Options::parseArguments(int argc, char* argv[])
   {
     switch (opt)
     {
-      case static_cast<uint32_t>(IPSolverMode()):
-        if (!strcmp(optarg, "lpsolve"))
-        {
-          ip.solverMode = IPSolverMode::LPSOLVE;
+    case static_cast<uint32_t>(Flags::VerifyMode):
+        h_v.verifyMode = VerifyMode::FULL;
+        h_v.verifyPath = optarg;
+        if (!std::filesystem::exists(h_v.verifyPath)) {
+          throw std::invalid_argument("Invalid Verification Path: " + std::string{optarg});
         }
-        else
+        break;
+    case static_cast<uint32_t>(Flags::IPSolverMode):
+      if (!strcmp(optarg, "lpsolve"))
+        {
+          h_ip.solverMode = IPSolverMode::LPSOLVE;
+        }
+      else
         {
           throw std::invalid_argument("Invalid IP Solver: " + std::string{optarg});
         }
-        break;
-      default:
-        throw std::invalid_argument("Invalid option");
-        break;
+      break;
+    default:
+      throw std::invalid_argument("Invalid option");
+      break;
     }
   }
 }

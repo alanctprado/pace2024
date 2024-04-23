@@ -16,7 +16,17 @@
 #ifndef __PACE2024__OPTIONS_HPP
 #define __PACE2024__OPTIONS_HPP
 
+#include <string>
+
 namespace banana::options {
+
+enum class Flags
+{
+  /** IP options */
+  IPSolverMode,
+  /** Verify options */
+  VerifyMode
+};
 
 enum class IPSolverMode
 {
@@ -24,9 +34,21 @@ enum class IPSolverMode
   __MAX_VALUE = LPSOLVE
 };
 
+enum class VerifyMode
+{
+  LIGHT, FULL,
+  __MAX_VALUE = LIGHT
+};
+
 struct HolderIP
 {
   IPSolverMode solverMode = IPSolverMode::LPSOLVE;
+};
+
+struct HolderVerify
+{
+  VerifyMode verifyMode = VerifyMode::LIGHT;
+  std::string verifyPath = "";
 };
 
 class Options
@@ -38,7 +60,8 @@ class Options
   void parseArguments(int argc, char* argv[]);
   ~Options() = default;
 
-  HolderIP ip;
+  HolderIP h_ip;
+  HolderVerify h_v;
 };
 
 } // namespace banana::options

@@ -35,7 +35,7 @@ IntegerProgrammingSolver::IntegerProgrammingSolver(graph::BipartiteGraph graph)
 
 int IntegerProgrammingSolver::solve()
 {
-  switch (Environment::options().ip.solverMode)
+  switch (Environment::options().h_ip.solverMode)
   {
     case options::IPSolverMode::LPSOLVE:
       return solveWithLPSolve();

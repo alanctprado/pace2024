@@ -37,6 +37,7 @@ class BaseSolver
   /** Integer programming solver. */
   std::unique_ptr<ip::IntegerProgrammingSolver> m_ipSolver;
   const graph::BipartiteGraph m_graph;
+  void verifySolution(int expectedCrossings);
 };
 
 } // namespace solver
