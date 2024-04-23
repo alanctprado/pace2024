@@ -40,7 +40,11 @@ class IntegerProgrammingSolver : public MetaSolver<int>
   int solve() override;
 
  protected:
-  int solveWithLPSolve();
+  /** Formulation 1 */
+  int solveWithLPSolve1();
+  /** Formulation 2 */
+  std::pair<int, bool> index2(int i, int j);
+  int solveWithLPSolve2();
   std::string m_solver;
 };
 

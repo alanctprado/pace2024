@@ -30,8 +30,12 @@ void Options::parseArguments(int argc, char* argv[])
   int opt;
 
   struct option longopts[] = {
+    /** IP options */
     { "ipsolver", required_argument, nullptr,
       static_cast<uint32_t>(Flags::IPSolverMode) },
+    { "formulation", required_argument, nullptr,
+      static_cast<uint32_t>(Flags::IPFormulation) },
+    /** Verification options */
     { "verify", required_argument, nullptr,
       static_cast<uint32_t>(Flags::VerifyMode) },
     { 0 }
@@ -41,15 +45,7 @@ void Options::parseArguments(int argc, char* argv[])
   {
     switch (opt)
     {
-      case static_cast<uint32_t>(Flags::VerifyMode):
-        verify.verifyMode = VerifyMode::FULL;
-        verify.verifyPath = optarg;
-        if (!std::filesystem::exists(verify.verifyPath))
-        {
-          throw std::invalid_argument("Invalid Verification Path: " +
-                                      std::string{optarg});
-        }
-        break;
+      /** IP options */
       case static_cast<uint32_t>(Flags::IPSolverMode):
         if (!strcmp(optarg, "lpsolve"))
         {
@@ -58,6 +54,31 @@ void Options::parseArguments(int argc, char* argv[])
         else
         {
           throw std::invalid_argument("Invalid IP Solver: " +
+                                      std::string{optarg});
+        }
+        break;
+      case static_cast<uint32_t>(Flags::IPFormulation):
+        if (!strcmp(optarg, "one"))
+        {
+          ip.formulation = IPFormulation::ONE;
+        }
+        else if (!strcmp(optarg, "two"))
+        {
+          ip.formulation = IPFormulation::TWO;
+        }
+        else
+        {
+          throw std::invalid_argument("Invalid IP Formulation: " +
+                                      std::string{optarg});
+        }
+        break;
+      /** Verify options */
+      case static_cast<uint32_t>(Flags::VerifyMode):
+        verify.verifyMode = VerifyMode::FULL;
+        verify.verifyPath = optarg;
+        if (!std::filesystem::exists(verify.verifyPath))
+        {
+          throw std::invalid_argument("Invalid Verification Path: " +
                                       std::string{optarg});
         }
         break;

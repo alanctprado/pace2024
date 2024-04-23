@@ -24,6 +24,7 @@ enum class Flags
 {
   /** IP options */
   IPSolverMode,
+  IPFormulation,
   /** Verify options */
   VerifyMode
 };
@@ -32,6 +33,12 @@ enum class IPSolverMode
 {
   LPSOLVE, HIGHS, COINOR, GLPK,
   __MAX_VALUE = LPSOLVE
+};
+
+enum class IPFormulation
+{
+  ONE, TWO,
+  __MAX_VALUE = TWO
 };
 
 enum class VerifyMode
@@ -43,6 +50,7 @@ enum class VerifyMode
 struct HolderIP
 {
   IPSolverMode solverMode = IPSolverMode::LPSOLVE;
+  IPFormulation formulation = IPFormulation::TWO;
 };
 
 struct HolderVerify

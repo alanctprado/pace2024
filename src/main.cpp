@@ -21,6 +21,8 @@
 #include <memory>
 #include <iostream>
 
+/** Remove assertions before submitting!! */
+
 int main(int argc, char* argv[])
 {
   banana::Environment env;
