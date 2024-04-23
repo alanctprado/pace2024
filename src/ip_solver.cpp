@@ -180,13 +180,10 @@ int IntegerProgrammingSolver::solveWithLPSolve1()
  *   x_{i,j}: 0-1 variable that is 1 iff B_i appears before B_j in the ordering
  *
  * Formulation:
- *   minimize \sum_{i,j} cm_{i,j} \cdot x_{i,j}
+ *   minimize \sum_{i > j} cm_{i,j} x_{i,j} - \sum_{i < j} cm_{i,j} x_{j,i}
  *
  *   subject to: x_{i,j} + x_{j,k} - x_{i,k} \leq 1 \forall i \neq j \neq k
- *               (transitivity constraint)
- *
- *               x_{i,j} + x_{j, i} = 1 \forall i < j
- *               (exactly one is true, we actually only need at least one true)
+ *               (transitivity constraint, but caution with the indexes)
  *
  *               x_{i,j} \in \{0, 1\} \forall i, j
  *               (integer program with 0-1 variables)
