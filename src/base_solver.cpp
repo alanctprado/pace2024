@@ -1,6 +1,6 @@
 /******************************************************************************
  * Top contributors (to current version):
- *   Alan Prado
+ *   Alan Prado, Luis Higino
  *
  * This file is part of Banana, a one-sided crossing minimization solver.
  *
@@ -16,35 +16,25 @@
 #include "base_solver.h"
 #include "environment.h"
 #include "options.h"
+#include "utils.h"
 
 #include <iostream>
 #include <cassert>
-#include <fstream>
-#include <sstream>
+#include <string>
 
 namespace banana {
 namespace solver {
 
 BaseSolver::BaseSolver(graph::BipartiteGraph graph)
-    : m_ipSolver(new ip::IntegerProgrammingSolver(graph))
-      ,
+    : m_ipSolver(new ip::IntegerProgrammingSolver(graph)),
       m_graph(graph)
 {
 }
 
 void BaseSolver::verifySolution(int expected_crossings)
 {
-  std::string path = Environment::options().h_v.verifyPath;
-  std::stringstream ss;
-  ss << std::ifstream(path).rdbuf();
-
-  std::vector<int> order;
-  int vertex;
-  while (ss >> vertex) {
-    vertex--; // solution file is 1-based
-    order.push_back(vertex);
-  }
-
+  std::string path = Environment::options().verify.verifyPath;
+  std::vector<int> order = utils::readSolution<int>(path);
   assert(m_ipSolver->verify(order, expected_crossings));
 }
 
@@ -54,8 +44,9 @@ void BaseSolver::runBanana()
   std::vector<int> order;
   m_ipSolver->explain(order);
   assert(m_ipSolver->verify(order, crossings));
-  if (Environment::options().h_v.verifyMode ==
-      banana::options::VerifyMode::FULL) {
+  if (Environment::options().verify.verifyMode ==
+      banana::options::VerifyMode::FULL)
+  {
     verifySolution(crossings);
   }
   for (int vertex : order)

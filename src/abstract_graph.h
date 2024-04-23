@@ -28,7 +28,8 @@ namespace graph {
  * The fundamental building block of life, the Universe and everything.
  */
 template <class T> // Define, someday, a Vertex class? Rita? 👀
-class TGraph {
+class TGraph
+{
  protected:
   typedef std::pair<T, T> Edge;
 

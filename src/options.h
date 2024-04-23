@@ -1,6 +1,6 @@
 /******************************************************************************
  * Top contributors (to current version):
- *   Alan Prado
+ *   Alan Prado, Luis Higino
  *
  * This file is part of Banana, a one-sided crossing minimization solver.
  *
@@ -60,8 +60,8 @@ class Options
   void parseArguments(int argc, char* argv[]);
   ~Options() = default;
 
-  HolderIP h_ip;
-  HolderVerify h_v;
+  HolderIP ip;
+  HolderVerify verify;
 };
 
 } // namespace banana::options

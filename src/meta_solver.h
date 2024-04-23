@@ -69,16 +69,15 @@ int MetaSolver<T>::numberOfCrossings(const std::vector<T>& order) const
   }
 
   auto edges = m_graph.edges();
-  sort(edges.begin(), edges.end(), [&] (auto edge1, auto edge2)
-      {
-        auto [a1, b1] = edge1;
-        auto [a2, b2] = edge2;
-        if (a1 > b1) std::swap(a1, b1);
-        if (a2 > b2) std::swap(a2, b2);
+  sort(edges.begin(), edges.end(), [&] (auto edge1, auto edge2) {
+    auto [a1, b1] = edge1;
+    auto [a2, b2] = edge2;
+    if (a1 > b1) std::swap(a1, b1);
+    if (a2 > b2) std::swap(a2, b2);
 
-        if (b1 == b2) return a1 < a2;
-        return position[b1 - nA] < position[b2 - nA];
-      });
+    if (b1 == b2) return a1 < a2;
+    return position[b1 - nA] < position[b2 - nA];
+  });
 
   int crossings = 0;
   library::FenwickTree<int> tree(nA);
@@ -87,14 +86,16 @@ int MetaSolver<T>::numberOfCrossings(const std::vector<T>& order) const
   {
     while (r < (int)edges.size() && edges[l].second == edges[r].second) r++;
 
-    for (int i = l; i < r; i++) {
+    for (int i = l; i < r; i++)
+    {
       auto [v_a, v_b] = edges[i];
       if (v_a > v_b) std::swap(v_a, v_b);
 
       crossings += tree.suffixQuery(v_a + 1);
     }
 
-    for (int i = l; i < r; i++) {
+    for (int i = l; i < r; i++)
+    {
       auto [v_a, v_b] = edges[i];
       if (v_a > v_b) std::swap(v_a, v_b);
 
@@ -106,8 +107,8 @@ int MetaSolver<T>::numberOfCrossings(const std::vector<T>& order) const
 }
 
 template<class T>
-bool MetaSolver<T>::verify(const std::vector<T>& order, int expected_crossings)
-  const
+bool MetaSolver<T>::verify(const std::vector<T>& order,
+                           int expected_crossings) const
 {
   assert(order.size() == m_graph.countVerticesB());
   return numberOfCrossings(order) == expected_crossings;

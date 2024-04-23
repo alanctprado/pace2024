@@ -74,23 +74,25 @@ FenwickTree<T>::FenwickTree(const std::vector<T>& array)
 }
 
 template <class T>
-void FenwickTree<T>::update(int i, const T& value) {
-  for (i++; i > 0; i -= i & (-i)) {
-    m_tree[i] = m_tree[i] + value;
-  }
+void FenwickTree<T>::update(int i, const T& value)
+{
+  for (i++; i > 0; i -= i & (-i)) { m_tree[i] = m_tree[i] + value; }
 }
 
 template <class T>
-T FenwickTree<T>::suffixQuery(int l) const {
+T FenwickTree<T>::suffixQuery(int l) const
+{
   T answer = T();
-  for (int i = l + 1; i <= m_treeSize; i += i & (-i)) {
+  for (int i = l + 1; i <= m_treeSize; i += i & (-i))
+  {
     answer = answer + m_tree[i];
   }
   return answer;
 }
 
 template <class T>
-T FenwickTree<T>::rangeQuery(int l, int r) const {
+T FenwickTree<T>::rangeQuery(int l, int r) const
+{
   return suffixQuery(l) - suffixQuery(r + 1);
 }
 

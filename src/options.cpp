@@ -1,6 +1,6 @@
 /******************************************************************************
  * Top contributors (to current version):
- *   Alan Prado
+ *   Alan Prado, Luis Higino
  *
  * This file is part of Banana, a one-sided crossing minimization solver.
  *
@@ -21,7 +21,8 @@
 #include <filesystem>
 #include <stdexcept>
 
-namespace banana::options {
+namespace banana {
+namespace options {
 
 void Options::parseArguments(int argc, char* argv[])
 {
@@ -29,11 +30,10 @@ void Options::parseArguments(int argc, char* argv[])
   int opt;
 
   struct option longopts[] = {
-    {"ipsolver", required_argument, nullptr,
-     static_cast<uint32_t>(Flags::IPSolverMode)},
-    {
-      "verify", required_argument, nullptr,
-      static_cast<uint32_t>(Flags::VerifyMode)},
+    { "ipsolver", required_argument, nullptr,
+      static_cast<uint32_t>(Flags::IPSolverMode) },
+    { "verify", required_argument, nullptr,
+      static_cast<uint32_t>(Flags::VerifyMode) },
     { 0 }
   };
 
@@ -41,28 +41,31 @@ void Options::parseArguments(int argc, char* argv[])
   {
     switch (opt)
     {
-    case static_cast<uint32_t>(Flags::VerifyMode):
-        h_v.verifyMode = VerifyMode::FULL;
-        h_v.verifyPath = optarg;
-        if (!std::filesystem::exists(h_v.verifyPath)) {
-          throw std::invalid_argument("Invalid Verification Path: " + std::string{optarg});
+      case static_cast<uint32_t>(Flags::VerifyMode):
+        verify.verifyMode = VerifyMode::FULL;
+        verify.verifyPath = optarg;
+        if (!std::filesystem::exists(verify.verifyPath))
+        {
+          throw std::invalid_argument("Invalid Verification Path: " +
+                                      std::string{optarg});
         }
         break;
-    case static_cast<uint32_t>(Flags::IPSolverMode):
-      if (!strcmp(optarg, "lpsolve"))
+      case static_cast<uint32_t>(Flags::IPSolverMode):
+        if (!strcmp(optarg, "lpsolve"))
         {
-          h_ip.solverMode = IPSolverMode::LPSOLVE;
+          ip.solverMode = IPSolverMode::LPSOLVE;
         }
-      else
+        else
         {
-          throw std::invalid_argument("Invalid IP Solver: " + std::string{optarg});
+          throw std::invalid_argument("Invalid IP Solver: " +
+                                      std::string{optarg});
         }
-      break;
-    default:
-      throw std::invalid_argument("Invalid option");
-      break;
+        break;
+      default:
+        throw std::invalid_argument("Invalid option");
     }
   }
 }
 
-} // namespace banana::options
+} // namespace options
+} // namespace banana

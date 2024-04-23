@@ -19,6 +19,7 @@
 #include <iostream>
 #include <memory>
 #include <sstream>
+#include <fstream>
 
 namespace banana {
 namespace utils {
@@ -53,6 +54,21 @@ inline void readBipartiteGraph(std::unique_ptr<graph::BipartiteGraph>& input_gra
     in >> a >> b;
     input_graph->addEdge(a - 1, b - 1);
   }
+}
+
+template <class T>
+inline std::vector<T> readSolution(std::string path)
+{
+  std::stringstream ss;
+  ss << std::ifstream(path).rdbuf();
+  std::vector<T> order;
+  int vertex;
+  while (ss >> vertex)
+  {
+    vertex--;  // solution file is 1-based
+    order.push_back(vertex);
+  }
+  return order;
 }
 
 } // namespace utils
