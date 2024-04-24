@@ -43,10 +43,10 @@ for testing and implementation purposes. They are listed below.
 
 ## Submission
 
-The submission is made through [Optil](https://www.optil.io/).
+The submission is done through [Optil](https://www.optil.io/).
 
 1. Clean the files that would conflict with Optil's compilation process. These
-   files are listed in `.gitignore` and, therefore, it can be accomplished
+   files are listed in `.gitignore`, and, therefore, this can be accomplished
    using the `git clean -dfx` command.
 2. After removing the files, run `tar -czvf pace.tgz ./*` to compile all the
    files.
