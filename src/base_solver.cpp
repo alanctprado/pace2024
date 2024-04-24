@@ -18,18 +18,16 @@
 #include "options.h"
 #include "utils.h"
 
-#include <iostream>
 #include <cassert>
+#include <iostream>
 #include <string>
 
 namespace banana {
 namespace solver {
 
 BaseSolver::BaseSolver(graph::BipartiteGraph graph)
-    : m_ipSolver(new ip::IntegerProgrammingSolver(graph)),
-      m_graph(graph)
-{
-}
+    : m_ipSolver(new ip::IntegerProgrammingSolver(graph)), m_graph(graph)
+{}
 
 void BaseSolver::verifySolution(int expected_crossings)
 {

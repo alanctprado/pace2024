@@ -29,11 +29,12 @@ namespace solver {
  */
 class BaseSolver
 {
- public:
+public:
   BaseSolver(graph::BipartiteGraph graph);
   ~BaseSolver() = default;
   void runBanana();
- protected:
+
+protected:
   /** Integer programming solver. */
   std::unique_ptr<ip::IntegerProgrammingSolver> m_ipSolver;
   const graph::BipartiteGraph m_graph;
@@ -43,4 +44,4 @@ class BaseSolver
 } // namespace solver
 } // namespace banana
 
-#endif  // __PACE2024__BASE_SOLVER_HPP
+#endif // __PACE2024__BASE_SOLVER_HPP

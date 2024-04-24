@@ -21,17 +21,17 @@ namespace graph {
 
 BipartiteGraph::BipartiteGraph(int n0, int n1) : Graph(n0 + n1)
 {
-  for (unsigned i = 0; i < (unsigned) n0; i++)
+  for (unsigned i = 0; i < (unsigned)n0; i++)
   {
     m_partA.push_back(i);
   }
-  for (unsigned i = n0; i < (unsigned) (n0 + n1); i++)
+  for (unsigned i = n0; i < (unsigned)(n0 + n1); i++)
   {
     m_partB.push_back(i);
   }
 }
 
-BipartiteGraph::BipartiteGraph(const BipartiteGraph& H) : Graph(H)
+BipartiteGraph::BipartiteGraph(const BipartiteGraph &H) : Graph(H)
 {
   for (int a : H.m_partA)
   {
@@ -45,12 +45,12 @@ BipartiteGraph::BipartiteGraph(const BipartiteGraph& H) : Graph(H)
 
 unsigned BipartiteGraph::countVerticesA() const
 {
-  return (unsigned) m_partA.size();
+  return (unsigned)m_partA.size();
 }
 
 unsigned BipartiteGraph::countVerticesB() const
 {
-  return (unsigned) m_partB.size();
+  return (unsigned)m_partB.size();
 }
 
 std::vector<std::vector<int>> BipartiteGraph::buildCrossingMatrix() const
@@ -61,13 +61,19 @@ std::vector<std::vector<int>> BipartiteGraph::buildCrossingMatrix() const
   {
     for (int j = 0; j < n_b; j++)
     {
-      if (i == j) { continue; }
+      if (i == j)
+      {
+        continue;
+      }
       int count_crossings = 0;
       for (int a_i : neighborhood(m_partB[i]))
       {
         for (int a_j : neighborhood(m_partB[j]))
         {
-          if (a_j < a_i) { count_crossings++; }
+          if (a_j < a_i)
+          {
+            count_crossings++;
+          }
         }
       }
       crossing_matrix[i][j] = count_crossings;

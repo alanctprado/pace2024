@@ -31,19 +31,24 @@ enum class Flags
 
 enum class IPSolverMode
 {
-  LPSOLVE, HIGHS, COINOR, GLPK,
+  LPSOLVE,
+  HIGHS,
+  COINOR,
+  GLPK,
   __MAX_VALUE = LPSOLVE
 };
 
 enum class IPFormulation
 {
-  ONE, TWO,
+  ONE,
+  TWO,
   __MAX_VALUE = TWO
 };
 
 enum class VerifyMode
 {
-  LIGHT, FULL,
+  LIGHT,
+  FULL,
   __MAX_VALUE = LIGHT
 };
 
@@ -61,11 +66,10 @@ struct HolderVerify
 
 class Options
 {
- protected:
-
- public:
+protected:
+public:
   Options() = default;
-  void parseArguments(int argc, char* argv[]);
+  void parseArguments(int argc, char *argv[]);
   ~Options() = default;
 
   HolderIP ip;
@@ -74,4 +78,4 @@ class Options
 
 } // namespace banana::options
 
-#endif  // __PACE2024__OPTIONS_HPP
+#endif // __PACE2024__OPTIONS_HPP

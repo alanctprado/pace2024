@@ -29,15 +29,15 @@ namespace graph {
  */
 class Graph : public TGraph<int>
 {
- protected:
+protected:
   std::vector<std::vector<bool>> m_adjacencyMatrix;
   std::vector<unsigned> m_vertexDegrees;
   std::vector<int> m_vertexLabels;
   unsigned m_edgeCount;
 
- public:
+public:
   Graph(int n);
-  Graph(const Graph& H);  // Copy constructor
+  Graph(const Graph &H); // Copy constructor
   ~Graph() = default;
 
   /** Adds edge (u, v) to graph */
@@ -87,7 +87,7 @@ class Graph : public TGraph<int>
   std::unique_ptr<TGraph> complement() const override;
   /** Divides a graph into disjoint subgraphs */
   std::vector<std::unique_ptr<TGraph>>
-  disjointSubgraphs(std::vector<std::vector<int>>& subsets) const override;
+  disjointSubgraphs(std::vector<std::vector<int>> &subsets) const override;
   /**
    * Creates the quotient graph from 'partition'.
    *
@@ -96,11 +96,11 @@ class Graph : public TGraph<int>
    * other with respect to the edge set of the original graph.
    */
   std::unique_ptr<TGraph>
-  quotient(std::vector<std::vector<int>>& partition) const override;
+  quotient(std::vector<std::vector<int>> &partition) const override;
 
   /** TO-DO */
   std::vector<std::vector<int>>
-  modularPartition(std::vector<std::vector<int>>& partition) const override;
+  modularPartition(std::vector<std::vector<int>> &partition) const override;
   /** TO-DO */
   std::vector<std::vector<int>> primeDecomposition() const override;
 
@@ -111,4 +111,4 @@ class Graph : public TGraph<int>
 } // namespace graph
 } // namespace banana
 
-#endif  // __PACE2024__GRAPH_HPP
+#endif // __PACE2024__GRAPH_HPP
