@@ -1,7 +1,7 @@
 #!/bin/bash
 
-if [ $# -ne 1 ]; then
-    echo "Usage: $0 <set>"
+if [ $# -lt 1 ]; then
+    echo "Usage: $0 <set> <args>"
     exit 1
 fi
 
@@ -12,6 +12,6 @@ for file in ./test/"$1"/instances/*; do
     file=${file##*/}
     file=${file%.*}
 
-    sh run_case.sh "$1" "$file"
+    sh run_case.sh "$1" "$file" "$@"
     echo
 done

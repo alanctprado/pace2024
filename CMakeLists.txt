@@ -40,11 +40,11 @@ add_executable(pace $<TARGET_OBJECTS:common> "${PROJECT_SOURCE_DIR}/src/main.cpp
 target_link_libraries(pace "${PROJECT_SOURCE_DIR}/lp_solve_5.5/lpsolve55/bin/ux64/liblpsolve55.a" dl)
 
 add_custom_target(run_tiny
-  COMMAND sh run_set.sh tiny-set
+  COMMAND sh run_set.sh tiny-set "$(ARGS)"
   WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
 )
 
 add_custom_target(run_medium
-  COMMAND sh run_set.sh medium-set
+  COMMAND sh run_set.sh medium-set "$(ARGS)"
   WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
 )
