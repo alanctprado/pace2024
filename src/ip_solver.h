@@ -39,13 +39,18 @@ public:
   ~IntegerProgrammingSolver() = default;
   int solve() override;
 
-protected:
-  /** Formulation 1 */
-  int solveWithLPSolve1();
-  /** Formulation 2 */
-  std::pair<int, bool> index2(int i, int j);
-  int solveWithLPSolve2();
-  std::string m_solver;
+ protected:
+  /** Simple formulation */
+  int simpleLPSolve();
+
+  /** Shorter simple formulation */
+  std::pair<int, bool> triangularIndex(int i, int j);
+  int shorterSimpleLPSolve();
+
+  /** Quadratic formulation */
+  int yIndex(int i, int j, int n);
+  int quadraticLPSolve();
+  int viniLPSolve();
 };
 
 } // namespace ip
