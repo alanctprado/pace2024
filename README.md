@@ -7,35 +7,37 @@ number of edge crossings. It was used as a submission to the 2024 Parameterized
 Algorithms and Computational Experiments
 ([Pace 2024](https://pacechallenge.org/)). We approached this problem by
 implementing a [something]() for it, combined with [something else]().
-[Luis Higino](https://github.com/luishgh) is our director of compilation.
+Luis Higino is our director of compilation.
 
 A description of the our approach will be available [here]().
+
+Obs: all following examples of commands assume the current directory is the project's root.
 
 ## Build application
 
 Simply run:
 
-`mkdir build && cd build && cmake .. && make`
-
-or
-
-`cmake -B build && make -C build`
+``` shell
+cmake -B build && make -C build
+```
 
 ## Execution
 
 ### Default execution
 To run a single test, redirect a file as input for the `pace` executable.
 
-`./pace < <test file>`
+``` shell
+./build/pace < <test file>
+```
 
 ### CMake rules
-The project is built using Cmake. The generated Makefile has the following targets:
+The project is built using CMake. The generated Makefile has the following targets:
 
 - `pace`: this is the default argument, which is choosen if no target is passed to the `make` command.
-- `run_*`: this target runs the `pace` binary, verifies its solution and times its execution with the `*` set of test cases. In the moment, the `tiny` and `medium` sets are supported. By default, it only passes the `--verify` flag. If you want additional arguments, you can use the `ARGS` variable when calling `make`. For example, to run all cases in the `tiny-set` with the `lpsolve` solver, you may run:
+- `run_*`: this target runs the `pace` binary, verifies its solution and times its execution with the `*` set of test cases. At the moment, the `tiny` and `medium` sets are supported. By default, it only passes the `--verify` flag. If you want additional arguments, you can use the `ARGS` variable when calling `make`. For example, to run all cases in the `tiny-set` with the `lpsolve` solver, you may run:
 
 ``` shell
-make run_tiny ARGS='--ipsolver="lpsolve"'
+make -C build run_tiny ARGS='--ipsolver="lpsolve"'
 ```
 
 ### Flags
