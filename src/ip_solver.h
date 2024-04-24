@@ -34,12 +34,12 @@ namespace ip {
  */
 class IntegerProgrammingSolver : public MetaSolver<int>
 {
- public:
+public:
   IntegerProgrammingSolver(graph::BipartiteGraph G);
   ~IntegerProgrammingSolver() = default;
   int solve() override;
 
- protected:
+protected:
   /** Formulation 1 */
   int solveWithLPSolve1();
   /** Formulation 2 */
@@ -52,4 +52,4 @@ class IntegerProgrammingSolver : public MetaSolver<int>
 } // namespace solver
 } // namespace banana
 
-#endif  // __PACE2024__IP_SOLVER_HPP
+#endif // __PACE2024__IP_SOLVER_HPP

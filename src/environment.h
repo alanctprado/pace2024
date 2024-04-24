@@ -24,16 +24,16 @@ namespace banana {
 
 class Environment
 {
- public:
+public:
   Environment() = default;
   ~Environment() = default;
-  static void setOptions(int argc, char* argv[]);
+  static void setOptions(int argc, char *argv[]);
   static options::Options options();
 
- protected:
+protected:
   static inline options::Options m_options = options::Options();
 };
 
 } // namespace banana
 
-#endif  // __PACE2024__ENVIRONMENT_HPP
+#endif // __PACE2024__ENVIRONMENT_HPP

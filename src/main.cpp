@@ -15,15 +15,15 @@
 
 #include "base_solver.h"
 #include "bipartite_graph.h"
-#include "utils.h"
 #include "environment.h"
+#include "utils.h"
 
-#include <memory>
 #include <iostream>
+#include <memory>
 
 /** Remove assertions before submitting!! */
 
-int main(int argc, char* argv[])
+int main(int argc, char *argv[])
 {
   banana::Environment env;
   env.setOptions(argc, argv);
@@ -31,5 +31,5 @@ int main(int argc, char* argv[])
   banana::utils::readBipartiteGraph(input_graph);
   banana::solver::BaseSolver bananao(*input_graph.get());
   bananao.runBanana();
-	exit(0);
+  exit(0);
 }

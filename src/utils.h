@@ -16,27 +16,29 @@
 #include "bipartite_graph.h"
 
 #include <cassert>
+#include <fstream>
 #include <iostream>
 #include <memory>
 #include <sstream>
-#include <fstream>
 
 namespace banana {
 namespace utils {
 
-inline void readNextLine(std::istringstream& in)
+inline void readNextLine(std::istringstream &in)
 {
   std::string line;
   while (std::getline(std::cin, line))
   {
-    if (line[0] == 'c') continue;
+    if (line[0] == 'c')
+      continue;
     in = std::istringstream(line);
     return;
   }
   assert(false);
 }
 
-inline void readBipartiteGraph(std::unique_ptr<graph::BipartiteGraph>& input_graph)
+inline void
+readBipartiteGraph(std::unique_ptr<graph::BipartiteGraph> &input_graph)
 {
   std::istringstream in;
   readNextLine(in);
@@ -45,9 +47,9 @@ inline void readBipartiteGraph(std::unique_ptr<graph::BipartiteGraph>& input_gra
   int n_a, n_b, edge_count;
   in >> discard >> discard >> n_a >> n_b >> edge_count;
 
-  input_graph = std::make_unique<graph::BipartiteGraph> (n_a, n_b);
+  input_graph = std::make_unique<graph::BipartiteGraph>(n_a, n_b);
 
-  for (unsigned i = 0; i < (unsigned) edge_count; i++)
+  for (unsigned i = 0; i < (unsigned)edge_count; i++)
   {
     readNextLine(in);
     int a, b;
@@ -56,8 +58,7 @@ inline void readBipartiteGraph(std::unique_ptr<graph::BipartiteGraph>& input_gra
   }
 }
 
-template <class T>
-inline std::vector<T> readSolution(std::string path)
+template <class T> inline std::vector<T> readSolution(std::string path)
 {
   std::stringstream ss;
   ss << std::ifstream(path).rdbuf();
@@ -65,7 +66,7 @@ inline std::vector<T> readSolution(std::string path)
   int vertex;
   while (ss >> vertex)
   {
-    vertex--;  // solution file is 1-based
+    vertex--; // solution file is 1-based
     order.push_back(vertex);
   }
   return order;

@@ -24,19 +24,18 @@ namespace recognizer {
 /**
  * TO-DO
  */
-template <class T>
-class Recognizer
+template <class T> class Recognizer
 {
- public:
-  Recognizer(graph::TGraph<T>& graph) : m_graph(graph) {}
+public:
+  Recognizer(graph::TGraph<T> &graph) : m_graph(graph) {}
   virtual ~Recognizer() {}
   virtual bool check();
 
- protected:
+protected:
   const graph::TGraph<T> m_graph;
 };
 
 } // namespace recognizer
 } // namespace banana
 
-#endif  // __PACE2024__RECOGNIZER_HPP
+#endif // __PACE2024__RECOGNIZER_HPP
