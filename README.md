@@ -7,7 +7,7 @@ number of edge crossings. It was used as a submission to the 2024 Parameterized
 Algorithms and Computational Experiments
 ([Pace 2024](https://pacechallenge.org/)). We approached this problem by
 implementing a [something]() for it, combined with [something else]().
-Luis Higino is our director of compilation.
+[Luis Higino](https://github.com/luishgh) is our director of compilation.
 
 A description of the our approach will be available [here]().
 
@@ -17,6 +17,10 @@ Simply run:
 
 `mkdir build && cd build && cmake .. && make`
 
+or
+
+`cmake -B build && make -C build`
+
 ## Execution
 
 ### Default execution
@@ -24,8 +28,15 @@ To run a single test, redirect a file as input for the `pace` executable.
 
 `./pace < <test file>`
 
-### CMake rules (Higino)
-To-Do
+### CMake rules
+The project is built using Cmake. The generated Makefile has the following targets:
+
+- `pace`: this is the default argument, which is choosen if no target is passed to the `make` command.
+- `run_*`: this target runs the `pace` binary, verifies its solution and times its execution with the `*` set of test cases. In the moment, the `tiny` and `medium` sets are supported. By default, it only passes the `--verify` flag. If you want additional arguments, you can use the `ARGS` variable when calling `make`. For example, to run all cases in the `tiny-set` with the `lpsolve` solver, you may run:
+
+``` shell
+make run_tiny ARGS='--ipsolver="lpsolve"'
+```
 
 ### Flags
 We have implemented a series of flags that can be used to tweak the solver
@@ -39,7 +50,7 @@ for testing and implementation purposes. They are listed below.
   is described in the `ip_solver.cpp` file.
 
 #### Verification
-- `verify`: hello Higino.
+- `verify`: this flag enables verification of the solver's output with a solution file. It expectes an argument, which is the path -- relative or absolute -- to the solution file to be used.
 
 ## Submission
 
