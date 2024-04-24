@@ -6,22 +6,52 @@ involves arranging the nodes of one of the layers, aiming to minimize the
 number of edge crossings. It was used as a submission to the 2024 Parameterized
 Algorithms and Computational Experiments
 ([Pace 2024](https://pacechallenge.org/)). We approached this problem by
-implementing a [Something](https://arxiv.org/abs/2110.06146) for it, combined
-with something else. Luis Higino is our director of compilation.
+implementing a [something]() for it, combined with [something else]().
+Luis Higino is our director of compilation.
 
-A description of the our approach is available [here]().
+A description of the our approach will be available [here]().
 
-## Build Application 
+## Build application
 
-1. Run `mkdir build` in the top-level source directory
-2. Run `cmake ..` in the build directory
-3. Run `make` in the build directory
+Simply run:
 
-## Run Tests
-To run the tests, pass the name of a test file, as shown below (from build
-folder):
+`mkdir build && cd build && cmake .. && make`
+
+## Execution
+
+### Default execution
+To run a single test, redirect a file as input for the `pace` executable.
 
 `./pace < <test file>`
+
+### CMake rules (Higino)
+To-Do
+
+### Flags
+We have implemented a series of flags that can be used to tweak the solver
+for testing and implementation purposes. They are listed below.
+
+#### Integer programming
+- `ipsolver`: sets the solver that will be used to solve the integer program.
+  At the moment, the available solvers are `lpsolve`.
+- `ipformulation`: choose which formulation for the OSCM problem will be used.
+  The possible values are `simple`, `shorter` and `quadratic`. Each formulation
+  is described in the `ip_solver.cpp` file.
+
+#### Verification
+- `verify`: hello Higino.
+
+## Submission
+
+The submission is made through [Optil](https://www.optil.io/).
+
+1. Clean the files that would conflict with Optil's compilation process. These
+   files are listed in `.gitignore` and, therefore, it can be accomplished
+   using the `git clean -dfx` command.
+2. After removing the files, run `tar -czvf pace.tgz ./*` to compile all the
+   files.
+3. Upload `pace.tgz` to Optil's submission page and choose `CMake` as the
+   language.
 
 ## Requirements
 - A 64-bit Linux operating system.
