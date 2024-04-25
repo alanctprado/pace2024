@@ -14,10 +14,10 @@
  */
 
 #include "ip_solver.h"
-#include "../lp_solve_5.5/lp_lib.h"
 #include "environment.h"
 #include "meta_solver.h"
 #include "options.h"
+#include "../lp_solve_5.5/lp_lib.h"
 
 #include <algorithm>
 #include <cassert>

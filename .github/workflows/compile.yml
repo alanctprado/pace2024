@@ -13,3 +13,5 @@ jobs:
         run: cmake -B build
       - name: Run Make
         run: make -C build
+      - name: Test against Tiny Case Set
+        run: make -C build run_tiny
