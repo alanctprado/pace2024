@@ -48,7 +48,7 @@ int IntegerProgrammingSolver::solve()
       }
       else if (ip_options.formulation == options::IPFormulation::QUADRATIC)
       {
-        return viniLPSolve();
+        return quadraticLPSolve();
       }
       throw std::runtime_error("Is this the real life?");
     default:
@@ -406,8 +406,8 @@ int IntegerProgrammingSolver::quadraticLPSolve()
         c[yIndex(i, k, n)] = 1;
         c[yIndex(j, k, n)] = -1;
         auto [index, b] = triangularIndex(j, i);
-        if (!b) { c[index] = -n; }
-        else { c[index] = n; rhs += n; }
+        if (!b) { c[index] = -(n - 1); }
+        else { c[index] = n - 1; rhs += n - 1; }
       }
       add_constraint(lp, c, LE, rhs);
       for (int k = 0; k < n; k++)
@@ -426,7 +426,7 @@ int IntegerProgrammingSolver::quadraticLPSolve()
 
   if (::solve(lp))
   {
-    throw std::invalid_argument("Houston, we have a problem :-(\n");
+    throw std::runtime_error("Houston, we have a problem :-(\n");
   }
 
   /**
