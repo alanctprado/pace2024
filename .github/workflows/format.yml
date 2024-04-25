@@ -1,0 +1,14 @@
+name: Format
+run-name: ${{ github.actor }} is running Format
+on: [push]
+jobs:
+  format-source-code:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+      - name: Clang Format Github Action
+        uses: RafikFarhad/clang-format-github-action@v4
+        with:
+            sources: "src/*"
+            style: file
