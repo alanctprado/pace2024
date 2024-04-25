@@ -3,6 +3,7 @@ IndentWidth: 2
 ColumnLimit: 80
 UseTab: Never
 BreakBeforeBraces: Custom
+SortIncludes: false
 BraceWrapping:
     AfterEnum: true
     AfterCaseLabel: true
