@@ -30,9 +30,9 @@ namespace graph {
  */
 class BipartiteGraph : public Graph
 {
- public:
+public:
   BipartiteGraph(int n0, int n1);
-  BipartiteGraph(const BipartiteGraph& H);  // Copy constructor
+  BipartiteGraph(const BipartiteGraph &H); // Copy constructor
   ~BipartiteGraph() = default;
 
   /** Get the number of vertices in part A */
@@ -45,11 +45,11 @@ class BipartiteGraph : public Graph
    * */
   std::vector<std::vector<int>> buildCrossingMatrix() const;
 
- protected:
+protected:
   std::vector<int> m_partA, m_partB;
 };
 
 } // namespace graph
 } // namespace banana
 
-#endif  // __PACE2024__BIPARTITE_GRAPH_HPP
+#endif // __PACE2024__BIPARTITE_GRAPH_HPP

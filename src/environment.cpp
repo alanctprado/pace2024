@@ -18,14 +18,11 @@
 
 namespace banana {
 
-void Environment::setOptions(int argc, char* argv[])
+void Environment::setOptions(int argc, char *argv[])
 {
   m_options.parseArguments(argc, argv);
 }
 
-options::Options Environment::options()
-{
-  return m_options;
-}
+options::Options Environment::options() { return m_options; }
 
 } // namespace banana

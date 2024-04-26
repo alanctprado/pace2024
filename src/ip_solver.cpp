@@ -16,9 +16,8 @@
 #include "ip_solver.h"
 #include "environment.h"
 #include "meta_solver.h"
-#include "../lp_solve_5.5/lp_lib.h"
 #include "options.h"
-#include "environment.h"
+#include "../lp_solve_5.5/lp_lib.h"
 
 #include <algorithm>
 #include <cassert>
@@ -30,7 +29,7 @@ namespace solver {
 namespace ip {
 
 IntegerProgrammingSolver::IntegerProgrammingSolver(graph::BipartiteGraph graph)
-  : MetaSolver<int>(graph)
+    : MetaSolver<int>(graph)
 {}
 
 int IntegerProgrammingSolver::solve()
@@ -38,17 +37,17 @@ int IntegerProgrammingSolver::solve()
   options::HolderIP ip_options = Environment::options().ip;
   switch (ip_options.solverMode)
   {
-    case options::IPSolverMode::LPSOLVE:
-      if (ip_options.formulation == options::IPFormulation::ONE)
-      {
-        return solveWithLPSolve1();
-      }
-      else if (ip_options.formulation == options::IPFormulation::TWO)
-      {
-        return solveWithLPSolve2();
-      }
-    default:
-      break;
+  case options::IPSolverMode::LPSOLVE:
+    if (ip_options.formulation == options::IPFormulation::ONE)
+    {
+      return solveWithLPSolve1();
+    }
+    else if (ip_options.formulation == options::IPFormulation::TWO)
+    {
+      return solveWithLPSolve2();
+    }
+  default:
+    break;
   }
   throw std::runtime_error("Do the L");
 }
@@ -80,21 +79,20 @@ int IntegerProgrammingSolver::solveWithLPSolve1()
   int n = m_graph.countVerticesB();
   int offset = m_graph.countVerticesA();
 
-  lprec* lp;
-  lp = make_lp(0, n * n);    // (#rows, #columns = #variables)
+  lprec *lp;
+  lp = make_lp(0, n * n); // (#rows, #columns = #variables)
   /**
-    * SEVERE:   Only severe messages are reported. Errors.
-    * CRITICAL: Only critical messages are reported. Hard errors like
-    *           instability, out of memory, ...
-    * Change to critical before submitting.
-    */
+   * SEVERE:   Only severe messages are reported. Errors.
+   * CRITICAL: Only critical messages are reported. Hard errors like
+   *           instability, out of memory, ...
+   * Change to critical before submitting.
+   */
   set_verbose(lp, SEVERE);
-
 
   /** Configure objective function */
   set_minim(lp);
-  double* c = (double*) malloc((n * n + 1) * sizeof(double));
-  c[0] = 0;    // Element 0 is ignored by LP Solve
+  double *c = (double *)malloc((n * n + 1) * sizeof(double));
+  c[0] = 0; // Element 0 is ignored by LP Solve
   for (int i = 0; i < n; i++)
   {
     for (int j = 0; j < n; j++)
@@ -112,7 +110,8 @@ int IntegerProgrammingSolver::solveWithLPSolve1()
     {
       for (int k = 0; k < n; k++)
       {
-        if (i == j or i == k or j == k) continue;
+        if (i == j or i == k or j == k)
+          continue;
         c[i * n + j + 1] = c[j * n + k + 1] = 1;
         c[i * n + k + 1] = -1;
         add_constraint(lp, c, LE, 1);
@@ -131,10 +130,13 @@ int IntegerProgrammingSolver::solveWithLPSolve1()
       c[i * n + j + 1] = c[j * n + i + 1] = 0;
     }
   }
-  free(c);    // No longer need it
+  free(c); // No longer need it
 
   /** 0-1 variables constraint */
-  for (int i = 1; i <= n * n; i++) { set_binary(lp, i, TRUE); }
+  for (int i = 1; i <= n * n; i++)
+  {
+    set_binary(lp, i, TRUE);
+  }
 
   if (::solve(lp))
   {
@@ -142,10 +144,10 @@ int IntegerProgrammingSolver::solveWithLPSolve1()
   }
 
   /**
-    * Create vector with how many successors each vertex in B has.
-    * Sort this vector and return the vertices in reverse order.
-    */
-  double* vars = (double*) malloc((n * n) * sizeof(double));
+   * Create vector with how many successors each vertex in B has.
+   * Sort this vector and return the vertices in reverse order.
+   */
+  double *vars = (double *)malloc((n * n) * sizeof(double));
   get_variables(lp, vars);
   std::vector<std::pair<int, int>> sol;
   for (int i = 0; i < n; i++)
@@ -153,25 +155,28 @@ int IntegerProgrammingSolver::solveWithLPSolve1()
     int count_successors = 0;
     for (int j = 0; j < n; j++)
     {
-       if (i == j) { continue; }
-       count_successors += vars[i * n + j];
+      if (i == j)
+      {
+        continue;
+      }
+      count_successors += vars[i * n + j];
     }
     sol.push_back({count_successors, i});
   }
   std::sort(sol.begin(), sol.end());
-  for (int i = n - 1; i >=0; i--)
+  for (int i = n - 1; i >= 0; i--)
   {
     m_order.push_back(sol[i].second + offset);
   }
 
   double z = get_objective(lp);
   delete_lp(lp);
-  return (int) z;    // Return optimal value
+  return (int)z; // Return optimal value
 }
 
 /**
  * Integer Program 2
- * 
+ *
  * The same as the first one, but using half the variables: x_{i,j} s.t. i > j;
  *
  * Variables:
@@ -193,8 +198,10 @@ std::pair<int, bool> IntegerProgrammingSolver::index2(int i, int j)
 {
   assert(i != j);
   int index = (i > j) ? i * (i - 1) / 2 + j : j * (j - 1) / 2 + i;
-  if (i > j) return {index + 1, 0};
-  else return {index + 1, 1};
+  if (i > j)
+    return {index + 1, 0};
+  else
+    return {index + 1, 1};
 }
 
 int IntegerProgrammingSolver::solveWithLPSolve2()
@@ -206,20 +213,20 @@ int IntegerProgrammingSolver::solveWithLPSolve2()
   int offset = m_graph.countVerticesA();
   int columns = n * (n - 1) / 2;
 
-  lprec* lp;
-  lp = make_lp(0, columns);    // (#rows, #columns = #variables)
+  lprec *lp;
+  lp = make_lp(0, columns); // (#rows, #columns = #variables)
   /**
-    * SEVERE:   Only severe messages are reported. Errors.
-    * CRITICAL: Only critical messages are reported. Hard errors like
-    *           instability, out of memory, ...
-    * Change to critical before submitting.
-    */
+   * SEVERE:   Only severe messages are reported. Errors.
+   * CRITICAL: Only critical messages are reported. Hard errors like
+   *           instability, out of memory, ...
+   * Change to critical before submitting.
+   */
   set_verbose(lp, SEVERE);
 
   /** Configure objective function */
   set_minim(lp);
-  double* c = (double*) malloc((columns + 1) * sizeof(double));
-  c[0] = 0;    // Element 0 is ignored by LP Solve
+  double *c = (double *)malloc((columns + 1) * sizeof(double));
+  c[0] = 0; // Element 0 is ignored by LP Solve
   int objective_offset = 0;
   for (int i = 0; i < n; i++)
   {
@@ -239,31 +246,56 @@ int IntegerProgrammingSolver::solveWithLPSolve2()
     {
       for (int k = 0; k < n; k++)
       {
-        if (i == j or i == k or j == k) continue;
+        if (i == j or i == k or j == k)
+          continue;
         int rhs = 1;
 
         std::tie(index, b) = index2(i, j);
-        if (!b) { c[index] = 1; }
-        else { c[index] = -1; rhs -= 1; }
+        if (!b)
+        {
+          c[index] = 1;
+        }
+        else
+        {
+          c[index] = -1;
+          rhs -= 1;
+        }
 
         std::tie(index, b) = index2(j, k);
-        if (!b) { c[index] = 1; }
-        else { c[index] = -1; rhs -= 1; }
+        if (!b)
+        {
+          c[index] = 1;
+        }
+        else
+        {
+          c[index] = -1;
+          rhs -= 1;
+        }
 
         std::tie(index, b) = index2(i, k);
-        if (!b) { c[index] = -1; }
-        else { c[index] = 1; rhs += 1; }
-        
+        if (!b)
+        {
+          c[index] = -1;
+        }
+        else
+        {
+          c[index] = 1;
+          rhs += 1;
+        }
+
         add_constraint(lp, c, LE, rhs);
         c[index2(i, j).first] = c[index2(j, k).first] = 0;
         c[index2(i, k).first] = 0;
       }
     }
   }
-  free(c);    // No longer need it
+  free(c); // No longer need it
 
   /** 0-1 variables constraint */
-  for (int i = 1; i <= columns; i++) { set_binary(lp, i, TRUE); }
+  for (int i = 1; i <= columns; i++)
+  {
+    set_binary(lp, i, TRUE);
+  }
 
   if (::solve(lp))
   {
@@ -271,10 +303,10 @@ int IntegerProgrammingSolver::solveWithLPSolve2()
   }
 
   /**
-    * Create vector with how many successors each vertex in B has.
-    * Sort this vector and return the vertices in reverse order.
-    */
-  double* vars = (double*) malloc((n * n) * sizeof(double));
+   * Create vector with how many successors each vertex in B has.
+   * Sort this vector and return the vertices in reverse order.
+   */
+  double *vars = (double *)malloc((n * n) * sizeof(double));
   get_variables(lp, vars);
   std::vector<std::pair<int, int>> sol;
   for (int i = 0; i < n; i++)
@@ -282,7 +314,10 @@ int IntegerProgrammingSolver::solveWithLPSolve2()
     int count_successors = 0;
     for (int j = 0; j < n; j++)
     {
-      if (i == j) { continue; }
+      if (i == j)
+      {
+        continue;
+      }
       std::tie(index, b) = index2(i, j);
       index--;
       count_successors += !b ? vars[index] : 1 - vars[index];
@@ -290,14 +325,14 @@ int IntegerProgrammingSolver::solveWithLPSolve2()
     sol.push_back({count_successors, i});
   }
   std::sort(sol.begin(), sol.end());
-  for (int i = n - 1; i >=0; i--)
+  for (int i = n - 1; i >= 0; i--)
   {
     m_order.push_back(sol[i].second + offset);
   }
 
   double z = get_objective(lp);
   delete_lp(lp);
-  return (int) z + objective_offset;    // Return optimal value
+  return (int)z + objective_offset; // Return optimal value
 }
 
 } // namespace ip

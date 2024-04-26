@@ -30,10 +30,10 @@ namespace graph {
 template <class T> // Define, someday, a Vertex class? Rita? 👀
 class TGraph
 {
- protected:
+protected:
   typedef std::pair<T, T> Edge;
 
- public:
+public:
   TGraph() {}
   virtual ~TGraph() {}
 
@@ -84,7 +84,7 @@ class TGraph
   virtual std::unique_ptr<TGraph> complement() const = 0;
   /** Divides a graph into disjoint subgraphs */
   virtual std::vector<std::unique_ptr<TGraph>>
-  disjointSubgraphs(std::vector<std::vector<T>>& subsets) const = 0;
+  disjointSubgraphs(std::vector<std::vector<T>> &subsets) const = 0;
   /**
    * Creates the quotient graph from 'partition'.
    *
@@ -92,8 +92,8 @@ class TGraph
    * adjacent to another if some vertex in it is adjacent to some vertex in the
    * other with respect to the edge set of the original graph.
    */
-  virtual std::unique_ptr<TGraph> 
-  quotient(std::vector<std::vector<T>>& partition) const = 0;
+  virtual std::unique_ptr<TGraph>
+  quotient(std::vector<std::vector<T>> &partition) const = 0;
   /** TO-DO */
   virtual std::vector<std::vector<T>>
   modularPartition(std::vector<std::vector<T>> &P) const = 0;
@@ -107,4 +107,4 @@ class TGraph
 } // namespace graph
 } // namespace banana
 
-#endif  // __PACE2024__ABSTRACT_GRAPH_HPP
+#endif // __PACE2024__ABSTRACT_GRAPH_HPP

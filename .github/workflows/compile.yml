@@ -1,0 +1,17 @@
+name: Compile
+run-name: ${{ github.actor }} is running Compile
+on: [push]
+jobs:
+  compile-source-code:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+      - name: Install dependencies
+        run: sudo apt-get install -y cmake
+      - name: Run CMake
+        run: cmake -B build
+      - name: Run Make
+        run: make -C build
+      - name: Test against Tiny Case Set
+        run: make -C build run_tiny
