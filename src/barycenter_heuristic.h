@@ -25,12 +25,15 @@ namespace solver{
 namespace approx_routine{
 namespace barycenter{
 
+/**
+ * Implements the barycenter heuristic
+ */
 class BarycenterHeuristic : public ApproximationRoutine
 {
 public:
   BarycenterHeuristic(graph::BipartiteGraph graph);
   ~BarycenterHeuristic() override = default;
-  int runRoutine() override;
+  int solve() override;
 
 private:
   std::vector<std::pair<int,int>> neighborhood_info; //sum of neighbors, number of neighbors
