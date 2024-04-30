@@ -10,18 +10,20 @@
  * licensing information.
  * ****************************************************************************
  *
- * Base solver for the one-sided crossing minimization problem
+ * Definition of an abstract approximation routine class
  */
 
 #include "approximation_routine.h"
 
 
 namespace banana{
+namespace solver{
 namespace approx_routine{
   
-  ApproximationRoutine::ApproximationRoutine(graph::BipartiteGraph graph) : 
-      m_graph(graph)
-  {}
+ApproximationRoutine::ApproximationRoutine(graph::BipartiteGraph graph) 
+    : MetaSolver<int>(graph)
+{}
 
 } // namespace approx_routine
+} // namespace solver
 } // namespace banana
