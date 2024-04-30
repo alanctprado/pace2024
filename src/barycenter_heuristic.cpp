@@ -32,7 +32,7 @@ BarycenterHeuristic::BarycenterHeuristic(graph::BipartiteGraph graph)
   }
 }
 
-int BarycenterHeuristic::runRoutine()
+int BarycenterHeuristic::solve()
 {
   return solveBarycenterHeuristic();
 }
