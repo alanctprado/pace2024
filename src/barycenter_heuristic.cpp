@@ -17,14 +17,15 @@
 #include <algorithm>
 
 namespace banana{
+namespace solver{
 namespace approx_routine{
 namespace barycenter{
   
 BarycenterHeuristic::BarycenterHeuristic(graph::BipartiteGraph graph)
     : ApproximationRoutine(graph)
 {
-  int n = graph.CountVerticesA();
-  int offset = graph.CountVerticesB();
+  int n = graph.countVerticesA();
+  int offset = graph.countVerticesB();
   
   for (int i = 0; i < offset; ++i){
     neighborhood_info.push_back(getNeighborhoodInfo(n+i));
@@ -33,24 +34,32 @@ BarycenterHeuristic::BarycenterHeuristic(graph::BipartiteGraph graph)
 
 int BarycenterHeuristic::runRoutine()
 {
-  int n = graph->countVerticesA();
-  int offset = graph->countVerticesB();
+  return solveBarycenterHeuristic();
+}
+
+int BarycenterHeuristic::solveBarycenterHeuristic(){
+  int n = m_graph.countVerticesA();
+  int offset = m_graph.countVerticesB();
   
   std::vector<int> blayer;
   for (int i = 0; i < offset; ++i) blayer.push_back(i);
 
-  std::sort(blayer.begin(), blayer.end(), compareNodes());
+  std::sort(blayer.begin(), blayer.end(), [&](int node1, int node2) {
+        long long v1 = (1ll * neighborhood_info[node1].first * neighborhood_info[node2].second);
+        long long v2 = (1ll * neighborhood_info[node2].first * neighborhood_info[node1].second);
+        return (v1 < v2);
+    });
 
   for (int i = 0; i < offset; ++i) blayer[i] += n;
 
   return numberOfCrossings(blayer);
 }
 
-pair<int,int> BarycenterHeuristic::getNeighborhoodInfo(int node){
-  std::vector<int> neighbors = m_graph->neighborhood(node);
+std::pair<int,int> BarycenterHeuristic::getNeighborhoodInfo(int node){
+  std::vector<int> neighbors = m_graph.neighborhood(node);
 
   int neighborhood_sum = 0;
-  for (auto v : neighbors) neighbordhood_sum += v;
+  for (auto v : neighbors) neighborhood_sum += v;
 
   int neighbordhood_size = neighbors.size();
 
@@ -58,14 +67,7 @@ pair<int,int> BarycenterHeuristic::getNeighborhoodInfo(int node){
   return info;
 }
 
-bool BarycenterHeuristic::compareNodes(int &node1, int &node2){
-  long long v1 = (1ll * neighborhood_info[node1].f * neighborhood_info[node2].s);
-  long long v2 = (1ll * neighborhood_info[node2].f * neighborhood_info[node1].s);
-
-  return (v1 < v2);
-}
-
-
 } // namespace barycenter
 } // namespace approx_routine
+} // namespace solver
 } // namespace banana

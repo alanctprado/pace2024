@@ -20,6 +20,8 @@ execute_process(
 )
 
 set(SRC_FILES
+  "${PROJECT_SOURCE_DIR}/src/barycenter_heuristic.cpp"
+  "${PROJECT_SOURCE_DIR}/src/approximation_routine.cpp"
   "${PROJECT_SOURCE_DIR}/src/base_solver.cpp"
   "${PROJECT_SOURCE_DIR}/src/bipartite_graph.cpp"
   "${PROJECT_SOURCE_DIR}/src/environment.cpp"
