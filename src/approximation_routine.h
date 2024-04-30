@@ -22,12 +22,12 @@ namespace banana{
 namespace solver{
 namespace approx_routine{
 
-class ApproximationRoutine : MetaSolver<int>
+class ApproximationRoutine : public MetaSolver<int>
 {
 public:
-  ApproximationRoutine(graph::BipartiteGraph &graph);
+  ApproximationRoutine(graph::BipartiteGraph graph);
   virtual ~ApproximationRoutine() = default;
-  int runRoutine() = 0;
+  virtual int runRoutine() = 0;
 };
 
 } // namespace approx_routine
