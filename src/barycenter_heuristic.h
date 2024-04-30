@@ -18,13 +18,14 @@
 
 #include "approximation_routine.h"
 #include <vector>
-#include <pair>
+#include <utility>
 
 namespace banana{
+namespace solver{
 namespace approx_routine{
 namespace barycenter{
 
-class BarycenterHeuristic : ApproximationRoutine
+class BarycenterHeuristic : public ApproximationRoutine
 {
 public:
   BarycenterHeuristic(graph::BipartiteGraph graph);
@@ -32,13 +33,14 @@ public:
   int runRoutine() override;
 
 private:
-  std::vector<pair<int,int>> neighborhood_info; //sum of neighbors, number of neighbors
+  std::vector<std::pair<int,int>> neighborhood_info; //sum of neighbors, number of neighbors
+  int solveBarycenterHeuristic();
   std::pair<int,int> getNeighborhoodInfo(int node);
-  bool compareNodes(int node1, int node2);
 }; 
 
 } // namespace barycenter
 } // namespace approx_routine
+} // namespace solver
 } // namespace banana
 
 
