@@ -10,29 +10,28 @@
  * licensing information.
  * ****************************************************************************
  *
- * Base solver for the one-sided crossing minimization problem
+ * Definition of an abstract approximation routine class
  */
 
 #ifndef __PACE2024__APPROXIMATION_ROUTINE_H
 #define __PACE2024__APPROXIMATION_ROUTINE_H
 
-#include "bipartite_graph.h"
+#include "meta_solver.h"
 
 namespace banana{
+namespace solver{
 namespace approx_routine{
 
-class ApproximationRoutine
+class ApproximationRoutine : MetaSolver<int>
 {
-  public:
-    ApproximationRoutine(graph::BipartiteGraph graph);
-    ~ApproximationRoutine() = default;
-    int runRoutine() = 0;
-
-  protected:
-    const graph::BipartiteGraph m_graph;
-}
+public:
+  ApproximationRoutine(graph::BipartiteGraph &graph);
+  virtual ~ApproximationRoutine() = default;
+  int runRoutine() = 0;
+};
 
 } // namespace approx_routine
+} // namespace solver
 } // namespace banana
 
 
