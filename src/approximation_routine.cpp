@@ -18,12 +18,12 @@
 
 namespace banana{
 namespace solver{
-namespace approx_routine{
+namespace heuristic{
   
 ApproximationRoutine::ApproximationRoutine(graph::BipartiteGraph graph) 
     : MetaSolver<int>(graph)
 {}
 
-} // namespace approx_routine
+} // namespace heuristic
 } // namespace solver
 } // namespace banana
