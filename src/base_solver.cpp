@@ -43,7 +43,7 @@ void BaseSolver::runBanana()
   m_ipSolver->explain(order);
   assert(m_ipSolver->verify(order, crossings));
   if (Environment::options().verify.verifyMode ==
-      banana::options::VerifyMode::FULL)
+      banana::options::VerifyMode::COMPLETE)
   {
     verifySolution(crossings);
   }

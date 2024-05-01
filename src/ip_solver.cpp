@@ -13,13 +13,15 @@
  * Integer programming solver.
  */
 
-#include "ip_solver.h"
 #include "environment.h"
 #include "meta_solver.h"
 #include "options.h"
+#include "environment.h"
+#include "ip_solver.h"
 #include "../lp_solve_5.5/lp_lib.h"
 
 #include <algorithm>
+#include <numeric>
 #include <cassert>
 #include <iostream>
 #include <stdexcept>
@@ -96,8 +98,8 @@ int IntegerProgrammingSolver::simpleLPSolve()
 
   /** Configure objective function */
   set_minim(lp);
-  double *c = (double *)malloc((n * n + 1) * sizeof(double));
-  c[0] = 0; // Element 0 is ignored by LP Solve
+  std::vector<double> c(n * n + 1);
+  c[0] = 0;    // Element 0 is ignored by LP Solve
   for (int i = 0; i < n; i++)
   {
     for (int j = 0; j < n; j++)
@@ -105,10 +107,10 @@ int IntegerProgrammingSolver::simpleLPSolve()
       c[i * n + j + 1] = cm[i][j];
     }
   }
-  set_obj_fn(lp, c);
+  set_obj_fn(lp, c.data());
 
   /** Transitivity constraints */
-  memset(c, 0, (n * n + 1) * sizeof(double));
+  std::fill(c.begin(), c.end(), 0);
   for (int i = 0; i < n; i++)
   {
     for (int j = 0; j < n; j++)
@@ -119,7 +121,7 @@ int IntegerProgrammingSolver::simpleLPSolve()
           continue;
         c[i * n + j + 1] = c[j * n + k + 1] = 1;
         c[i * n + k + 1] = -1;
-        add_constraint(lp, c, LE, 1);
+        add_constraint(lp, c.data(), LE, 1);
         c[i * n + j + 1] = c[j * n + k + 1] = c[i * n + k + 1] = 0;
       }
     }
@@ -131,11 +133,10 @@ int IntegerProgrammingSolver::simpleLPSolve()
     for (int j = i + 1; j < n; j++)
     {
       c[i * n + j + 1] = c[j * n + i + 1] = 1;
-      add_constraint(lp, c, EQ, 1);
+      add_constraint(lp, c.data(), EQ, 1);
       c[i * n + j + 1] = c[j * n + i + 1] = 0;
     }
   }
-  free(c); // No longer need it
 
   /** 0-1 variables constraint */
   for (int i = 1; i <= n * n; i++)
@@ -230,8 +231,8 @@ int IntegerProgrammingSolver::shorterSimpleLPSolve()
 
   /** Configure objective function */
   set_minim(lp);
-  double *c = (double *)malloc((columns + 1) * sizeof(double));
-  c[0] = 0; // Element 0 is ignored by LP Solve
+  std::vector<double> c(columns + 1);
+  c[0] = 0;    // Element 0 is ignored by LP Solve
   int objective_offset = 0;
   for (int i = 0; i < n; i++)
   {
@@ -241,10 +242,10 @@ int IntegerProgrammingSolver::shorterSimpleLPSolve()
       objective_offset += cm[j][i];
     }
   }
-  set_obj_fn(lp, c);
+  set_obj_fn(lp, c.data());
 
   /** Transitivity constraints */
-  memset(c, 0, (columns + 1) * sizeof(double));
+  std::fill(c.begin(), c.end(), 0);
   for (int i = 0; i < n; i++)
   {
     for (int j = 0; j < n; j++)
@@ -267,13 +268,22 @@ int IntegerProgrammingSolver::shorterSimpleLPSolve()
         if (!b) { c[index] = -1; }
         else { c[index] = 1; rhs += 1; }
         
-        add_constraint(lp, c, LE, rhs);
+        add_constraint(lp, c.data(), LE, rhs);
         c[triangularIndex(i, j).first] = c[triangularIndex(j, k).first] = 0;
         c[triangularIndex(i, k).first] = 0;
       }
     }
   }
-  free(c); // No longer need it
+
+  /** Prefix constraints */
+  const auto& opt = Environment::options().ip.prefixConstraints;
+  if (opt == options::IPPrefixConstraints::X)
+  {
+    xPrefixLPSolve(lp, c);
+  }
+  /** Can't add Y constraints */
+  assert(opt != options::IPPrefixConstraints::Y);
+  assert(opt != options::IPPrefixConstraints::BOTH);
 
   /** 0-1 variables constraint */
   for (int i = 1; i <= columns; i++)
@@ -313,6 +323,7 @@ int IntegerProgrammingSolver::shorterSimpleLPSolve()
 
   double z = get_objective(lp);
   delete_lp(lp);
+
   return round(z) + objective_offset;    // Return optimal value
 }
 
@@ -362,8 +373,7 @@ int IntegerProgrammingSolver::quadraticLPSolve()
 
   /** Configure objective function */
   set_minim(lp);
-  double* c = (double*) malloc((columns + 1) * sizeof(double));
-  memset(c, 0, (columns + 1) * sizeof(double));
+  std::vector<double> c(columns + 1);
   int objective_offset = 0;
   for (int i = 0; i < n; i++)
   {
@@ -373,13 +383,13 @@ int IntegerProgrammingSolver::quadraticLPSolve()
       objective_offset += cm[j][i];
     }
   }
-  set_obj_fn(lp, c);
+  set_obj_fn(lp, c.data());
 
-  memset(c, 0, (columns + 1) * sizeof(double));
+  std::fill(c.begin(), c.end(), 0);
   for (int k = 0; k < n; k++)
   {
     for (int i = 0; i < n; i++) { c[yIndex(i, k, n)] = 1; }
-    add_constraint(lp, c, EQ, k + 1);
+    add_constraint(lp, c.data(), EQ, k + 1);
     for (int i = 0; i < n; i++) { c[yIndex(i, k, n)] = 0; }
   }
 
@@ -389,7 +399,7 @@ int IntegerProgrammingSolver::quadraticLPSolve()
     {
       c[yIndex(i, k, n)] = 1;
       c[yIndex(i, k + 1, n)] = -1;
-      add_constraint(lp, c, LE, 0);
+      add_constraint(lp, c.data(), LE, 0);
       c[yIndex(i, k, n)] = 0;
       c[yIndex(i, k + 1, n)] = 0;
     }
@@ -409,7 +419,7 @@ int IntegerProgrammingSolver::quadraticLPSolve()
         if (!b) { c[index] = -(n - 1); }
         else { c[index] = n - 1; rhs += n - 1; }
       }
-      add_constraint(lp, c, LE, rhs);
+      add_constraint(lp, c.data(), LE, rhs);
       for (int k = 0; k < n; k++)
       {
         c[yIndex(i, k, n)] = 0;
@@ -418,8 +428,20 @@ int IntegerProgrammingSolver::quadraticLPSolve()
       }
     }
   }
-  
-  free(c);    // No longer need it
+
+  /** Prefix constraints */
+  const auto& opt = Environment::options().ip.prefixConstraints;
+  if (opt == options::IPPrefixConstraints::X ||
+      opt == options::IPPrefixConstraints::BOTH)
+  {
+    xPrefixLPSolve(lp, c);
+  }
+
+  if (opt == options::IPPrefixConstraints::Y ||
+      opt == options::IPPrefixConstraints::BOTH)
+  {
+    yPrefixLPSolve(lp, c);
+  }
 
   /** 0-1 variables constraint */
   for (int i = 1; i <= columns; i++) { set_binary(lp, i, TRUE); }
@@ -435,15 +457,6 @@ int IntegerProgrammingSolver::quadraticLPSolve()
     */
   double* vars = (double*) malloc((columns) * sizeof(double));
   get_variables(lp, vars);
-
-  for (int i = 0; i < n; i++)
-  {
-    for (int j = 0; j < n; j++)
-    {
-       std::cout << vars[yIndex(i, j, n) - 1] << " ";
-    }
-    std::cout << "\n";
-  }
 
   std::vector<std::pair<int, int>> sol;
   for (int i = 0; i < n; i++)
@@ -466,14 +479,137 @@ int IntegerProgrammingSolver::quadraticLPSolve()
     m_order.push_back(sol[i].second + offset);
   }
 
-  for (int vertex : m_order)
-    std::cout << vertex << " ";
-  std::cout << "\n";
-
   double z = get_objective(lp);
   delete_lp(lp);
-  std::cout << "OBJETIVO: " <<  round(z) + objective_offset << "\n";
   return round(z) + objective_offset;    // Return optimal value
+}
+
+
+
+/** Prefix Constraints On X 
+ * 
+ *  By evaluating the number of crossings involving a vertex 'p' considering
+ *  if it is used in the beginning of the order (L), or the end (R),
+ *  we can infer that 'p' isn't too far from the end in which this crossing
+ *  number is minimal.
+ *
+ *  More formally, if there are 'i' vertices before 'p' in the order,
+ *  there is at least S = \sum_{i smallest values of} C_{jp} - C_{pj} crossings.
+ *  Therefore, if L + S > L, it is never optimal to add 'i' 
+ *  or more vertices before 'p'.
+ *
+ *
+ *  These constraints can be added in any formulation that uses the variables
+ *  'X' indexed by the function triangularIndex.
+ */
+void IntegerProgrammingSolver::xPrefixLPSolve(lprec* lp, std::vector<double>& c)
+{
+  std::vector<std::vector<int>> cm = m_graph.buildCrossingMatrix();
+  int n = m_graph.countVerticesB();
+  int offset = m_graph.countVerticesA();
+
+  for (int p = 0; p < n; p++)
+  {
+    std::vector<int> deltas(n);
+    for (int j = 0; j < n; j++)
+    {
+      /** change in crossings when moving j to the left of p */
+      /* TODO: Why does this work? */
+      /* deltas[j] = cm[j][p] - cm[p][j]; */
+      deltas[j] = cm[p][j] - cm[j][p];
+    }
+
+    std::vector<int> order(n - 1);
+    std::iota(order.begin(), order.begin() + p, 0);
+    std::iota(order.begin() + p, order.end(), p + 1);
+    std::sort(order.begin(), order.end(), [&] (int i, int j)
+        {
+          return deltas[i] < deltas[j];
+        });
+
+    /** 
+      * The position of 'p' is at most max_prefix, being the first moment 
+      * when it's certainly better to put 'p' at the beginning,
+      * this is given by the first prefix such that \sum_j delta_j > 0
+      */
+    int cum_sum = 0, max_prefix = 0;
+    for (int j = 0; j < n - 1; j++) {
+      cum_sum += deltas[order[j]];
+      if (cum_sum > 0) { break; }
+      max_prefix++;
+    }
+
+    /** 
+      * Populates the constraint vector 'c' with the sum of 'x_{jp}' for 
+      * every other vertex 'j', when 'p' is fixed.
+      *
+      * It is used to restrict the position of 'p' to a prefix or a suffix.
+      */
+    auto _create_constraint = [&] ()
+    {
+      for (int j = 0; j < p; j++)
+      {
+        c[triangularIndex(j, p).first] = 1;
+      }
+      for (int j = p + 1; j < n; j++)
+      {
+        c[triangularIndex(j, p).first] = -1;
+      }
+    };
+
+    /** 
+      * Resets the constraint vector 'c' to be used by the next constraint.
+      */
+    auto _undo_constraint = [&] ()
+    {
+      for (int j = 0; j < p; j++)
+      {
+        c[triangularIndex(j, p).first] = 0;
+      }
+      for (int j = p + 1; j < n; j++)
+      {
+        c[triangularIndex(j, p).first] = 0;
+      }
+    };
+
+    /** Add constraint pos(p) <= max_prefix */
+    if (max_prefix < n - 1)
+    {
+      _create_constraint();
+      int inverted_vars = (n - 1) - p;
+      add_constraint(lp, c.data(), LE, max_prefix - inverted_vars);
+      _undo_constraint();
+    }
+
+    /** 
+      * The position of 'p' is at least min_suffix, being the first moment 
+      * when it's certainly better to put 'p' at the end,
+      * this is given by the first suffix such that \sum_j delta_j < 0
+      */
+    cum_sum = 0;
+    int min_suffix = n - 1;
+    for (int j = n - 2; j >= 0; --j)
+    {
+      cum_sum += deltas[order[j]];
+      if (cum_sum < 0) { break; }
+      min_suffix--;
+    }
+
+    /** Add constraint pos(p) >= min_suffix */
+    if (min_suffix > 0)
+    {
+      _create_constraint();
+      int inverted_vars = (n - 1) - p;
+      add_constraint(lp, c.data(), GE, min_suffix - inverted_vars);
+      _undo_constraint();
+    }
+  }
+}
+
+/** TODO: explain */
+void IntegerProgrammingSolver::yPrefixLPSolve(lprec* lp, std::vector<double>& c)
+{
+  std::vector<std::vector<int>> cm = m_graph.buildCrossingMatrix();
 }
 
 int IntegerProgrammingSolver::viniLPSolve()
@@ -495,8 +631,7 @@ int IntegerProgrammingSolver::viniLPSolve()
 
   /** Configure objective function */
   set_minim(lp);
-  double* c = (double*) malloc((columns + 1) * sizeof(double));
-  memset(c, 0, (columns + 1) * sizeof(double));
+  std::vector<double> c(columns + 1);
   int objective_offset = 0;
   for (int i = 0; i < n; i++)
   {
@@ -506,13 +641,13 @@ int IntegerProgrammingSolver::viniLPSolve()
       objective_offset += cm[j][i];
     }
   }
-  set_obj_fn(lp, c);
+  set_obj_fn(lp, c.data());
 
-  memset(c, 0, (columns + 1) * sizeof(double));
+  std::fill(c.begin(), c.end(), 0);
   for (int k = 0; k < n; k++)
   {
     for (int i = 0; i < n; i++) { c[yIndex(i, k, n)] = 1; }
-    add_constraint(lp, c, EQ, k + 1);
+    add_constraint(lp, c.data(), EQ, k + 1);
     for (int i = 0; i < n; i++) { c[yIndex(i, k, n)] = 0; }
   }
 
@@ -522,7 +657,7 @@ int IntegerProgrammingSolver::viniLPSolve()
     {
       c[yIndex(i, k, n)] = 1;
       c[yIndex(i, k + 1, n)] = -1;
-      add_constraint(lp, c, LE, 0);
+      add_constraint(lp, c.data(), LE, 0);
       c[yIndex(i, k, n)] = 0;
       c[yIndex(i, k + 1, n)] = 0;
     }
@@ -541,15 +676,27 @@ int IntegerProgrammingSolver::viniLPSolve()
         auto [index, b] = triangularIndex(j, i);
         if (!b) { c[index] = -1; }
         else { c[index] = 1; rhs += 1; }
-        add_constraint(lp, c, LE, rhs);
+        add_constraint(lp, c.data(), LE, rhs);
         c[yIndex(i, k, n)] = 0;
         c[yIndex(j, k, n)] = 0;
         c[triangularIndex(j, i).first] = 0;
       }
     }
   }
-  
-  free(c);    // No longer need it
+
+  /** Prefix constraints */
+  const auto& opt = Environment::options().ip.prefixConstraints;
+  if (opt == options::IPPrefixConstraints::X ||
+      opt == options::IPPrefixConstraints::BOTH)
+  {
+    xPrefixLPSolve(lp, c);
+  }
+
+  if (opt == options::IPPrefixConstraints::Y ||
+      opt == options::IPPrefixConstraints::BOTH)
+  {
+    yPrefixLPSolve(lp, c);
+  }
 
   /** 0-1 variables constraint */
   for (int i = 1; i <= columns; i++) { set_binary(lp, i, TRUE); }
@@ -565,15 +712,6 @@ int IntegerProgrammingSolver::viniLPSolve()
     */
   double* vars = (double*) malloc((columns) * sizeof(double));
   get_variables(lp, vars);
-
-  for (int i = 0; i < n; i++)
-  {
-    for (int j = 0; j < n; j++)
-    {
-       std::cout << vars[yIndex(i, j, n) - 1] << " ";
-    }
-    std::cout << "\n";
-  }
 
   std::vector<std::pair<int, int>> sol;
   for (int i = 0; i < n; i++)
@@ -596,13 +734,8 @@ int IntegerProgrammingSolver::viniLPSolve()
     m_order.push_back(sol[i].second + offset);
   }
 
-  for (int vertex : m_order)
-    std::cout << vertex << " ";
-  std::cout << "\n";
-
   double z = get_objective(lp);
   delete_lp(lp);
-  std::cout << "OBJETIVO: " <<  round(z) + objective_offset << "\n";
   return round(z) + objective_offset;    // Return optimal value
 }
 
