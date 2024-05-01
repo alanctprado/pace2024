@@ -29,9 +29,9 @@ namespace barycenter {
  * Implements the Barycenter Heuristic
  *
  * In short, the algorithm orders the vertices on layer B by the mean of their
- * neighbors. If two vertices share the same mean, it preserves their original
- * arrangement. This can be done in polynomial time BIGO( max(M, |B|log|B|) ),
- * where M is the number of edges in the graph.
+ * neighbors indexes. If two vertices share the same mean, it preserves their
+ * original arrangement. This can be done in polynomial time BIGO( max(M,
+ * |B|log|B|) ), where M is the number of edges in the graph.
  *
  * The Barycenter Heuristic was the first popular approximation algorithm
  * developed for the OSCM problem, credited to Sugiyama & Tagawa (1981). Its
