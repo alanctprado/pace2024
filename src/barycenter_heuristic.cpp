@@ -28,7 +28,7 @@ BarycenterHeuristic::BarycenterHeuristic(graph::BipartiteGraph graph)
   int offset = graph.countVerticesA();
   
   for (int i = 0; i < n; ++i){
-    m_neighborhoodInfo.push_back(getNeighborhoodInfo(n+i));
+    m_neighborhoodInfo.push_back(getNeighborhoodInfo(i+offset));
   }
 }
 
