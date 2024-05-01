@@ -47,7 +47,9 @@ int BarycenterHeuristic::solve()
 
   std::vector<int> b_layer;
   for (int i = 0; i < n; ++i)
+  {
     b_layer.push_back(i);
+  }
 
   std::sort(b_layer.begin(), b_layer.end(), [&](int node1, int node2) {
     long long v1 = (1ll * m_neighborhoodInfo[node1].first *
@@ -58,13 +60,16 @@ int BarycenterHeuristic::solve()
   });
 
   for (int i = 0; i < n; ++i)
+  {
     b_layer[i] += offset;
+  }
 
   return numberOfCrossings(b_layer);
 }
 
 /**
- * Calculates the pair (sum of neighbors, number of neighbors) for a given node
+ * Calculates the pair (sum of neighbors indexes, number of neighbors) for a
+ * given node
  */
 std::pair<int, int> BarycenterHeuristic::getNeighborhoodInfo(int node)
 {
