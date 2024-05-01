@@ -78,7 +78,7 @@ void Options::parseArguments(int argc, char *argv[])
         break;
       /** Verify options */
       case static_cast<uint32_t>(Flags::VerifyMode):
-        verify.verifyMode = VerifyMode::FULL;
+        verify.verifyMode = VerifyMode::COMPLETE;
         verify.verifyPath = optarg;
         if (!std::filesystem::exists(verify.verifyPath))
         {

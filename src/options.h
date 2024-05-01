@@ -46,8 +46,7 @@ enum class IPFormulation
 
 enum class VerifyMode
 {
-  LIGHT,
-  FULL,
+  LIGHT, COMPLETE,
   __MAX_VALUE = LIGHT
 };
 
