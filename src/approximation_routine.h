@@ -10,7 +10,7 @@
  * licensing information.
  * ****************************************************************************
  *
- * Definition of an abstract approximation routine class
+ * Definition of an abstract approximation routine class for heuristics
  */
 
 #ifndef __PACE2024__APPROXIMATION_ROUTINE_H
@@ -20,7 +20,7 @@
 
 namespace banana{
 namespace solver{
-namespace approx_routine{
+namespace heuristic{
 
 /**
  * Abstract approximation routine class
@@ -32,7 +32,7 @@ public:
   virtual ~ApproximationRoutine() = default;
 };
 
-} // namespace approx_routine
+} // namespace heuristic
 } // namespace solver
 } // namespace banana
 
