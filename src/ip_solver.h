@@ -55,8 +55,8 @@ public:
 
   /** Prefix constraints */
   void computeDeltas();
-  void xPrefixLPSolve(lprec* lp, double** c);
-  void yPrefixLPSolve(lprec* lp, double* c);
+  void xPrefixLPSolve(lprec* lp, std::vector<double>& c);
+  void yPrefixLPSolve(lprec* lp, std::vector<double>& c);
 };
 
 } // namespace ip
