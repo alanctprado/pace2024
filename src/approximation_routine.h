@@ -18,9 +18,9 @@
 
 #include "meta_solver.h"
 
-namespace banana{
-namespace solver{
-namespace heuristic{
+namespace banana {
+namespace solver {
+namespace heuristic {
 
 /**
  * Abstract approximation routine class
@@ -36,7 +36,4 @@ public:
 } // namespace solver
 } // namespace banana
 
-
 #endif // __PACE_2024__APPROXIMATION_ROUTINE_H
-
-
