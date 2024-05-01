@@ -18,44 +18,50 @@
 
 namespace banana{
 namespace solver{
-namespace approx_routine{
+namespace heuristic{
 namespace barycenter{
   
 BarycenterHeuristic::BarycenterHeuristic(graph::BipartiteGraph graph)
     : ApproximationRoutine(graph)
 {
-  int n = graph.countVerticesA();
-  int offset = graph.countVerticesB();
+  int n = graph.countVerticesB();
+  int offset = graph.countVerticesA();
   
-  for (int i = 0; i < offset; ++i){
-    neighborhood_info.push_back(getNeighborhoodInfo(n+i));
+  for (int i = 0; i < n; ++i){
+    m_neighborhoodInfo.push_back(getNeighborhoodInfo(n+i));
   }
 }
 
+/**
+ * Sorts vertices in layer B by the mean of their neighbors.
+ * 
+ * To avoid working with non-integer values, the corresponding mean for each node is
+ * represented as a fraction by the pair (sum of neighbors, number of neighbors)
+ */
 int BarycenterHeuristic::solve()
 {
-  return solveBarycenterHeuristic();
-}
-
-int BarycenterHeuristic::solveBarycenterHeuristic(){
-  int n = m_graph.countVerticesA();
-  int offset = m_graph.countVerticesB();
+  int n = m_graph.countVerticesB();
+  int offset = m_graph.countVerticesA();
   
-  std::vector<int> blayer;
-  for (int i = 0; i < offset; ++i) blayer.push_back(i);
+  std::vector<int> b_layer;
+  for (int i = 0; i < n; ++i) b_layer.push_back(i);
 
-  std::sort(blayer.begin(), blayer.end(), [&](int node1, int node2) {
-        long long v1 = (1ll * neighborhood_info[node1].first * neighborhood_info[node2].second);
-        long long v2 = (1ll * neighborhood_info[node2].first * neighborhood_info[node1].second);
+  std::sort(b_layer.begin(), b_layer.end(), [&](int node1, int node2) {
+        long long v1 = (1ll * m_neighborhoodInfo[node1].first * m_neighborhoodInfo[node2].second);
+        long long v2 = (1ll * m_neighborhoodInfo[node2].first * m_neighborhoodInfo[node1].second);
         return (v1 < v2);
-    });
+  });
+    
+  for (int i = 0; i < n; ++i) b_layer[i] += offset;
 
-  for (int i = 0; i < offset; ++i) blayer[i] += n;
-
-  return numberOfCrossings(blayer);
+  return numberOfCrossings(b_layer);
 }
 
-std::pair<int,int> BarycenterHeuristic::getNeighborhoodInfo(int node){
+/**
+ * Calculates the pair (sum of neighbors, number of neighbors) for a given node
+ */
+std::pair<int,int> BarycenterHeuristic::getNeighborhoodInfo(int node)
+{
   std::vector<int> neighbors = m_graph.neighborhood(node);
 
   int neighborhood_sum = 0;
@@ -68,6 +74,6 @@ std::pair<int,int> BarycenterHeuristic::getNeighborhoodInfo(int node){
 }
 
 } // namespace barycenter
-} // namespace approx_routine
+} // namespace heuristic
 } // namespace solver
 } // namespace banana
