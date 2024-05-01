@@ -35,6 +35,8 @@ void Options::parseArguments(int argc, char *argv[])
       static_cast<uint32_t>(Flags::IPSolverMode) },
     { "ipformulation", required_argument, nullptr,
       static_cast<uint32_t>(Flags::IPFormulation) },
+    { "ipprefixconstraints", required_argument, nullptr,
+      static_cast<uint32_t>(Flags::IPPrefixConstraints) },
     /** Verification options */
     { "verify", required_argument, nullptr,
       static_cast<uint32_t>(Flags::VerifyMode) },
@@ -73,6 +75,29 @@ void Options::parseArguments(int argc, char *argv[])
         else
         {
           throw std::invalid_argument("Invalid IP Formulation: " +
+                                      std::string{optarg});
+        }
+        break;
+      case static_cast<uint32_t>(Flags::IPPrefixConstraints):
+        if (!strcmp(optarg, "none"))
+        {
+          ip.prefixConstraints = IPPrefixConstraints::NONE;
+        }
+        else if (!strcmp(optarg, "x"))
+        {
+          ip.prefixConstraints = IPPrefixConstraints::X;
+        }
+        else if (!strcmp(optarg, "y"))
+        {
+          ip.prefixConstraints = IPPrefixConstraints::Y;
+        }
+        else if (!strcmp(optarg, "both"))
+        {
+          ip.prefixConstraints = IPPrefixConstraints::BOTH;
+        }
+        else
+        {
+          throw std::invalid_argument("Invalid IP Prefix Constraint: " +
                                       std::string{optarg});
         }
         break;

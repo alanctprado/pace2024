@@ -25,6 +25,7 @@ enum class Flags
   /** IP options */
   IPSolverMode,
   IPFormulation,
+  IPPrefixConstraints,
   /** Verify options */
   VerifyMode
 };
@@ -44,6 +45,12 @@ enum class IPFormulation
   __MAX_VALUE = SHORTER
 };
 
+enum class IPPrefixConstraints
+{
+  NONE, X, Y, BOTH,
+  __MAX_VALUE = NONE
+};
+
 enum class VerifyMode
 {
   LIGHT, COMPLETE,
@@ -54,6 +61,7 @@ struct HolderIP
 {
   IPSolverMode solverMode = IPSolverMode::LPSOLVE;
   IPFormulation formulation = IPFormulation::SHORTER;
+  IPPrefixConstraints prefixConstraints = IPPrefixConstraints::NONE;
 };
 
 struct HolderVerify

@@ -275,6 +275,16 @@ int IntegerProgrammingSolver::shorterSimpleLPSolve()
     }
   }
 
+  /** Prefix constraints */
+  const auto& opt = Environment::options().ip.prefixConstraints;
+  if (opt == options::IPPrefixConstraints::X)
+  {
+    xPrefixLPSolve(lp, c);
+  }
+  /** Can't add Y constraints */
+  assert(opt != options::IPPrefixConstraints::Y);
+  assert(opt != options::IPPrefixConstraints::BOTH);
+
   /** 0-1 variables constraint */
   for (int i = 1; i <= columns; i++)
   {
@@ -313,6 +323,7 @@ int IntegerProgrammingSolver::shorterSimpleLPSolve()
 
   double z = get_objective(lp);
   delete_lp(lp);
+
   return round(z) + objective_offset;    // Return optimal value
 }
 
@@ -418,6 +429,20 @@ int IntegerProgrammingSolver::quadraticLPSolve()
     }
   }
 
+  /** Prefix constraints */
+  const auto& opt = Environment::options().ip.prefixConstraints;
+  if (opt == options::IPPrefixConstraints::X ||
+      opt == options::IPPrefixConstraints::BOTH)
+  {
+    xPrefixLPSolve(lp, c);
+  }
+
+  if (opt == options::IPPrefixConstraints::Y ||
+      opt == options::IPPrefixConstraints::BOTH)
+  {
+    yPrefixLPSolve(lp, c);
+  }
+
   /** 0-1 variables constraint */
   for (int i = 1; i <= columns; i++) { set_binary(lp, i, TRUE); }
 
@@ -456,7 +481,6 @@ int IntegerProgrammingSolver::quadraticLPSolve()
 
   double z = get_objective(lp);
   delete_lp(lp);
-  std::cout << "OBJETIVO: " <<  round(z) + objective_offset << "\n";
   return round(z) + objective_offset;    // Return optimal value
 }
 
@@ -482,6 +506,7 @@ void IntegerProgrammingSolver::xPrefixLPSolve(lprec* lp, std::vector<double>& c)
 {
   std::vector<std::vector<int>> cm = m_graph.buildCrossingMatrix();
   int n = m_graph.countVerticesB();
+  int offset = m_graph.countVerticesA();
 
   for (int p = 0; p < n; p++)
   {
@@ -489,15 +514,14 @@ void IntegerProgrammingSolver::xPrefixLPSolve(lprec* lp, std::vector<double>& c)
     for (int j = 0; j < n; j++)
     {
       /** change in crossings when moving j to the left of p */
-      deltas[j] = cm[j][p] - cm[p][j];
+      /* TODO: Why does this work? */
+      /* deltas[j] = cm[j][p] - cm[p][j]; */
+      deltas[j] = cm[p][j] - cm[j][p];
     }
 
     std::vector<int> order(n - 1);
     std::iota(order.begin(), order.begin() + p, 0);
-    if (p != n - 1)
-    {
-      std::iota(order.begin() + p + 1, order.end(), p + 1);
-    }
+    std::iota(order.begin() + p, order.end(), p + 1);
     std::sort(order.begin(), order.end(), [&] (int i, int j)
         {
           return deltas[i] < deltas[j];
@@ -548,7 +572,7 @@ void IntegerProgrammingSolver::xPrefixLPSolve(lprec* lp, std::vector<double>& c)
       }
     };
 
-    /** Add constraint pos(b) <= max_prefix */
+    /** Add constraint pos(p) <= max_prefix */
     if (max_prefix < n - 1)
     {
       _create_constraint();
@@ -571,8 +595,8 @@ void IntegerProgrammingSolver::xPrefixLPSolve(lprec* lp, std::vector<double>& c)
       min_suffix--;
     }
 
-    /** Add constraint pos(b) >= min_suffix */
-    if (max_prefix < n - 1)
+    /** Add constraint pos(p) >= min_suffix */
+    if (min_suffix > 0)
     {
       _create_constraint();
       int inverted_vars = (n - 1) - p;
@@ -660,6 +684,20 @@ int IntegerProgrammingSolver::viniLPSolve()
     }
   }
 
+  /** Prefix constraints */
+  const auto& opt = Environment::options().ip.prefixConstraints;
+  if (opt == options::IPPrefixConstraints::X ||
+      opt == options::IPPrefixConstraints::BOTH)
+  {
+    xPrefixLPSolve(lp, c);
+  }
+
+  if (opt == options::IPPrefixConstraints::Y ||
+      opt == options::IPPrefixConstraints::BOTH)
+  {
+    yPrefixLPSolve(lp, c);
+  }
+
   /** 0-1 variables constraint */
   for (int i = 1; i <= columns; i++) { set_binary(lp, i, TRUE); }
 
@@ -674,15 +712,6 @@ int IntegerProgrammingSolver::viniLPSolve()
     */
   double* vars = (double*) malloc((columns) * sizeof(double));
   get_variables(lp, vars);
-
-  for (int i = 0; i < n; i++)
-  {
-    for (int j = 0; j < n; j++)
-    {
-       std::cout << vars[yIndex(i, j, n) - 1] << " ";
-    }
-    std::cout << "\n";
-  }
 
   std::vector<std::pair<int, int>> sol;
   for (int i = 0; i < n; i++)
@@ -705,13 +734,8 @@ int IntegerProgrammingSolver::viniLPSolve()
     m_order.push_back(sol[i].second + offset);
   }
 
-  for (int vertex : m_order)
-    std::cout << vertex << " ";
-  std::cout << "\n";
-
   double z = get_objective(lp);
   delete_lp(lp);
-  std::cout << "OBJETIVO: " <<  round(z) + objective_offset << "\n";
   return round(z) + objective_offset;    // Return optimal value
 }
 
