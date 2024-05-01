@@ -15,12 +15,11 @@
 
 #include "approximation_routine.h"
 
+namespace banana {
+namespace solver {
+namespace heuristic {
 
-namespace banana{
-namespace solver{
-namespace heuristic{
-  
-ApproximationRoutine::ApproximationRoutine(graph::BipartiteGraph graph) 
+ApproximationRoutine::ApproximationRoutine(graph::BipartiteGraph graph)
     : MetaSolver<int>(graph)
 {}
 
