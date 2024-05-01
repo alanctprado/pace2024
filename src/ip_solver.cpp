@@ -13,13 +13,15 @@
  * Integer programming solver.
  */
 
-#include "ip_solver.h"
 #include "environment.h"
 #include "meta_solver.h"
 #include "options.h"
+#include "environment.h"
+#include "ip_solver.h"
 #include "../lp_solve_5.5/lp_lib.h"
 
 #include <algorithm>
+#include <numeric>
 #include <cassert>
 #include <iostream>
 #include <stdexcept>
@@ -230,8 +232,9 @@ int IntegerProgrammingSolver::shorterSimpleLPSolve()
 
   /** Configure objective function */
   set_minim(lp);
-  double *c = (double *)malloc((columns + 1) * sizeof(double));
-  c[0] = 0; // Element 0 is ignored by LP Solve
+  double* c = (double*) malloc((columns + 1) * sizeof(double));
+  std::cout << (sizeof c) << std::endl;
+  c[0] = 0;    // Element 0 is ignored by LP Solve
   int objective_offset = 0;
   for (int i = 0; i < n; i++)
   {
@@ -274,6 +277,8 @@ int IntegerProgrammingSolver::shorterSimpleLPSolve()
     }
   }
   free(c); // No longer need it
+
+  xPrefixLPSolve(lp, &c);
 
   /** 0-1 variables constraint */
   for (int i = 1; i <= columns; i++)
@@ -436,15 +441,6 @@ int IntegerProgrammingSolver::quadraticLPSolve()
   double* vars = (double*) malloc((columns) * sizeof(double));
   get_variables(lp, vars);
 
-  for (int i = 0; i < n; i++)
-  {
-    for (int j = 0; j < n; j++)
-    {
-       std::cout << vars[yIndex(i, j, n) - 1] << " ";
-    }
-    std::cout << "\n";
-  }
-
   std::vector<std::pair<int, int>> sol;
   for (int i = 0; i < n; i++)
   {
@@ -466,14 +462,143 @@ int IntegerProgrammingSolver::quadraticLPSolve()
     m_order.push_back(sol[i].second + offset);
   }
 
-  for (int vertex : m_order)
-    std::cout << vertex << " ";
-  std::cout << "\n";
-
   double z = get_objective(lp);
   delete_lp(lp);
   std::cout << "OBJETIVO: " <<  round(z) + objective_offset << "\n";
   return round(z) + objective_offset;    // Return optimal value
+}
+
+
+
+/** Prefix Constraints On X 
+ * 
+ *  By evaluating the number of crossings involving a vertex 'p' considering
+ *  if it is used in the beginning of the order (L), or the end (R),
+ *  we can infer that 'p' isn't too far from the end in which this crossing
+ *  number is minimal.
+ *
+ *  More formally, if there are 'i' vertices before 'p' in the order,
+ *  there is at least S = \sum_{i smallest values of} C_{jp} - C_{pj} crossings.
+ *  Therefore, if L + S > L, it is never optimal to add 'i' 
+ *  or more vertices before 'p'.
+ *
+ *
+ *  These constraints can be added in any formulation that uses the variables
+ *  'X' indexed by the function triangularIndex.
+ */
+void IntegerProgrammingSolver::xPrefixLPSolve(lprec* lp, double** c)
+{
+  std::vector<std::vector<int>> cm = m_graph.buildCrossingMatrix();
+  int n = m_graph.countVerticesB();
+
+  int columns = n * (n - 1) / 2;
+  //double* c = (double*) malloc((columns + 1) * sizeof(double));
+  //memset(c, 0, (columns + 1) * sizeof(double));
+
+  for (int p = 0; p < n; p++)
+  {
+    std::vector<int> deltas(n);
+    for (int j = 0; j < n; j++)
+    {
+      /** change in crossings when moving j to the left of p */
+      deltas[j] = cm[j][p] - cm[p][j];
+    }
+
+    std::vector<int> order(n - 1);
+    std::iota(order.begin(), order.begin() + p, 0);
+    if (p != n - 1)
+    {
+      std::iota(order.begin() + p + 1, order.end(), p + 1);
+    }
+    std::sort(order.begin(), order.end(), [&] (int i, int j)
+        {
+          return deltas[i] < deltas[j];
+        });
+
+    /** 
+      * The position of 'p' is at most max_prefix, being the first moment 
+      * when it's certainly better to put 'p' at the beginning,
+      * this is given by the first prefix such that \sum_j delta_j > 0
+      */
+    int cum_sum = 0, max_prefix = 0;
+    for (int j = 0; j < n - 1; j++) {
+      cum_sum += deltas[order[j]];
+      if (cum_sum > 0) { break; }
+      max_prefix++;
+    }
+
+    /** 
+      * Populates the constraint vector 'c' with the sum of 'x_{jp}' for 
+      * every other vertex 'j', when 'p' is fixed.
+      *
+      * It is used to restrict the position of 'p' to a prefix or a suffix.
+      */
+    auto _create_constraint = [&] ()
+    {
+      for (int j = 0; j < p; j++)
+      {
+        std::cout << j << " " << p << " " << triangularIndex(j, p).first << std::endl;
+        *c[triangularIndex(j, p).first] = 1;
+      }
+      for (int j = p + 1; j < n; j++)
+      {
+        *c[triangularIndex(j, p).first] = -1;
+      }
+    };
+
+    /** 
+      * Resets the constraint vector 'c' to be used by the next constraint.
+      */
+    auto _undo_constraint = [&] ()
+    {
+      for (int j = 0; j < p; j++)
+      {
+        *c[triangularIndex(j, p).first] = 0;
+      }
+      for (int j = p + 1; j < n; j++)
+      {
+        *c[triangularIndex(j, p).first] = 0;
+      }
+    };
+
+    /** Add constraint pos(b) <= max_prefix */
+    if (max_prefix < n - 1)
+    {
+      _create_constraint();
+      int inverted_vars = (n - 1) - p;
+      add_constraint(lp, *c, LE, max_prefix - inverted_vars);
+      _undo_constraint();
+    }
+
+    /** 
+      * The position of 'p' is at least min_suffix, being the first moment 
+      * when it's certainly better to put 'p' at the end,
+      * this is given by the first suffix such that \sum_j delta_j < 0
+      */
+    cum_sum = 0;
+    int min_suffix = n - 1;
+    for (int j = n - 2; j >= 0; --j)
+    {
+      cum_sum += deltas[order[j]];
+      if (cum_sum < 0) { break; }
+      min_suffix--;
+    }
+
+    /** Add constraint pos(b) >= min_suffix */
+    if (max_prefix < n - 1)
+    {
+      _create_constraint();
+      int inverted_vars = (n - 1) - p;
+      add_constraint(lp, *c, GE, min_suffix - inverted_vars);
+      _undo_constraint();
+    }
+  }
+}
+
+/** TODO: explain */
+void IntegerProgrammingSolver::yPrefixLPSolve(lprec* lp, double* c)
+{
+  std::vector<std::vector<int>> cm = m_graph.buildCrossingMatrix();
 }
 
 int IntegerProgrammingSolver::viniLPSolve()

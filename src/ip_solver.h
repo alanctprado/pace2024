@@ -18,6 +18,7 @@
 
 #include "bipartite_graph.h"
 #include "meta_solver.h"
+#include "../lp_solve_5.5/lp_lib.h"
 
 #include <string>
 
@@ -51,6 +52,11 @@ public:
   int yIndex(int i, int j, int n);
   int quadraticLPSolve();
   int viniLPSolve();
+
+  /** Prefix constraints */
+  void computeDeltas();
+  void xPrefixLPSolve(lprec* lp, double** c);
+  void yPrefixLPSolve(lprec* lp, double* c);
 };
 
 } // namespace ip
