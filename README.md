@@ -21,6 +21,15 @@ Simply run:
 cmake -B build && make -C build
 ```
 
+## Adding commits
+
+All commits to `main` should be done through pull requests. The formatting rules for the source code are specified in `.clang-format` and code is automatically formatted on each new commit to an open PR. You can either:
+
+1. Run `clang-format` locally
+2. Rely on the automatic commits by `Bananlyzer` when you open and update PRs. Remember to always [rebase](https://git-scm.com/book/en/v2/Git-Branching-Rebasing "Documentation for Git Rebasing") your local PR branch afterwards to avoid merge conflicts.
+
+Additional information can be checked at [style.md](style.md) .
+
 ## Execution
 
 ### Default execution
