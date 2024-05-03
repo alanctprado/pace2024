@@ -72,6 +72,10 @@ void Options::parseArguments(int argc, char *argv[])
         {
           ip.formulation = IPFormulation::QUADRATIC;
         }
+        else if (!strcmp(optarg, "vini"))
+        {
+          ip.formulation = IPFormulation::VINI;
+        }
         else
         {
           throw std::invalid_argument("Invalid IP Formulation: " +

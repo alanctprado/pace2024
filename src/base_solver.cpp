@@ -15,6 +15,7 @@
 
 #include "base_solver.h"
 #include "environment.h"
+#include "ip_solver_lpsolve.h"
 #include "options.h"
 #include "utils.h"
 
@@ -26,7 +27,7 @@ namespace banana {
 namespace solver {
 
 BaseSolver::BaseSolver(graph::BipartiteGraph graph)
-    : m_ipSolver(new ip::IntegerProgrammingSolver(graph)), m_graph(graph)
+    : m_ipSolver(new ip::LPSolveSolver(graph)), m_graph(graph)
 {}
 
 void BaseSolver::verifySolution(int expected_crossings)
