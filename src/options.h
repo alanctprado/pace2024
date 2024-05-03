@@ -41,7 +41,7 @@ enum class IPSolverMode
 
 enum class IPFormulation
 {
-  SIMPLE, SHORTER, QUADRATIC,
+  SIMPLE, SHORTER, QUADRATIC, VINI,
   __MAX_VALUE = SHORTER
 };
 

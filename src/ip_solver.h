@@ -16,24 +16,22 @@
 #ifndef __PACE2024__IP_SOLVER_HPP
 #define __PACE2024__IP_SOLVER_HPP
 
+#include "environment.h"
 #include "bipartite_graph.h"
 #include "meta_solver.h"
-#include "../lp_solve_5.5/lp_lib.h"
 
-#include <string>
+#include <stdexcept>
 
 namespace banana {
 namespace solver {
 namespace ip {
 
 /**
- * This class defines an integer programming solver for the OSCM problem. The
- * objective function and constraints are specified in the implementation.
- *
- * Currently, the integer programming solvers available are:
- *   - LP Solve
+ * This class defines an integer programming solver for the OSCM problem. It is
+ * an abstract class which will be extended by each solver.
  */
-class IntegerProgrammingSolver : public MetaSolver<int>
+template<class T, class U>
+class IntegerProgrammingSolver : public MetaSolver<graph::BipartiteGraph, int>
 {
 public:
   IntegerProgrammingSolver(graph::BipartiteGraph G);
@@ -41,23 +39,142 @@ public:
   int solve() override;
 
  protected:
-  /** Simple formulation */
-  int simpleLPSolve();
+  /**
+   * Simple formulation
+   *
+   * Variables:
+   *   x_{i,j}: 0-1 variable that is 1 iff B_i appears before B_j in the
+   *            ordering
+   *
+   * Formulation:
+   *   minimize \sum_{i,j} cm_{i,j} \cdot x_{i,j}
+   *
+   *   subject to: x_{i,j} + x_{j,k} - x_{i,k} \leq 1 \forall i \neq j \neq k
+   *               (transitivity constraint)
+   *
+   *               x_{i,j} + x_{j, i} = 1 \forall i < j
+   *               (exactly one is true, we actually only need at least one
+   *                true)
+   *
+   *               x_{i,j} \in \{0, 1\} \forall i, j
+   *               (integer program with 0-1 variables)
+   */
+  virtual int simple() = 0;
 
-  /** Shorter simple formulation */
-  std::pair<int, bool> triangularIndex(int i, int j);
-  int shorterSimpleLPSolve();
+  /**
+   * Shorter (simple) formulation
+   *
+   * The same as the first one, but using half the variables: x_{i,j}
+   * s.t. i > j;
+   *
+   * Variables:
+   *   x_{i,j} | i > j: 0-1 variable that is 1 iff B_i appears before B_j in the
+   *   ordering
+   *
+   * Formulation:
+   *   minimize \sum_{i > j} cm_{i,j} x_{i,j} - \sum_{i < j} cm_{i,j} x_{j,i}
+   *
+   *   subject to: x_{i,j} + x_{j,k} - x_{i,k} \leq 1 \forall i \neq j \neq k
+   *               (transitivity constraint, but caution with the indexes)
+   *
+   *               x_{i,j} \in \{0, 1\} \forall i, j
+   *               (integer program with 0-1 variables)
+   */
+  virtual int shorter() = 0;
 
-  /** Quadratic formulation */
-  int yIndex(int i, int j, int n);
-  int quadraticLPSolve();
-  int viniLPSolve();
+  /**
+   * Quadratic formulation
+   *
+   * TODO: explain
+   */
+  virtual int quadratic() = 0;
 
-  /** Prefix constraints */
+  /**
+   * Vinicius' formulation
+   *
+   * TODO: explain
+   */
+  virtual int vini() = 0;
+
+  /** TODO: explain */
   void computeDeltas();
-  void xPrefixLPSolve(lprec* lp, std::vector<double>& c);
-  void yPrefixLPSolve(lprec* lp, std::vector<double>& c);
+  /** Prefix Constraints On X 
+   * 
+   *  By evaluating the number of crossings involving a vertex 'p' considering
+   *  if it is used in the beginning of the order (L), or the end (R), we can
+   *  infer that 'p' isn't too far from the end in which this crossing number
+   *  is minimal.
+   *
+   *  More formally, if there are 'i' vertices before 'p' in the order, there
+   *  is at least S = \sum_{i smallest values of} C_{jp} - C_{pj} crossings.
+   *  Therefore, if L + S > L, it is never optimal to add 'i' or more vertices
+   *  before 'p'.
+   *
+   *  These constraints can be added in any formulation that uses the variables
+   *  'X' indexed by the function triangularIndex.
+   */
+  virtual void xPrefix(T* program, U& vars) = 0;
+  /** TODO: explain */
+  virtual void yPrefix(T* program, U& vars) = 0;
+  /** TODO: explain */
+  std::pair<int, bool> triangularIndex(int i, int j);
+  /** TODO: explain */
+  int yIndex(int i, int j, int n, int offset);
 };
+
+template<class T, class U>
+IntegerProgrammingSolver<T,U>::
+IntegerProgrammingSolver(graph::BipartiteGraph graph)
+    : MetaSolver<graph::BipartiteGraph, int>(graph)
+{}
+
+template<class T, class U>
+int IntegerProgrammingSolver<T,U>::solve()
+{
+  options::HolderIP ip_options = Environment::options().ip;
+  switch (ip_options.solverMode)
+  {
+    case options::IPSolverMode::LPSOLVE:
+      if (ip_options.formulation == options::IPFormulation::SIMPLE)
+      {
+        return simple();
+      }
+      else if (ip_options.formulation == options::IPFormulation::SHORTER)
+      {
+        return shorter();
+      }
+      else if (ip_options.formulation == options::IPFormulation::QUADRATIC)
+      {
+        return quadratic();
+      }
+      else if (ip_options.formulation == options::IPFormulation::VINI)
+      {
+        return vini();
+      }
+      throw std::runtime_error("Is this the real life?");
+    default:
+      break;
+  }
+  throw std::runtime_error("Do the L");
+}
+
+template<class T, class U>
+std::pair<int, bool> IntegerProgrammingSolver<T,U>::
+triangularIndex(int i, int j)
+{
+  assert(i != j);
+  int index = (i > j) ? i * (i - 1) / 2 + j : j * (j - 1) / 2 + i;
+  if (i > j) { return {index, 0}; }
+  else { return {index, 1}; }
+}
+
+template<class T, class U>
+int IntegerProgrammingSolver<T,U>::yIndex(int i, int j, int n, int offset)
+{
+  int index = i * n + j;
+  index += offset;
+  return index;
+}
 
 } // namespace ip
 } // namespace solver

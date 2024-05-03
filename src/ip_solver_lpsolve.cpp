@@ -10,76 +10,25 @@
  * licensing information.
  * ****************************************************************************
  *
- * Integer programming solver.
+ * LPSolve extension of the integer programming solver
  */
 
-#include "environment.h"
-#include "meta_solver.h"
-#include "options.h"
-#include "environment.h"
-#include "ip_solver.h"
+#include "ip_solver_lpsolve.h"
 #include "../lp_solve_5.5/lp_lib.h"
+#include "ip_solver.h"
 
-#include <algorithm>
 #include <numeric>
-#include <cassert>
-#include <iostream>
 #include <stdexcept>
 
 namespace banana {
 namespace solver {
 namespace ip {
 
-IntegerProgrammingSolver::IntegerProgrammingSolver(graph::BipartiteGraph graph)
-    : MetaSolver<int>(graph)
+LPSolveSolver::LPSolveSolver(graph::BipartiteGraph graph)
+    : IntegerProgrammingSolver<lprec, std::vector<double>>(graph)
 {}
 
-int IntegerProgrammingSolver::solve()
-{
-  options::HolderIP ip_options = Environment::options().ip;
-  switch (ip_options.solverMode)
-  {
-    case options::IPSolverMode::LPSOLVE:
-      if (ip_options.formulation == options::IPFormulation::SIMPLE)
-      {
-        return simpleLPSolve();
-      }
-      else if (ip_options.formulation == options::IPFormulation::SHORTER)
-      {
-        return shorterSimpleLPSolve();
-      }
-      else if (ip_options.formulation == options::IPFormulation::QUADRATIC)
-      {
-        return quadraticLPSolve();
-      }
-      throw std::runtime_error("Is this the real life?");
-    default:
-      break;
-  }
-  throw std::runtime_error("Do the L");
-}
-
-/**
- * Integer Program 1
- *
- * Variables:
- *   cm:      crossing matrix, cm_{i,j} counts the numbers of crossings that
- *            happen if B_i comes before B_j in the ordering.
- *   x_{i,j}: 0-1 variable that is 1 iff B_i appears before B_j in the ordering
- *
- * Formulation:
- *   minimize \sum_{i,j} cm_{i,j} \cdot x_{i,j}
- *
- *   subject to: x_{i,j} + x_{j,k} - x_{i,k} \leq 1 \forall i \neq j \neq k
- *               (transitivity constraint)
- *
- *               x_{i,j} + x_{j, i} = 1 \forall i < j
- *               (exactly one is true, we actually only need at least one true)
- *
- *               x_{i,j} \in \{0, 1\} \forall i, j
- *               (integer program with 0-1 variables)
- */
-int IntegerProgrammingSolver::simpleLPSolve()
+int LPSolveSolver::simple()
 {
   std::vector<std::vector<int>> cm = m_graph.buildCrossingMatrix();
 
@@ -180,37 +129,7 @@ int IntegerProgrammingSolver::simpleLPSolve()
   return round(z);    // Return optimal value
 }
 
-/**
- * Integer Program 2
- *
- * The same as the first one, but using half the variables: x_{i,j} s.t. i > j;
- *
- * Variables:
- *   cm:      crossing matrix, cm_{i,j} counts the numbers of crossings that
- *            happen if B_i comes before B_j in the ordering.
- *   x_{i,j}: 0-1 variable that is 1 iff B_i appears before B_j in the ordering
- *
- * Formulation:
- *   minimize \sum_{i > j} cm_{i,j} x_{i,j} - \sum_{i < j} cm_{i,j} x_{j,i}
- *
- *   subject to: x_{i,j} + x_{j,k} - x_{i,k} \leq 1 \forall i \neq j \neq k
- *               (transitivity constraint, but caution with the indexes)
- *
- *               x_{i,j} \in \{0, 1\} \forall i, j
- *               (integer program with 0-1 variables)
- */
-
-std::pair<int, bool> IntegerProgrammingSolver::triangularIndex(int i, int j)
-{
-  assert(i != j);
-  int index = (i > j) ? i * (i - 1) / 2 + j : j * (j - 1) / 2 + i;
-  if (i > j)
-    return {index + 1, 0};
-  else
-    return {index + 1, 1};
-}
-
-int IntegerProgrammingSolver::shorterSimpleLPSolve()
+int LPSolveSolver::shorter()
 {
   std::vector<std::vector<int>> cm = m_graph.buildCrossingMatrix();
 
@@ -238,7 +157,7 @@ int IntegerProgrammingSolver::shorterSimpleLPSolve()
   {
     for (int j = 0; j < i; j++)
     {
-      c[triangularIndex(i, j).first] = cm[i][j] - cm[j][i];
+      c[triangularIndex(i, j).first + 1] = cm[i][j] - cm[j][i];
       objective_offset += cm[j][i];
     }
   }
@@ -257,20 +176,24 @@ int IntegerProgrammingSolver::shorterSimpleLPSolve()
         int rhs = 1;
 
         std::tie(index, b) = triangularIndex(i, j);
+        index++;
         if (!b) { c[index] = 1; }
         else { c[index] = -1; rhs -= 1; }
 
         std::tie(index, b) = triangularIndex(j, k);
+        index++;
         if (!b) { c[index] = 1; }
         else { c[index] = -1; rhs -= 1; }
 
         std::tie(index, b) = triangularIndex(i, k);
+        index++;
         if (!b) { c[index] = -1; }
         else { c[index] = 1; rhs += 1; }
         
         add_constraint(lp, c.data(), LE, rhs);
-        c[triangularIndex(i, j).first] = c[triangularIndex(j, k).first] = 0;
-        c[triangularIndex(i, k).first] = 0;
+        c[triangularIndex(i, j).first + 1] = 0;
+        c[triangularIndex(j, k).first + 1] = 0;
+        c[triangularIndex(i, k).first + 1] = 0;
       }
     }
   }
@@ -279,7 +202,7 @@ int IntegerProgrammingSolver::shorterSimpleLPSolve()
   const auto& opt = Environment::options().ip.prefixConstraints;
   if (opt == options::IPPrefixConstraints::X)
   {
-    xPrefixLPSolve(lp, c);
+    xPrefix(lp, c);
   }
   /** Can't add Y constraints */
   assert(opt != options::IPPrefixConstraints::Y);
@@ -310,7 +233,6 @@ int IntegerProgrammingSolver::shorterSimpleLPSolve()
     {
       if (i == j) { continue; }
       std::tie(index, b) = triangularIndex(i, j);
-      index--;
       count_successors += !b ? vars[index] : 1 - vars[index];
     }
     sol.push_back({count_successors, i});
@@ -327,39 +249,13 @@ int IntegerProgrammingSolver::shorterSimpleLPSolve()
   return round(z) + objective_offset;    // Return optimal value
 }
 
-/**
- * Integer Program 3
- * 
- * The same as the first one, but using half the variables: x_{i,j} s.t. i > j;
- *
- * Variables:
- *   cm:      crossing matrix, cm_{i,j} counts the numbers of crossings that
- *            happen if B_i comes before B_j in the ordering.
- *   x_{i,j}: 0-1 variable that is 1 iff B_i appears before B_j in the ordering
- *
- * Formulation:
- *   minimize \sum_{i > j} cm_{i,j} x_{i,j} - \sum_{i < j} cm_{i,j} x_{j,i}
- *
- *   subject to: x_{i,j} + x_{j,k} - x_{i,k} \leq 1 \forall i \neq j \neq k
- *               (transitivity constraint, but caution with the indexes)
- *
- *               x_{i,j} \in \{0, 1\} \forall i, j
- *               (integer program with 0-1 variables)
- */
-
-int IntegerProgrammingSolver::yIndex(int i, int j, int n)
-{
-  int index = i * n + j;
-  index += n * (n - 1) / 2 + 1;    // Offseting by the 'x' variables
-  return index;
-}
-
-int IntegerProgrammingSolver::quadraticLPSolve()
+int LPSolveSolver::quadratic()
 {
   std::vector<std::vector<int>> cm = m_graph.buildCrossingMatrix();
 
   int n = m_graph.countVerticesB();
   int columns = n * (n - 1) / 2 + n * n;
+  int offset = n * (n - 1) / 2;
 
   lprec* lp;
   lp = make_lp(0, columns);    // (#rows, #columns = #variables)
@@ -379,7 +275,7 @@ int IntegerProgrammingSolver::quadraticLPSolve()
   {
     for (int j = 0; j < i; j++)
     {
-      c[triangularIndex(i, j).first] = cm[i][j] - cm[j][i];
+      c[triangularIndex(i, j).first + 1] = cm[i][j] - cm[j][i];
       objective_offset += cm[j][i];
     }
   }
@@ -388,20 +284,20 @@ int IntegerProgrammingSolver::quadraticLPSolve()
   std::fill(c.begin(), c.end(), 0);
   for (int k = 0; k < n; k++)
   {
-    for (int i = 0; i < n; i++) { c[yIndex(i, k, n)] = 1; }
+    for (int i = 0; i < n; i++) { c[yIndex(i, k, n, offset)] = 1; }
     add_constraint(lp, c.data(), EQ, k + 1);
-    for (int i = 0; i < n; i++) { c[yIndex(i, k, n)] = 0; }
+    for (int i = 0; i < n; i++) { c[yIndex(i, k, n, offset)] = 0; }
   }
 
   for (int k = 0; k < n - 1; k++)
   {
     for (int i = 0; i < n; i++) 
     {
-      c[yIndex(i, k, n)] = 1;
-      c[yIndex(i, k + 1, n)] = -1;
+      c[yIndex(i, k, n, offset)] = 1;
+      c[yIndex(i, k + 1, n, offset)] = -1;
       add_constraint(lp, c.data(), LE, 0);
-      c[yIndex(i, k, n)] = 0;
-      c[yIndex(i, k + 1, n)] = 0;
+      c[yIndex(i, k, n, offset)] = 0;
+      c[yIndex(i, k + 1, n, offset)] = 0;
     }
   }
 
@@ -413,18 +309,19 @@ int IntegerProgrammingSolver::quadraticLPSolve()
       int rhs = 0;
       for (int k = 0; k < n; k++)
       {
-        c[yIndex(i, k, n)] = 1;
-        c[yIndex(j, k, n)] = -1;
+        c[yIndex(i, k, n, offset)] = 1;
+        c[yIndex(j, k, n, offset)] = -1;
         auto [index, b] = triangularIndex(j, i);
+        index++;
         if (!b) { c[index] = -(n - 1); }
         else { c[index] = n - 1; rhs += n - 1; }
       }
       add_constraint(lp, c.data(), LE, rhs);
       for (int k = 0; k < n; k++)
       {
-        c[yIndex(i, k, n)] = 0;
-        c[yIndex(j, k, n)] = 0;
-        c[triangularIndex(j, i).first] = 0;
+        c[yIndex(i, k, n, offset)] = 0;
+        c[yIndex(j, k, n, offset)] = 0;
+        c[triangularIndex(j, i).first + 1] = 0;
       }
     }
   }
@@ -434,13 +331,13 @@ int IntegerProgrammingSolver::quadraticLPSolve()
   if (opt == options::IPPrefixConstraints::X ||
       opt == options::IPPrefixConstraints::BOTH)
   {
-    xPrefixLPSolve(lp, c);
+    xPrefix(lp, c);
   }
 
   if (opt == options::IPPrefixConstraints::Y ||
       opt == options::IPPrefixConstraints::BOTH)
   {
-    yPrefixLPSolve(lp, c);
+    yPrefix(lp, c);
   }
 
   /** 0-1 variables constraint */
@@ -466,13 +363,12 @@ int IntegerProgrammingSolver::quadraticLPSolve()
     {
       if (i == j) { continue; }
       auto [index, b] = triangularIndex(i, j);
-      index--;
       count_successors += !b ? vars[index] : 1 - vars[index];
     }
     sol.push_back({count_successors, i});
   }
 
-  int offset = m_graph.countVerticesA();
+  offset = m_graph.countVerticesA();
   std::sort(sol.begin(), sol.end());
   for (int i = n - 1; i >= 0; i--)
   {
@@ -484,25 +380,7 @@ int IntegerProgrammingSolver::quadraticLPSolve()
   return round(z) + objective_offset;    // Return optimal value
 }
 
-
-
-/** Prefix Constraints On X 
- * 
- *  By evaluating the number of crossings involving a vertex 'p' considering
- *  if it is used in the beginning of the order (L), or the end (R),
- *  we can infer that 'p' isn't too far from the end in which this crossing
- *  number is minimal.
- *
- *  More formally, if there are 'i' vertices before 'p' in the order,
- *  there is at least S = \sum_{i smallest values of} C_{jp} - C_{pj} crossings.
- *  Therefore, if L + S > L, it is never optimal to add 'i' 
- *  or more vertices before 'p'.
- *
- *
- *  These constraints can be added in any formulation that uses the variables
- *  'X' indexed by the function triangularIndex.
- */
-void IntegerProgrammingSolver::xPrefixLPSolve(lprec* lp, std::vector<double>& c)
+void LPSolveSolver::xPrefix(lprec* lp, std::vector<double>& c)
 {
   std::vector<std::vector<int>> cm = m_graph.buildCrossingMatrix();
   int n = m_graph.countVerticesB();
@@ -549,11 +427,11 @@ void IntegerProgrammingSolver::xPrefixLPSolve(lprec* lp, std::vector<double>& c)
     {
       for (int j = 0; j < p; j++)
       {
-        c[triangularIndex(j, p).first] = 1;
+        c[triangularIndex(j, p).first + 1] = 1;
       }
       for (int j = p + 1; j < n; j++)
       {
-        c[triangularIndex(j, p).first] = -1;
+        c[triangularIndex(j, p).first + 1] = -1;
       }
     };
 
@@ -564,11 +442,11 @@ void IntegerProgrammingSolver::xPrefixLPSolve(lprec* lp, std::vector<double>& c)
     {
       for (int j = 0; j < p; j++)
       {
-        c[triangularIndex(j, p).first] = 0;
+        c[triangularIndex(j, p).first + 1] = 0;
       }
       for (int j = p + 1; j < n; j++)
       {
-        c[triangularIndex(j, p).first] = 0;
+        c[triangularIndex(j, p).first + 1] = 0;
       }
     };
 
@@ -606,18 +484,18 @@ void IntegerProgrammingSolver::xPrefixLPSolve(lprec* lp, std::vector<double>& c)
   }
 }
 
-/** TODO: explain */
-void IntegerProgrammingSolver::yPrefixLPSolve(lprec* lp, std::vector<double>& c)
+void LPSolveSolver::yPrefix(lprec* lp, std::vector<double>& c)
 {
-  std::vector<std::vector<int>> cm = m_graph.buildCrossingMatrix();
+  throw std::runtime_error("Not implemented.\n");
 }
 
-int IntegerProgrammingSolver::viniLPSolve()
+int LPSolveSolver::vini()
 {
   std::vector<std::vector<int>> cm = m_graph.buildCrossingMatrix();
 
   int n = m_graph.countVerticesB();
   int columns = n * (n - 1) / 2 + n * n;
+  int offset = n * (n - 1) / 2;
 
   lprec* lp;
   lp = make_lp(0, columns);    // (#rows, #columns = #variables)
@@ -637,7 +515,7 @@ int IntegerProgrammingSolver::viniLPSolve()
   {
     for (int j = 0; j < i; j++)
     {
-      c[triangularIndex(i, j).first] = cm[i][j] - cm[j][i];
+      c[triangularIndex(i, j).first + 1] = cm[i][j] - cm[j][i];
       objective_offset += cm[j][i];
     }
   }
@@ -646,20 +524,20 @@ int IntegerProgrammingSolver::viniLPSolve()
   std::fill(c.begin(), c.end(), 0);
   for (int k = 0; k < n; k++)
   {
-    for (int i = 0; i < n; i++) { c[yIndex(i, k, n)] = 1; }
+    for (int i = 0; i < n; i++) { c[yIndex(i, k, n, offset)] = 1; }
     add_constraint(lp, c.data(), EQ, k + 1);
-    for (int i = 0; i < n; i++) { c[yIndex(i, k, n)] = 0; }
+    for (int i = 0; i < n; i++) { c[yIndex(i, k, n, offset)] = 0; }
   }
 
   for (int k = 0; k < n - 1; k++)
   {
     for (int i = 0; i < n; i++) 
     {
-      c[yIndex(i, k, n)] = 1;
-      c[yIndex(i, k + 1, n)] = -1;
+      c[yIndex(i, k, n, offset)] = 1;
+      c[yIndex(i, k + 1, n, offset)] = -1;
       add_constraint(lp, c.data(), LE, 0);
-      c[yIndex(i, k, n)] = 0;
-      c[yIndex(i, k + 1, n)] = 0;
+      c[yIndex(i, k, n, offset)] = 0;
+      c[yIndex(i, k + 1, n, offset)] = 0;
     }
   }
 
@@ -671,15 +549,16 @@ int IntegerProgrammingSolver::viniLPSolve()
       for (int k = 0; k < n; k++)
       {
         int rhs = 0;
-        c[yIndex(i, k, n)] = 1;
-        c[yIndex(j, k, n)] = -1;
+        c[yIndex(i, k, n, offset)] = 1;
+        c[yIndex(j, k, n, offset)] = -1;
         auto [index, b] = triangularIndex(j, i);
+        index++;
         if (!b) { c[index] = -1; }
         else { c[index] = 1; rhs += 1; }
         add_constraint(lp, c.data(), LE, rhs);
-        c[yIndex(i, k, n)] = 0;
-        c[yIndex(j, k, n)] = 0;
-        c[triangularIndex(j, i).first] = 0;
+        c[yIndex(i, k, n, offset)] = 0;
+        c[yIndex(j, k, n, offset)] = 0;
+        c[index] = 0;
       }
     }
   }
@@ -689,13 +568,13 @@ int IntegerProgrammingSolver::viniLPSolve()
   if (opt == options::IPPrefixConstraints::X ||
       opt == options::IPPrefixConstraints::BOTH)
   {
-    xPrefixLPSolve(lp, c);
+    xPrefix(lp, c);
   }
 
   if (opt == options::IPPrefixConstraints::Y ||
       opt == options::IPPrefixConstraints::BOTH)
   {
-    yPrefixLPSolve(lp, c);
+    yPrefix(lp, c);
   }
 
   /** 0-1 variables constraint */
@@ -721,13 +600,12 @@ int IntegerProgrammingSolver::viniLPSolve()
     {
       if (i == j) { continue; }
       auto [index, b] = triangularIndex(i, j);
-      index--;
       count_successors += !b ? vars[index] : 1 - vars[index];
     }
     sol.push_back({count_successors, i});
   }
 
-  int offset = m_graph.countVerticesA();
+  offset = m_graph.countVerticesA();
   std::sort(sol.begin(), sol.end());
   for (int i = n - 1; i >= 0; i--)
   {

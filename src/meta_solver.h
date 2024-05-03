@@ -30,34 +30,35 @@ namespace solver {
 /**
  * Abstract solver class
  */
-template <class T> class MetaSolver
+template <class T, class U> class MetaSolver
 {
 public:
-  MetaSolver(graph::BipartiteGraph G) : m_graph(G) {}
+  MetaSolver(T G) : m_graph(G) {}
   virtual ~MetaSolver() {}
 
   virtual int solve() = 0;
-  void explain(std::vector<T> &order);
-  bool verify(const std::vector<T> &order, int expected_crossings) const;
+  void explain(std::vector<U> &order);
+  bool verify(const std::vector<U> &order, int expected_crossings) const;
 
 protected:
-  int numberOfCrossings(const std::vector<T> &order) const;
+  int numberOfCrossings(const std::vector<U> &order) const;
 
-  graph::BipartiteGraph const m_graph;
-  std::vector<T> m_order;
+  T const m_graph;
+  std::vector<U> m_order;
 };
 
-template <class T> void MetaSolver<T>::explain(std::vector<T> &order)
+template <class T, class U>
+void MetaSolver<T,U>::explain(std::vector<U> &order)
 {
   assert(order.size() == 0);
-  for (T vertex : m_order)
+  for (U vertex : m_order)
   {
     order.push_back(vertex);
   }
 }
 
-template <class T>
-int MetaSolver<T>::numberOfCrossings(const std::vector<T> &order) const
+template <class T, class U>
+int MetaSolver<T,U>::numberOfCrossings(const std::vector<U> &order) const
 {
   int nA = m_graph.countVerticesA();
   int nB = m_graph.countVerticesB();
@@ -83,7 +84,7 @@ int MetaSolver<T>::numberOfCrossings(const std::vector<T> &order) const
   });
 
   int crossings = 0;
-  library::FenwickTree<int> tree(nA);
+  library::FenwickTree<int> tree(nA);  // shouldn't it be <U>? @mvkaio
 
   for (int l = 0, r = 0; l < (int)edges.size(); l = r)
   {
@@ -112,9 +113,9 @@ int MetaSolver<T>::numberOfCrossings(const std::vector<T> &order) const
   return crossings;
 }
 
-template <class T>
-bool MetaSolver<T>::verify(const std::vector<T> &order,
-                           int expected_crossings) const
+template <class T, class U>
+bool MetaSolver<T,U>::verify(const std::vector<U> &order,
+                             int expected_crossings) const
 {
   assert(order.size() == m_graph.countVerticesB());
   return numberOfCrossings(order) == expected_crossings;
