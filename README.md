@@ -59,6 +59,11 @@ for testing and implementation purposes. They are listed below.
 - `ipformulation`: choose which formulation for the OSCM problem will be used.
   The possible values are `simple`, `shorter` and `quadratic`. Each formulation
   is described in the `ip_solver.cpp` file.
+- `ipprefixconstraints`: adds a set of restrictions aiming to prune the search,
+  considering how far a vertex can deviate from the two extremes of the order.
+  The possible variables are `none` (default), `x` (uses the $x_{ij}$ variables,
+  supported by all solvers), `y` (uses the $y_{ik}$ variables, supported by the
+  `quadratic` solver), and `both`.
 
 #### Verification
 - `verify`: this flag enables verification of the solver's output with a solution file. It expectes an argument, which is the path -- relative or absolute -- to the solution file to be used.
