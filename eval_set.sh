@@ -21,6 +21,5 @@ for file in ./test/"$1"/instances/*; do
     file=${file##*/}
     file=${file%.*}
 
-    echo -n "$file, " >> "$out"
-    sh eval_case.sh "$1" "$file" "$2" "$3" | tail -n 1 >> "$out"
+    echo "$file," "$(sh eval_case.sh "$1" "$file" "$2" "$3" | tail -n 1)" >> "$out" &
 done
