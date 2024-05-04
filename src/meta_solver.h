@@ -84,7 +84,7 @@ int MetaSolver<T,U>::numberOfCrossings(const std::vector<U> &order) const
   });
 
   int crossings = 0;
-  library::FenwickTree<int> tree(nA);  // shouldn't it be <U>? @mvkaio
+  library::FenwickTree<int> tree(nA);
 
   for (int l = 0, r = 0; l < (int)edges.size(); l = r)
   {

@@ -33,9 +33,10 @@ enum class Flags
 enum class IPSolverMode
 {
   LPSOLVE,
-  HIGHS,
-  COINOR,
-  GLPK,
+  GUROBI,
+//  HIGHS,
+//  COINOR,
+//  GLPK,
   __MAX_VALUE = LPSOLVE
 };
 

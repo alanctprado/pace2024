@@ -26,12 +26,22 @@ namespace banana {
 namespace solver {
 namespace ip {
 
+class IntegerProgrammingSolverBase
+  : public MetaSolver<graph::BipartiteGraph, int>
+{
+public:
+  IntegerProgrammingSolverBase(graph::BipartiteGraph G)
+    : MetaSolver<graph::BipartiteGraph, int>(G) {};
+  ~IntegerProgrammingSolverBase() = default;
+  virtual int solve() = 0;
+};
+
 /**
  * This class defines an integer programming solver for the OSCM problem. It is
  * an abstract class which will be extended by each solver.
  */
 template<class T, class U>
-class IntegerProgrammingSolver : public MetaSolver<graph::BipartiteGraph, int>
+class IntegerProgrammingSolver : public IntegerProgrammingSolverBase
 {
 public:
   IntegerProgrammingSolver(graph::BipartiteGraph G);
@@ -85,18 +95,18 @@ public:
   /**
    * Quadratic formulation
    *
-   * TODO: explain
+   * TODO: explain @mvkaio?
    */
   virtual int quadratic() = 0;
 
   /**
    * Vinicius' formulation
    *
-   * TODO: explain
+   * TODO: explain @mvkaio?
    */
   virtual int vini() = 0;
 
-  /** TODO: explain */
+  /** TODO: explain @mvkaio? */
   void computeDeltas();
   /** Prefix Constraints On X 
    * 
@@ -114,7 +124,7 @@ public:
    *  'X' indexed by the function triangularIndex.
    */
   virtual void xPrefix(T* program, U& vars) = 0;
-  /** TODO: explain */
+  /** TODO: implement and explain? @mvkaio */
   virtual void yPrefix(T* program, U& vars) = 0;
   /** TODO: explain */
   std::pair<int, bool> triangularIndex(int i, int j);
@@ -125,33 +135,27 @@ public:
 template<class T, class U>
 IntegerProgrammingSolver<T,U>::
 IntegerProgrammingSolver(graph::BipartiteGraph graph)
-    : MetaSolver<graph::BipartiteGraph, int>(graph)
+    : IntegerProgrammingSolverBase(graph)
 {}
 
 template<class T, class U>
 int IntegerProgrammingSolver<T,U>::solve()
 {
   options::HolderIP ip_options = Environment::options().ip;
-  switch (ip_options.solverMode)
+  switch (ip_options.formulation)
   {
-    case options::IPSolverMode::LPSOLVE:
-      if (ip_options.formulation == options::IPFormulation::SIMPLE)
-      {
-        return simple();
-      }
-      else if (ip_options.formulation == options::IPFormulation::SHORTER)
-      {
-        return shorter();
-      }
-      else if (ip_options.formulation == options::IPFormulation::QUADRATIC)
-      {
-        return quadratic();
-      }
-      else if (ip_options.formulation == options::IPFormulation::VINI)
-      {
-        return vini();
-      }
-      throw std::runtime_error("Is this the real life?");
+    case options::IPFormulation::SIMPLE:
+      return simple();
+      break;
+    case options::IPFormulation::SHORTER:
+      return shorter();
+      break;
+    case options::IPFormulation::QUADRATIC:
+      return quadratic();
+      break;
+    case options::IPFormulation::VINI:
+      return vini();
+      break;
     default:
       break;
   }

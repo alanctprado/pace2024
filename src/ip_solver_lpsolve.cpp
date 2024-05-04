@@ -15,7 +15,6 @@
 
 #include "ip_solver_lpsolve.h"
 #include "../lp_solve_5.5/lp_lib.h"
-#include "ip_solver.h"
 
 #include <numeric>
 #include <stdexcept>
