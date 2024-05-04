@@ -1,0 +1,1083 @@
+<!DOCTYPE HTML>
+
+<!--Converted with LaTeX2HTML 2023.2 (Released July 1, 2023) -->
+<HTML lang="en">
+<HEAD>
+<TITLE>General Constraints</TITLE>
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
+<META NAME="viewport" CONTENT="width=device-width, initial-scale=1.0">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2023.2">
+
+<LINK REL="STYLESHEET" HREF="refman.css">
+
+<LINK REL="previous" HREF="quadratic_constraints.html">
+<LINK REL="next" HREF="objectives.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A
+ HREF="objectives.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="constraints.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="quadratic_constraints.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A>   
+<BR>
+<B> Next:</B> <A
+ HREF="objectives.html">Objectives</A>
+<B> Up:</B> <A
+ HREF="constraints.html">Constraints</A>
+<B> Previous:</B> <A
+ HREF="quadratic_constraints.html">Quadratic Constraints</A>
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H3><A ID="SECTION000162400000000000000"></A>
+<A ID="subsubsection:GeneralConstraints"></A>
+<BR>
+General Constraints
+</H3>
+
+<P>
+The previously-described constraints are typically (but not always)
+handled directly by the underlying optimization algorithms.  Gurobi
+includes an additional set of higher-level constraints, which we
+collectively refer to as <EM>general constraints</EM>, that require
+special handling.  We think of these as belonging to two types:
+<A HREF="#subsubsection:GenConstrSimple">simple constraints</A> and
+<A HREF="#subsubsection:GenConstrFunction">function constraints</A>
+
+<P>
+Simple general constraints are a modeling convenience.  They allow you
+to state fairly simple relationships between variables (min, max,
+absolute value, logical OR, etc.).  Techniques for translating these
+constraints into lower-level modeling objects (typically using
+auxiliary binary variables and linear or SOS constraints) are well
+known and can be found in optimization modeling textbooks.  By
+automating these translations and removing the need for the modeler to
+perform them, the hope is that these simple general constraints will
+allow you to write more readable and more maintainable models.
+
+<P>
+Function constraints allow you to state much more complex
+relationships between variables; you can require that <SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.55ex; vertical-align: -0.70ex; " SRC="img44.svg"
+ ALT="$y =
+f(x)$"></SPAN>, where
+<SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.23ex; vertical-align: -0.12ex; " SRC="img29.svg"
+ ALT="$x$"></SPAN> and <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.68ex; vertical-align: -0.57ex; " SRC="img45.svg"
+ ALT="$y$"></SPAN> are Gurobi decision variables and <SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.55ex; vertical-align: -0.70ex; " SRC="img126.svg"
+ ALT="$f()$"></SPAN> is chosen from a
+predefined list of nonlinear functions.  The common theme among these
+functions is that there is no simple way to restate the associated
+constraints using the primitive objects (like integer variables and
+linear constraints) that a standard MIP solver wants to work with.
+Alternate algorithms are required, and the resulting models are
+typically much more difficult to solve than models that do not contain
+these constraints.
+
+<P>
+<SPAN CLASS="LARGE"><SPAN  CLASS="textbf">Simple General Constraints</SPAN></SPAN>
+<A ID="subsubsection:GenConstrSimple"></A>
+<P>
+Gurobi supports the following simple general constraints, each with
+its own syntax and semantics:
+
+<UL>
+<LI><SPAN  CLASS="textbf">MAX constraint:</SPAN>
+The constraint <!-- MATH
+ $r = \max\{x_1,\ldots,x_k,c\}$
+ -->
+<SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.55ex; vertical-align: -0.70ex; " SRC="img127.svg"
+ ALT="$r = \max\{x_1,\ldots,x_k,c\}$"></SPAN> states that the
+<SPAN  CLASS="textit">resultant variable</SPAN> <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.23ex; vertical-align: -0.12ex; " SRC="img22.svg"
+ ALT="$r$"></SPAN> should be equal to the maximum of the
+<SPAN  CLASS="textit">operand variables</SPAN> <!-- MATH
+ $x_1,\ldots,x_k$
+ -->
+<SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.68ex; vertical-align: -0.57ex; " SRC="img128.svg"
+ ALT="$x_1,\ldots,x_k$"></SPAN> and the <SPAN  CLASS="textit">constant</SPAN> <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.23ex; vertical-align: -0.12ex; " SRC="img24.svg"
+ ALT="$c$"></SPAN>.
+For example, a solution <!-- MATH
+ $(r=3, x_1=2, x_2=3, x_3=0)$
+ -->
+<SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.55ex; vertical-align: -0.70ex; " SRC="img129.svg"
+ ALT="$(r=3, x_1=2, x_2=3, x_3=0)$"></SPAN> would be feasible
+for the constraint <!-- MATH
+ $r = \max\{x_1,x_2,x_3,1.7\}$
+ -->
+<SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.55ex; vertical-align: -0.70ex; " SRC="img130.svg"
+ ALT="$r = \max\{x_1,x_2,x_3,1.7\}$"></SPAN> because <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.72ex; vertical-align: -0.12ex; " SRC="img131.svg"
+ ALT="$3$"></SPAN> is indeed
+the maximum of <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.72ex; vertical-align: -0.12ex; " SRC="img132.svg"
+ ALT="$2$"></SPAN>, <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.72ex; vertical-align: -0.12ex; " SRC="img131.svg"
+ ALT="$3$"></SPAN>, <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.72ex; vertical-align: -0.12ex; " SRC="img32.svg"
+ ALT="$0$"></SPAN>, and <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.72ex; vertical-align: -0.12ex; " SRC="img133.svg"
+ ALT="$1.7$"></SPAN>.
+</LI>
+<LI><SPAN  CLASS="textbf">MIN constraint:</SPAN>
+Similar to a MAX constraint,
+the constraint <!-- MATH
+ $r = \min\{x_1,\ldots,x_k,c\}$
+ -->
+<SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.55ex; vertical-align: -0.70ex; " SRC="img134.svg"
+ ALT="$r = \min\{x_1,\ldots,x_k,c\}$"></SPAN> states that the
+<SPAN  CLASS="textit">resultant variable</SPAN> <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.23ex; vertical-align: -0.12ex; " SRC="img22.svg"
+ ALT="$r$"></SPAN> should be equal to the minimum of the
+<SPAN  CLASS="textit">operand variables</SPAN> <!-- MATH
+ $x_1,\ldots,x_k$
+ -->
+<SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.68ex; vertical-align: -0.57ex; " SRC="img128.svg"
+ ALT="$x_1,\ldots,x_k$"></SPAN> and the <SPAN  CLASS="textit">constant</SPAN> <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.23ex; vertical-align: -0.12ex; " SRC="img24.svg"
+ ALT="$c$"></SPAN>.
+</LI>
+<LI><SPAN  CLASS="textbf">ABS constraint:</SPAN>
+The constraint <!-- MATH
+ $r = \mbox{abs}\{x\}$
+ -->
+<SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.55ex; vertical-align: -0.70ex; " SRC="img28.svg"
+ ALT="$r = \mbox{abs}\{x\}$"></SPAN> states that the
+<SPAN  CLASS="textit">resultant variable</SPAN> <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.23ex; vertical-align: -0.12ex; " SRC="img22.svg"
+ ALT="$r$"></SPAN> should be equal to the absolute value of the
+<SPAN  CLASS="textit">operand variable</SPAN> <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.23ex; vertical-align: -0.12ex; " SRC="img29.svg"
+ ALT="$x$"></SPAN>.
+For example, a solution <SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.55ex; vertical-align: -0.70ex; " SRC="img135.svg"
+ ALT="$(r=3, x=-3)$"></SPAN> would be feasible
+for the constraint <!-- MATH
+ $r = \mbox{abs}\{x\}$
+ -->
+<SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.55ex; vertical-align: -0.70ex; " SRC="img28.svg"
+ ALT="$r = \mbox{abs}\{x\}$"></SPAN>.
+</LI>
+<LI><SPAN  CLASS="textbf">AND constraint:</SPAN>
+The constraint <!-- MATH
+ $r = \mbox{and}\{x_1,\ldots,x_k\}$
+ -->
+<SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.55ex; vertical-align: -0.70ex; " SRC="img136.svg"
+ ALT="$r = \mbox{and}\{x_1,\ldots,x_k\}$"></SPAN> states that the binary
+<SPAN  CLASS="textit">resultant variable</SPAN> <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.23ex; vertical-align: -0.12ex; " SRC="img22.svg"
+ ALT="$r$"></SPAN> should be <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.72ex; vertical-align: -0.12ex; " SRC="img31.svg"
+ ALT="$1$"></SPAN> if and only if all of the
+binary <SPAN  CLASS="textit">operand variables</SPAN> <!-- MATH
+ $x_1,\ldots,x_k$
+ -->
+<SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.68ex; vertical-align: -0.57ex; " SRC="img128.svg"
+ ALT="$x_1,\ldots,x_k$"></SPAN> are equal to <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.72ex; vertical-align: -0.12ex; " SRC="img31.svg"
+ ALT="$1$"></SPAN>.
+For example, a solution <!-- MATH
+ $(r=1, x_1=1, x_2=1, x_3=1)$
+ -->
+<SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.55ex; vertical-align: -0.70ex; " SRC="img137.svg"
+ ALT="$(r=1, x_1=1, x_2=1, x_3=1)$"></SPAN> would be feasible
+for the constraint <!-- MATH
+ $r = \mbox{and}\{x_1,x_2,x_3\}$
+ -->
+<SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.55ex; vertical-align: -0.70ex; " SRC="img138.svg"
+ ALT="$r = \mbox{and}\{x_1,x_2,x_3\}$"></SPAN>.
+Note that any involved variables that are not already binary
+are converted to binary.
+</LI>
+<LI><SPAN  CLASS="textbf">OR constraint:</SPAN>
+Similar to an AND constraint,
+the constraint <!-- MATH
+ $r = \mbox{or}\{x_1,\ldots,x_k\}$
+ -->
+<SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.55ex; vertical-align: -0.70ex; " SRC="img139.svg"
+ ALT="$r = \mbox{or}\{x_1,\ldots,x_k\}$"></SPAN> states that the binary
+<SPAN  CLASS="textit">resultant variable</SPAN> <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.23ex; vertical-align: -0.12ex; " SRC="img22.svg"
+ ALT="$r$"></SPAN> should be <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.72ex; vertical-align: -0.12ex; " SRC="img31.svg"
+ ALT="$1$"></SPAN> if and only if at least one of the
+binary <SPAN  CLASS="textit">operand variables</SPAN> <!-- MATH
+ $x_1,\ldots,x_k$
+ -->
+<SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.68ex; vertical-align: -0.57ex; " SRC="img128.svg"
+ ALT="$x_1,\ldots,x_k$"></SPAN> is equal to <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.72ex; vertical-align: -0.12ex; " SRC="img31.svg"
+ ALT="$1$"></SPAN>.
+Note that any involved variables that are not already binary
+are converted to binary.
+</LI>
+<LI><SPAN  CLASS="textbf">NORM constraint:</SPAN>
+The constraint <!-- MATH
+ $r = \mbox{norm}\{x_1,\ldots,x_k\}$
+ -->
+<SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.55ex; vertical-align: -0.70ex; " SRC="img140.svg"
+ ALT="$r = \mbox{norm}\{x_1,\ldots,x_k\}$"></SPAN> states that the
+<SPAN  CLASS="textit">resultant variable</SPAN> <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.23ex; vertical-align: -0.12ex; " SRC="img22.svg"
+ ALT="$r$"></SPAN> should be equal to the vector norm
+of the <SPAN  CLASS="textit">operand variables</SPAN> <!-- MATH
+ $x_1,\ldots,x_k$
+ -->
+<SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.68ex; vertical-align: -0.57ex; " SRC="img128.svg"
+ ALT="$x_1,\ldots,x_k$"></SPAN>.  A few options
+are available: the 0-norm, 1-norm, 2-norm, and infinity-norm.
+</LI>
+<LI><SPAN  CLASS="textbf">INDICATOR constraints:</SPAN>
+An indicator constraint <!-- MATH
+ $y = f \rightarrow a^Tx \leq b$
+ -->
+<SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.63ex; vertical-align: -0.57ex; " SRC="img141.svg"
+ ALT="$y = f \rightarrow a^Tx \leq b$"></SPAN> states that if
+the binary <SPAN  CLASS="textit">indicator variable</SPAN> <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.68ex; vertical-align: -0.57ex; " SRC="img45.svg"
+ ALT="$y$"></SPAN> is equal to <SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.29ex; vertical-align: -0.57ex; " SRC="img37.svg"
+ ALT="$f$"></SPAN> in
+a given solution, where <SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.55ex; vertical-align: -0.70ex; " SRC="img38.svg"
+ ALT="$f \in \{0,1\}$"></SPAN>,
+then the linear constraint <SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.49ex; vertical-align: -0.43ex; " SRC="img39.svg"
+ ALT="$a^Tx \leq b$"></SPAN> has
+to be satisfied.  On the other hand, if <SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.29ex; vertical-align: -0.57ex; " SRC="img142.svg"
+ ALT="$y \neq f$"></SPAN> (i.e., <SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.29ex; vertical-align: -0.57ex; " SRC="img143.svg"
+ ALT="$y = 1-f$"></SPAN>)
+then the linear constraint may be violated.  Note that the sense of
+the linear constraint can also be <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.08ex; vertical-align: -0.12ex; " SRC="img41.svg"
+ ALT="$=$"></SPAN> or <SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.02ex; vertical-align: -0.43ex; " SRC="img42.svg"
+ ALT="$\geq$"></SPAN>;
+refer to <A HREF="linear_constraints.html#subsubsection:LinearConstraints">this earlier section</A>
+for a more detailed description of linear constraints.
+Note also that declaring an INDICATOR constraint implicitly declares the
+indicator variable to be of binary type.
+</LI>
+<LI><SPAN  CLASS="textbf">Piecewise-linear constraints:</SPAN> A piecewise-linear constraint
+<SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.55ex; vertical-align: -0.70ex; " SRC="img44.svg"
+ ALT="$y =
+f(x)$"></SPAN> states that
+the point <SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.55ex; vertical-align: -0.70ex; " SRC="img144.svg"
+ ALT="$(x, y)$"></SPAN> must lie on the piecewise-linear function <SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.55ex; vertical-align: -0.70ex; " SRC="img126.svg"
+ ALT="$f()$"></SPAN> defined
+by a set of points <!-- MATH
+ $(x_1, y_1), (x_2, y_2), ..., (x_n, y_n)$
+ -->
+<SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.55ex; vertical-align: -0.70ex; " SRC="img145.svg"
+ ALT="$(x_1, y_1), (x_2, y_2), ..., (x_n, y_n)$"></SPAN>.  Refer
+to the description of
+<A HREF="objectives.html#subsubsection:PiecewiseObj">piecewise-linear objectives</A>
+for details of how piecewise-linear functions are defined.
+</LI>
+</UL>
+Note that adding any of these constraints to an otherwise
+continuous model will transform it into a MIP
+
+<P>
+As stated above, each general constraint has an equivalent MIP
+formulation that consists of linear and SOS constraints, and possibly
+auxiliary variables.  Thus, you could always model such constraints
+yourself without using a Gurobi general constraint.  For example,
+the MAX constraint <!-- MATH
+ $r = \max\{x_1,\ldots,x_k,c\}$
+ -->
+<SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.55ex; vertical-align: -0.70ex; " SRC="img127.svg"
+ ALT="$r = \max\{x_1,\ldots,x_k,c\}$"></SPAN> can be
+modeled as follows:
+<DIV class="CENTER">
+<!-- MATH
+ $\begin{array}{rcll}
+r                      &   =  & x_j + s_j   & \mbox{ for all } j = 1,\ldots,k \\
+r                      &   =  & c + s_{k+1} & \\
+z_1 + \ldots + z_{k+1} &   =  & 1           & \\
+SOS1(s_j, z_j)         &      &             & \mbox{ for all } j = 1,\ldots,k+1 \\
+s_j                    & \geq & 0           & \mbox{ for all } j = 1,\ldots,k+1 \\
+z_j                    & \in  & \{0,1\}     & \mbox{ for all } j = 1,\ldots,k+1
+\end{array}$
+ -->
+<SPAN CLASS="MATH"><IMG
+ STYLE="height: 16.89ex; vertical-align: -7.90ex; " SRC="img146.svg"
+ ALT="$\begin{array}{rcll}
+r &amp; = &amp; x_j + s_j &amp; \mbox{ for all } j = 1,\ldots,k \\
+r &amp;...
+...ots,k+1 \\
+z_j &amp; \in &amp; \{0,1\} &amp; \mbox{ for all } j = 1,\ldots,k+1
+\end{array}$"></SPAN>
+</DIV>
+The first two constraints state that <!-- MATH
+ $r \geq \max\{x_1,\ldots,x_k,c\}$
+ -->
+<SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.55ex; vertical-align: -0.70ex; " SRC="img147.svg"
+ ALT="$r \geq \max\{x_1,\ldots,x_k,c\}$"></SPAN>,
+i.e., that the resultant variable <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.23ex; vertical-align: -0.12ex; " SRC="img22.svg"
+ ALT="$r$"></SPAN> must be at least as large as each
+of the operand variables <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.89ex; vertical-align: -0.78ex; " SRC="img26.svg"
+ ALT="$x_j$"></SPAN> and the constant <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.23ex; vertical-align: -0.12ex; " SRC="img24.svg"
+ ALT="$c$"></SPAN>.
+This could be modeled using inequalities, but the explicit slack
+variables play an important role in the constraints that follow.
+
+<P>
+The next two constraints enforce
+<!-- MATH
+ $r \leq \max\{x_1,\ldots,x_k,c\}$
+ -->
+<SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.55ex; vertical-align: -0.70ex; " SRC="img148.svg"
+ ALT="$r \leq \max\{x_1,\ldots,x_k,c\}$"></SPAN>, which ensures that <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.23ex; vertical-align: -0.12ex; " SRC="img22.svg"
+ ALT="$r$"></SPAN> is equal
+to the MAX expression.  Enforcing this side of the equality is
+actually a lot more complicated.  We need to introduce
+binary auxiliary variables <!-- MATH
+ $z_j \in \{0,1\}$
+ -->
+<SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.63ex; vertical-align: -0.78ex; " SRC="img149.svg"
+ ALT="$z_j \in \{0,1\}$"></SPAN>, and
+SOS1 constraints to required that at most one of the two variables <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.89ex; vertical-align: -0.78ex; " SRC="img150.svg"
+ ALT="$s_j$"></SPAN> and
+<SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.89ex; vertical-align: -0.78ex; " SRC="img151.svg"
+ ALT="$z_j$"></SPAN> can be non-zero, which models the implication
+<!-- MATH
+ $z_j = 1 \rightarrow s_j = 0$
+ -->
+<SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.39ex; vertical-align: -0.78ex; " SRC="img152.svg"
+ ALT="$z_j = 1 \rightarrow s_j = 0$"></SPAN>.
+Due to the third constraint, one <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.89ex; vertical-align: -0.78ex; " SRC="img151.svg"
+ ALT="$z_j$"></SPAN> will be equal to <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.72ex; vertical-align: -0.12ex; " SRC="img31.svg"
+ ALT="$1$"></SPAN> and thus at
+least one <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.89ex; vertical-align: -0.78ex; " SRC="img150.svg"
+ ALT="$s_j$"></SPAN> will be zero.
+Hence, <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.89ex; vertical-align: -0.78ex; " SRC="img153.svg"
+ ALT="$r = x_j$"></SPAN> for at least one <SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.21ex; vertical-align: -0.57ex; " SRC="img66.svg"
+ ALT="$j$"></SPAN> due to the first constraint,
+or <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.23ex; vertical-align: -0.12ex; " SRC="img154.svg"
+ ALT="$r = c$"></SPAN> due to the second constraint.
+
+<P>
+Tolerances play a role in general constraints, although as you might
+expect, the exact role depends on the constraint type.  As a general rule,
+violations in the resultant will be smaller than the
+<A HREF="feasibilitytol.html#parameter:FeasibilityTol">feasibility tolerance</A>, and
+integrality violations in integer resultants will also satisfy the
+<A HREF="intfeastol.html#parameter:IntFeasTol">integrality tolerance</A>.
+
+<P>
+By most measures, general constraints are just a means of concisely
+capturing relationships between variables while removing the burden of
+creating an equivalent MIP formulation.  However, general constraints
+have another potential advantage: Gurobi might be able to simplify the
+MIP formulation if it can prove during presolve that the simplified
+version suffices for the correctness of the model.  For this reason,
+Gurobi might be able to produce a smaller or tighter representation of
+the general constraint than you would get from the most general
+formulation.  For example, it might be the case that <!-- MATH
+ $r \leq
+\max\{x_1,\ldots,x_k,c\}$
+ -->
+<SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.55ex; vertical-align: -0.70ex; " SRC="img148.svg"
+ ALT="$r \leq \max\{x_1,\ldots,x_k,c\}$"></SPAN> is already implied by the other constraints
+in the model, so that a simple set of inequalities
+<DIV class="CENTER">
+<!-- MATH
+ $\begin{array}{rcll}
+r  & \geq & x_j \;\;\mbox{ for all } j = 1,\ldots,k \\
+r  & \geq & c
+\end{array}$
+ -->
+<SPAN CLASS="MATH"><IMG
+ STYLE="height: 5.79ex; vertical-align: -2.32ex; " SRC="img155.svg"
+ ALT="$\begin{array}{rcll}
+r &amp; \geq &amp; x_j \;\;\mbox{ for all } j = 1,\ldots,k \\
+r &amp; \geq &amp; c
+\end{array}$"></SPAN>
+</DIV>
+to describe <!-- MATH
+ $r \geq \max\{x_1,\ldots,x_k,c\}$
+ -->
+<SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.55ex; vertical-align: -0.70ex; " SRC="img147.svg"
+ ALT="$r \geq \max\{x_1,\ldots,x_k,c\}$"></SPAN> suffices to model
+the relevant part of the MAX constraint.
+
+<P>
+<SPAN  CLASS="textbf">Norm Constraint</SPAN>
+
+<P>
+The norm constraint introduces a few complications that are important
+to be aware of.  As mentioned above, this constraint allows you to set
+one variable equal to the norm of a vector of variables.  A few norms
+are available.  The L1 norm is equal to the sum of the absolute values
+of the operand variables.  The L-infinity norm is equal to the maximum
+absolute value of any operand.  The L2 norm is equal to the square
+root of the sum of the squares of the operands.  The L0 norm counts
+the number of non-zero values among the operands.
+
+<P>
+Regarding the L2 norm, one obvious complication comes from the fact
+that enforcing it requires a quadratic constraint.  If your model only
+ever bounds the result from above (e.g., <SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.55ex; vertical-align: -0.70ex; " SRC="img156.svg"
+ ALT="$r=\vert\vert x\vert\vert&lt;=1$"></SPAN>), then the
+resulting constraint will be convex.  If your model was otherwise
+convex, the resulting model will be a (convex) QCP.  However, if you
+try to bound the result from below (e.g., <SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.55ex; vertical-align: -0.70ex; " SRC="img157.svg"
+ ALT="$r=\vert\vert x\vert\vert&gt;=y$"></SPAN>), adding the L2
+norm constraint will lead to a non-convex QCP model, which will
+typically be significantly harder to solve.
+
+<P>
+Regarding the L0 norm, note that results obtained with this constraint
+can be counter-intuitive.  This is a consequence of the fact that for
+nearly any feasible solution with a variable at exactly 0, you can add
+a small value into that variable while still satisfying all associated
+constraints to tolerances.  The net result is that a lower bound on
+the L0 norm is often satisfied by &ldquo;cheating&rdquo; - by setting enough
+variables to values that are slightly different from zero.  We
+strongly recommend that you only bound the result from above.  That
+is, you should avoid using the resultant in situations where the model
+incentivizes a larger value.  This would include situations where the
+objective coefficient is negative, as well as situations where a
+larger value for the variable could help to satisfy a constraint
+(e.g., a greater-than constraint where the resultant appears with a
+positive coefficient).
+
+<P>
+<SPAN CLASS="LARGE"><SPAN  CLASS="textbf">Function Constraints</SPAN></SPAN>
+<A ID="subsubsection:GenConstrFunction"></A>
+<P>
+Gurobi supports the following function constraints, each with somewhat
+different syntax and semantics (<SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.23ex; vertical-align: -0.12ex; " SRC="img29.svg"
+ ALT="$x$"></SPAN> and <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.68ex; vertical-align: -0.57ex; " SRC="img45.svg"
+ ALT="$y$"></SPAN> below are Gurobi decision
+variables, and other terms are constants provided as input when the
+constraint is added to the model):
+
+<UL>
+<LI><SPAN  CLASS="textbf">Polynomial:</SPAN>
+<!-- MATH
+ $y = p_0 x^n + p_1 x^{n-1} + ... + p_n x + p_{n+1}$
+ -->
+<SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.66ex; vertical-align: -0.66ex; " SRC="img158.svg"
+ ALT="$y = p_0 x^n + p_1 x^{n-1} + ... + p_n x + p_{n+1}$"></SPAN>
+</LI>
+<LI><SPAN  CLASS="textbf">Natural exponential:</SPAN>
+<SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.55ex; vertical-align: -0.70ex; " SRC="img48.svg"
+ ALT="$y = exp(x)$"></SPAN> or <SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.22ex; vertical-align: -0.57ex; " SRC="img12.svg"
+ ALT="$y = e^x$"></SPAN>
+</LI>
+<LI><SPAN  CLASS="textbf">Exponential:</SPAN>
+<SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.22ex; vertical-align: -0.57ex; " SRC="img13.svg"
+ ALT="$y = a^x$"></SPAN>, where <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.81ex; vertical-align: -0.21ex; " SRC="img49.svg"
+ ALT="$a &gt; 0$"></SPAN> is the base for the exponential function
+</LI>
+<LI><SPAN  CLASS="textbf">Natural logarithm:</SPAN>
+<SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.55ex; vertical-align: -0.70ex; " SRC="img14.svg"
+ ALT="$y = \log_e(x)$"></SPAN> or <SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.55ex; vertical-align: -0.70ex; " SRC="img159.svg"
+ ALT="$y = \ln(x)$"></SPAN>
+</LI>
+<LI><SPAN  CLASS="textbf">Logarithm:</SPAN>
+<SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.55ex; vertical-align: -0.70ex; " SRC="img15.svg"
+ ALT="$y = \log_a(x)$"></SPAN>, where <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.81ex; vertical-align: -0.21ex; " SRC="img49.svg"
+ ALT="$a &gt; 0$"></SPAN> is the base for the logarithmic function
+</LI>
+<LI><SPAN  CLASS="textbf">Logistic:</SPAN>
+<!-- MATH
+ $y = \frac{1}{1 + exp(-x)}$
+ -->
+<SPAN CLASS="MATH"><IMG
+ STYLE="height: 3.39ex; vertical-align: -1.32ex; " SRC="img160.svg"
+ ALT="$y = \frac{1}{1 + exp(-x)}$"></SPAN> or <!-- MATH
+ $y = \frac{1}{1 + e^{-x}}$
+ -->
+<SPAN CLASS="MATH"><IMG
+ STYLE="height: 3.18ex; vertical-align: -1.11ex; " SRC="img16.svg"
+ ALT="$y = \frac{1}{1 + e^{-x}}$"></SPAN>
+</LI>
+<LI><SPAN  CLASS="textbf">Power:</SPAN>
+<SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.22ex; vertical-align: -0.57ex; " SRC="img17.svg"
+ ALT="$y = x^a$"></SPAN>, where <SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.04ex; vertical-align: -0.43ex; " SRC="img161.svg"
+ ALT="$x \geq 0$"></SPAN> for any <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.23ex; vertical-align: -0.12ex; " SRC="img51.svg"
+ ALT="$a$"></SPAN> and <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.81ex; vertical-align: -0.21ex; " SRC="img162.svg"
+ ALT="$x &gt; 0$"></SPAN> for <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.81ex; vertical-align: -0.21ex; " SRC="img163.svg"
+ ALT="$a &lt; 0$"></SPAN>
+</LI>
+<LI><SPAN  CLASS="textbf">Sine:</SPAN>
+<SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.55ex; vertical-align: -0.70ex; " SRC="img18.svg"
+ ALT="$y = \sin(x)$"></SPAN>
+</LI>
+<LI><SPAN  CLASS="textbf">Cosine:</SPAN>
+<SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.55ex; vertical-align: -0.70ex; " SRC="img19.svg"
+ ALT="$y = \cos(x)$"></SPAN>
+</LI>
+<LI><SPAN  CLASS="textbf">Tangent:</SPAN>
+<SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.55ex; vertical-align: -0.70ex; " SRC="img20.svg"
+ ALT="$y = \tan(x)$"></SPAN>
+</LI>
+</UL>
+
+<P>
+As noted earlier, there is no good way to restate these nonlinear constraints so
+that a standard MIP solver can handle them efficiently and accurately.
+The most effective approaches to solving such problems involve
+replacing the constraints with piecewise-linear approximations.  Gurobi
+provides two different mechanisms for doing so:
+
+<UL>
+<LI>A static piecewise-linear approximation, where the nonlinear
+  function is approximated once, before the MIP solution process
+  begins.  That model can then be solved using the standard MIP
+  solver, but the accuracy of the approximation will of course depend
+  heavily on the number of pieces used.  For some nonlinear functions,
+  the number of pieces required to achieve the desired accuracy may be
+  lead to excessive solution times.
+</LI>
+<LI>A dynamic piecewise-linear approximation, using <EM>outer
+    approximation</EM> and <EM>spatial branch-and-bound</EM>.  In this
+  approach, the MIP solver is extended to compute an approximation in
+  the neighborhood of the current relaxation solution at each node of
+  the branch-and-bound search.  The solver can compute very accurate
+  solutions using this approach, but having the model change
+  at each node in the branch-and-bound tree greatly complicates the
+  search, which can lead to much less efficient tree exploration.
+</LI>
+</UL>
+The most effective approach will depend on your model and your
+accuracy goals.  That's why we provide both options.
+
+<P>
+<SPAN  CLASS="textbf">Function Constraints with Static Piecewise-Linear Approximation</SPAN>
+<A ID="subsubsection:GenConstrFunctionPWL"></A>
+<P>
+As noted earlier, the first option for managing function constraints
+is to perform a static piecewise-linear approximation, yielding a MIP
+model that can be handed to the standard MIP solver.  Gurobi
+will take this approach for any function where the
+<A HREF="funcnonlinear.html#attr:FuncNonlinear">FuncNonlinear attribute</A> is set to 0 (or
+that attribute is set to -1 and the global
+<A HREF="funcnonlinear2.html#parameter:FuncNonlinear">FuncNonlinear parameter</A>
+is set to 0).
+
+<P>
+With this approach to handling non-linearity, you face a fundamental
+cost-versus-accuracy tradeoff: adding more pieces produces
+smaller approximation errors, but also increases the cost of solving
+the problem.  The tradeoff can be complex.  Gurobi provides a set of
+three attributes that help to navigate this tradeoff:
+<A HREF="funcpieces.html#attr:FuncPieces">FuncPieces</A>,
+<A HREF="funcpiecelength.html#attr:FuncPieceLength">FuncPieceLength</A>,
+<A HREF="funcpieceerror.html#attr:FuncPieceError">FuncPieceError</A>.  They are used as
+follows:
+
+<UL>
+<LI>If you would like to choose the number of pieces to use for the
+  approximation, set the <A HREF="funcpieces.html#attr:FuncPieces">FuncPieces</A>
+  attribute to the desired value.  All pieces will have equal width.
+  This approach allows you to control the size of the
+  approximation.
+</LI>
+<LI>If you would like to choose the width of each piece, set the
+  <A HREF="funcpieces.html#attr:FuncPieces">FuncPieces</A> attribute to a special
+  value of 1 and set the
+  <A HREF="funcpiecelength.html#attr:FuncPieceLength">FuncPieceLength</A> attribute equal
+  to the desired width of each piece.  This approach provides some
+  control over both the size and the error of the approximation.
+  While this may appear to be a minor variation of the first option,
+  note that presolve may tighten the domain of <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.23ex; vertical-align: -0.12ex; " SRC="img29.svg"
+ ALT="$x$"></SPAN>, often
+  substantially, which can make it difficult to predict the
+  relationship between the width of each piece and the number of pieces.
+</LI>
+<LI>If you would like to set the maximum error you are willing to
+  tolerate in the approximation, set the
+  <A HREF="funcpieces.html#attr:FuncPieces">FuncPieces</A> attribute to a special
+  value of -1 and set the
+  <A HREF="funcpieceerror.html#attr:FuncPieceError">FuncPieceError</A> attribute equal
+  to the maximum absolute approximation you are willing to tolerate.
+  Gurobi will choose pieces, typically of different sizes, to achieve
+  that error bound.  Note that the number of pieces required may be
+  quite large if you set a tight error tolerance.  You can control
+  the maximum relative error rather than the absolute error by setting the
+  <A HREF="funcpieces.html#attr:FuncPieces">FuncPieces</A> attribute to -2 instead
+  of -1.
+</LI>
+</UL>
+These are attributes on the general constraints, so you can choose
+different values for each individual constraint.
+
+<P>
+The other relevant attribute is
+<A HREF="funcpieceratio.html#attr:FuncPieceRatio">FuncPieceRatio</A>, which controls
+whether the approximation is an underestimate of the function (0.0),
+an overestimate (1.0), or somewhere in between (any value strictly
+between 0.0 and 1.0).  You can also choose the special value of -1,
+which will choose points that are on the original function.
+
+<P>
+Consider the following simple example:
+<DIV class="CENTER">
+<!-- MATH
+ $\scalebox{1.0}{\includegraphics[width=2.5in]{graphics/func}}$
+ -->
+<IMG
+ STYLE="height: 72.89ex; vertical-align: -0.12ex; " SRC="img164.svg"
+ ALT="\scalebox{1.0}{\includegraphics[width=2.5in]{graphics/func}}">
+</DIV>
+<P>
+<DIV class="CENTER">
+</DIV>
+The goal is to find an approximation of the polynomial
+<SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.57ex; vertical-align: -0.57ex; " SRC="img165.svg"
+ ALT="$y=x^2$"></SPAN>. We've set <code>FuncPieces</code> to <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.72ex; vertical-align: -0.12ex; " SRC="img31.svg"
+ ALT="$1$"></SPAN> and
+<code>FuncPieceLength</code> to <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.72ex; vertical-align: -0.12ex; " SRC="img166.svg"
+ ALT="$1.0$"></SPAN>, so we're performing an
+approximation with fixed-width pieces of width 1.0.  The
+domain of <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.23ex; vertical-align: -0.12ex; " SRC="img29.svg"
+ ALT="$x$"></SPAN> is <SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.55ex; vertical-align: -0.70ex; " SRC="img167.svg"
+ ALT="$[0,2]$"></SPAN>, so the approximation has two pieces.
+The figure shows 6 points: <!-- MATH
+ $P_{u1}(0,0), P_{u2}(1,1), P_{u3}(2,4)$
+ -->
+<SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.55ex; vertical-align: -0.70ex; " SRC="img168.svg"
+ ALT="$P_{u1}(0,0), P_{u2}(1,1), P_{u3}(2,4)$"></SPAN>, and
+<!-- MATH
+ $P_{l1}(0,-0.25), P_{l2}(1, 0.75), P_{l3}(2,3.75)$
+ -->
+<SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.55ex; vertical-align: -0.70ex; " SRC="img169.svg"
+ ALT="$P_{l1}(0,-0.25), P_{l2}(1, 0.75), P_{l3}(2,3.75)$"></SPAN>.  If
+<code>FuncPieceRatio</code> is set to <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.72ex; vertical-align: -0.12ex; " SRC="img170.svg"
+ ALT="$0.0$"></SPAN>, the approximation would be
+built from the points below the function (<!-- MATH
+ $P_{l1}, P_{l2}$
+ -->
+<SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.26ex; vertical-align: -0.57ex; " SRC="img171.svg"
+ ALT="$P_{l1}, P_{l2}$"></SPAN>, and
+<SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.16ex; vertical-align: -0.46ex; " SRC="img172.svg"
+ ALT="$P_{l3}$"></SPAN>).  Similarly, if it is set to <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.72ex; vertical-align: -0.12ex; " SRC="img166.svg"
+ ALT="$1.0$"></SPAN>, the approximation would
+be built from the points above the function (<!-- MATH
+ $P_{u1}, P_{u2}$
+ -->
+<SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.26ex; vertical-align: -0.57ex; " SRC="img173.svg"
+ ALT="$P_{u1}, P_{u2}$"></SPAN>, and
+<SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.16ex; vertical-align: -0.46ex; " SRC="img174.svg"
+ ALT="$P_{u3}$"></SPAN>).  A value of <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.72ex; vertical-align: -0.12ex; " SRC="img175.svg"
+ ALT="$0.6$"></SPAN> would use weighted combinations of
+the points: <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.72ex; vertical-align: -0.12ex; " SRC="img175.svg"
+ ALT="$0.6$"></SPAN> times <SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.16ex; vertical-align: -0.46ex; " SRC="img176.svg"
+ ALT="$P_{ui}$"></SPAN> plus <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.72ex; vertical-align: -0.12ex; " SRC="img177.svg"
+ ALT="$0.4$"></SPAN> times <SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.16ex; vertical-align: -0.46ex; " SRC="img178.svg"
+ ALT="$P_{li}$"></SPAN>.  In this
+case, the line segments would be built from the points <!-- MATH
+ $(0, -0.1), (1,
+0.9)$
+ -->
+<SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.55ex; vertical-align: -0.70ex; " SRC="img179.svg"
+ ALT="$(0, -0.1), (1,
+0.9)$"></SPAN>, and <SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.55ex; vertical-align: -0.70ex; " SRC="img180.svg"
+ ALT="$(2, 3.9)$"></SPAN>.  If <code>FuncPieceRatio</code> is set to <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.92ex; vertical-align: -0.31ex; " SRC="img89.svg"
+ ALT="$-1$"></SPAN>,
+meaning that the approximation would be built from points that are on
+the original function, in this case the upper points (<!-- MATH
+ $P_{u1}, P_{u2}$
+ -->
+<SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.26ex; vertical-align: -0.57ex; " SRC="img173.svg"
+ ALT="$P_{u1}, P_{u2}$"></SPAN>,
+and <SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.16ex; vertical-align: -0.46ex; " SRC="img174.svg"
+ ALT="$P_{u3}$"></SPAN>) fit the bill.  This will always be the case for a convex
+function.
+
+<P>
+Recall that you can set <code>FuncPieces</code> to <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.92ex; vertical-align: -0.31ex; " SRC="img89.svg"
+ ALT="$-1$"></SPAN> to control the
+maximum absolute error.  In this case, choosing a
+<code>FuncPieceError</code> value of <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.72ex; vertical-align: -0.12ex; " SRC="img181.svg"
+ ALT="$0.25$"></SPAN> would give the piecewise
+approximation shown in the figure, since the distance between the
+upper and lower curves is always <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.72ex; vertical-align: -0.12ex; " SRC="img181.svg"
+ ALT="$0.25$"></SPAN>.  A smaller error value would
+of course lead to more pieces.  We should add that piece widths will
+typically be non-uniform when limiting the maximum approximation
+error.  The approximation algorithms we use try to limit the number of
+pieces needed to meet the error targets, which often requires more
+refinement in some portions of the domain than in others.
+
+<P>
+Note that the approximations are guaranteed to be under- and
+over-estimates in all cases except for polynomials of degree greater
+than 5.  Finding the roots of higher-degree polynomials, which would
+be required to guarantee this property, is quite difficult.
+
+<P>
+If you wish to experiment with different approaches to approximating a
+set of functions, it is often convenient to be able to change the
+approach for all functions at once.  We provide a set of parameters
+with the same names as the attributes to make this easier:
+<A HREF="funcpieces2.html#parameter:FuncPieces">FuncPieces</A>,
+<A HREF="funcpiecelength2.html#parameter:FuncPieceLength">FuncPieceLength</A>,
+<A HREF="funcpieceerror2.html#parameter:FuncPieceError">FuncPieceError</A>, and
+<A HREF="funcpieceratio2.html#parameter:FuncPieceRatio">FuncPieceRatio</A>.  If you set
+the <code>FuncPieces</code> attribute on a function constraint to <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.72ex; vertical-align: -0.12ex; " SRC="img32.svg"
+ ALT="$0$"></SPAN>, then
+the approximation approach for that constraint will be determined by
+the parameter settings instead.
+
+<P>
+For some of the supported functions, modest <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.23ex; vertical-align: -0.12ex; " SRC="img29.svg"
+ ALT="$x$"></SPAN> values can lead to
+enormous <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.68ex; vertical-align: -0.57ex; " SRC="img45.svg"
+ ALT="$y$"></SPAN> values (and vice-versa).  This can cause numerical issues
+when solving the resulting piecewise-linear MIP model.  To avoid such
+issues, we limit the range of any <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.23ex; vertical-align: -0.12ex; " SRC="img29.svg"
+ ALT="$x$"></SPAN> or <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.68ex; vertical-align: -0.57ex; " SRC="img45.svg"
+ ALT="$y$"></SPAN> that participates in a
+function constraint to [-1e+6, 1e+6].  The parameter
+<A HREF="funcmaxval.html#parameter:FuncMaxVal">FuncMaxVal</A> allows you to change
+these limits, but we recommend that you proceed with caution.
+
+<P>
+We should point out we handle violations and tolerances differently
+for PWL approximations, which can sometimes lead to unexpected
+results.  For one, the feasibility tolerance for function constraints is
+specified in
+<A HREF="funcpieceerror2.html#parameter:FuncPieceError">FuncPieceError</A>
+rather than through the standard
+<A HREF="feasibilitytol.html#parameter:FeasibilityTol">feasibility tolerance</A>.  We
+also interpret violations differently.  The violation of a function
+constraint is computed as the Euclidian distance from the solution
+to the nearest point on the function.  Computing this distance
+exactly can be quite involved for some functions, so we actually
+compute an over-estimate in some cases.  The net result is that
+the reported violations may be larger than you expect.
+
+<P>
+Another possible source of unexpected results comes from the fact
+that solutions that satisfy the original nonlinear function may
+not satisfy the piecewise-linear approximation of that function.
+This may lead to sub-optimal solutions or even conclusions
+of infeasibility.
+Consider a simple example with two constraints: <SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.17ex; vertical-align: -0.57ex; " SRC="img182.svg"
+ ALT="$y = 2x-1$"></SPAN>
+and <SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.57ex; vertical-align: -0.57ex; " SRC="img165.svg"
+ ALT="$y=x^2$"></SPAN>.  Clearly <!-- MATH
+ $(x, y) = (1, 1)$
+ -->
+<SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.55ex; vertical-align: -0.70ex; " SRC="img183.svg"
+ ALT="$(x, y) = (1, 1)$"></SPAN> is a feasible solution, but
+a piecewise-linear approximation could introduce breakpoints at
+<SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.72ex; vertical-align: -0.12ex; " SRC="img184.svg"
+ ALT="$x=0.9$"></SPAN> and <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.72ex; vertical-align: -0.12ex; " SRC="img185.svg"
+ ALT="$x=1.1$"></SPAN>.  The resulting approximation gives a <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.68ex; vertical-align: -0.57ex; " SRC="img45.svg"
+ ALT="$y$"></SPAN> value of
+<SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.72ex; vertical-align: -0.12ex; " SRC="img186.svg"
+ ALT="$1.01$"></SPAN> at <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.72ex; vertical-align: -0.12ex; " SRC="img187.svg"
+ ALT="$x=1$"></SPAN>, which is sufficiently far from the actual function
+value that Gurobi will not consider that a valid solution and declare
+the model infeasible, since there are no other solutions to the
+constraints. Reducing the maximum approximation error (by setting
+<A HREF="funcpieces2.html#parameter:FuncPieces">FuncPieces</A> to -1 and
+<A HREF="funcpieceerror2.html#parameter:FuncPieceError">FuncPieceError</A> to a much
+smaller value) would help, but this isn't always the best way to
+address the problem, since tighter error tolerances can substantially
+increase the number of pieces in the approximation and thus the cost.
+We recommend the following approach when you encounter unexpected
+results.  For inequalities, you should ask for an approximation that
+always overestimates or underestimates the function (depending on the
+sense of the constraint), to ensure that your approximation will
+always satisfy the constraint.  The
+<A HREF="funcpieceratio2.html#parameter:FuncPieceRatio">FuncPieceRatio</A> parameter
+allows you to do this.  For equalities, if you have a sense of where
+your solution is likely to lie, one option for managing the size of
+the approximation is to introduce additional variables to capture your
+function in different ranges, and then perform approximations with
+different levels of accuracy on these different pieces.
+
+<P>
+While users could perform piecewise-linear approximations themselves,
+there are several advantages to asking Gurobi to do it instead.
+First, Gurobi can often reduce the domains of variables, by using
+bound strengthening in presolve, or by exploiting repetition in
+periodic functions like sine or cosine.  Smaller domains means fewer
+pieces to achieve the same accuracy.  Gurobi also provides many
+options to make experimentation easier (for error control, piece
+length, etc.).  These options can be quite difficult to implement and
+maintain.
+
+<P>
+<SPAN  CLASS="textbf">Function Constraints With Dynamic Piecewise-Linear Approximation</SPAN>
+<A ID="subsubsection:GenConstrFunctionNL"></A>
+<P>
+The alternative for managing function constraints is a more dynamic
+approach, using <EM>spatial branching</EM> and <EM>outer approximation</EM>.
+Gurobi will take this approach for any function where the
+<A HREF="funcnonlinear.html#attr:FuncNonlinear">FuncNonlinear attribute</A> is set to 1 (or
+that attribute is set to -1 and the global
+<A HREF="funcnonlinear2.html#parameter:FuncNonlinear">FuncNonlinear parameter</A>
+is set to 1).
+
+<P>
+Solving a model with (nonconvex) nonlinear constraints to global
+optimality is well known to be a hard task.  The idea behind spatial
+branching is to divide the overall solution space into portions, and
+to compute valid primal and dual bounds for each portion.  Such bounds
+are obtained by computing a linear approximation to the feasible space
+for each region (a so-called <EM>outer approximation</EM>) that contains
+all feasible solutions for the original nonlinear constraints in
+that region.
+Bounds for a region can often be tightened by
+<EM>spatial branching</EM>, where the domain of a variable
+(integer or continuous) is split, allowing
+hopefully tighter outer approximations to be computed for the
+resulting feasible subregions.
+Bounds for the original model can be obtained by
+combining the bounds from the leafs of the resulting branch-and-bound
+tree.  This process continues until the desired optimality gap
+(<A HREF="mipgap2.html#parameter:MIPGap">MIPGap</A>) is achieved.
+
+<P>
+Valid primal bounds come from feasible solutions found during the
+search. They can be found using various heuristics, or they may come
+from solutions to the current node relaxation that happen to satisfy
+the nonlinear and integrality constraints (relaxation solutions will always satisfy
+linear and bound constraints because these are still present in the
+relaxation).  Valid dual bounds are found by solving an LP over a
+polyhedron that contains all feasible solutions to the original linear
+and nonlinear constraints in that region (the outer approximation).
+
+<P>
+Currently, Gurobi only directly supports the univariate nonlinear
+functions listed in the
+<A HREF="#subsubsection:GenConstrFunction">Function  Constraints</A>
+section.  More complex functions must be
+disaggregated into a cascade of supported univariate functions.
+For example, the nonlinear equality constraint
+<DIV class="CENTER">
+<!-- MATH
+ $x_3 = 100000 \cdot \frac{x_1}{x_1 + 1000 \cdot x_2}$
+ -->
+<SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.91ex; vertical-align: -1.15ex; " SRC="img188.svg"
+ ALT="$x_3 = 100000 \cdot \frac{x_1}{x_1 + 1000 \cdot x_2}
+$"></SPAN>
+</DIV>
+can be disaggregated into
+<DIV class="CENTER">
+<!-- MATH
+ $\begin{array}{ll}
+z_1 = & x_1 + 1000 \cdot x_2 \\
+z_2 = & z_1^{-1} \\
+x_3 = & 100000 \cdot x_1 \cdot z_2.
+\end{array}$
+ -->
+<SPAN CLASS="MATH"><IMG
+ STYLE="height: 8.65ex; vertical-align: -3.76ex; " SRC="img189.svg"
+ ALT="$\begin{array}{ll}
+z_1 = &amp; x_1 + 1000 \cdot x_2 \\
+z_2 = &amp; z_1^{-1} \\
+x_3 = &amp; 100000 \cdot x_1 \cdot z_2.
+\end{array}$"></SPAN>
+</DIV>
+Such disaggregation is standard practice for most global
+non-linear solvers (but it is typically performend behind the
+scenes).
+
+<P>
+While the disaggregated reformulation is mathematically equivalent to
+the original model, we should note that the presence of large
+coefficients in the expression can lead to larger violations of the
+original constraints than you might expect, due to the accumulation of
+violations of the disaggregated constraints.
+
+<P>
+Suppose we are using the default feasibility tolerance
+of <SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.12ex; vertical-align: -0.12ex; " SRC="img190.svg"
+ ALT="$10^{-6}$"></SPAN> and Gurobi produces the following solution for the
+disaggregated model:
+<DIV class="CENTER">
+<!-- MATH
+ $\begin{array}{ll}
+x_1 = & 1 \\
+x_2 = & 1 \\
+z_1 = & 1001.000001 \\
+z_2 = & 0.001000000998003 \\
+x_3 = & 100.0000998003
+\end{array}$
+ -->
+<SPAN CLASS="MATH"><IMG
+ STYLE="height: 14.12ex; vertical-align: -6.50ex; " SRC="img191.svg"
+ ALT="$\begin{array}{ll}
+x_1 = &amp; 1 \\
+x_2 = &amp; 1 \\
+z_1 = &amp; 1001.000001 \\
+z_2 = &amp; 0.001000000998003 \\
+x_3 = &amp; 100.0000998003
+\end{array}$"></SPAN>
+</DIV>
+As one can see, this solution is indeed feasible within the tolerance for
+the disaggregated model. However,
+<DIV class="CENTER">
+<!-- MATH
+ $100000 \cdot \frac{1}{1 + 1000 \cdot 1} = 99.9000999001 \neq 100.0000998003 = x_3.$
+ -->
+<SPAN CLASS="MATH"><IMG
+ STYLE="height: 3.18ex; vertical-align: -1.11ex; " SRC="img192.svg"
+ ALT="$100000 \cdot \frac{1}{1 + 1000 \cdot 1} = 99.9000999001 \neq 100.0000998003 = x_3.
+$"></SPAN>
+</DIV>
+The 100000 coefficient magnifies the error in the
+intermediate result, leading to a violation of almost <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.72ex; vertical-align: -0.12ex; " SRC="img193.svg"
+ ALT="$0.1$"></SPAN> on the
+original model, which is much larger than the specified feasibility
+tolerance.
+
+<P>
+This example illustrates that a solution that is feasible for the
+disaggregated model may not necessarily be feasible for the aggregated
+(original) model. Clearly, the above example is an extreme case, but
+this issue can definitely arise in other situations. This
+makes scaling and tight coefficient ranges extremely important when
+formulating and solving nonlinear models.
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A
+ HREF="objectives.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="constraints.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="quadratic_constraints.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A>   
+<BR>
+<B> Next:</B> <A
+ HREF="objectives.html">Objectives</A>
+<B> Up:</B> <A
+ HREF="constraints.html">Constraints</A>
+<B> Previous:</B> <A
+ HREF="quadratic_constraints.html">Quadratic Constraints</A></DIV>
+<!--End of Navigation Panel-->
+
+</BODY>
+</HTML>

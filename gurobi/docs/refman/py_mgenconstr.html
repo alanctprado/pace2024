@@ -1,0 +1,115 @@
+<!DOCTYPE HTML>
+
+<!--Converted with LaTeX2HTML 2023.2 (Released July 1, 2023) -->
+<HTML lang="en">
+<HEAD>
+<TITLE>MGenConstr</TITLE>
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
+<META NAME="viewport" CONTENT="width=device-width, initial-scale=1.0">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2023.2">
+
+<LINK REL="STYLESHEET" HREF="refman.css">
+
+<LINK REL="next" HREF="py_lex.html">
+<LINK REL="previous" HREF="py_genconstr.html">
+<LINK REL="next" HREF="py_mgenconstr_fromlist.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A
+ HREF="py_mgenconstr_fromlist.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="py_python_api_details.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="py_genconstr_setattr.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A>   
+<BR>
+<B> Next:</B> <A
+ HREF="py_mgenconstr_fromlist.html">MGenConstr.fromlist()</A>
+<B> Up:</B> <A
+ HREF="py_python_api_details.html">Python API Details</A>
+<B> Previous:</B> <A
+ HREF="py_genconstr_setattr.html">GenConstr.setAttr()</A>
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A ID="SECTION0001111000000000000000"></A>
+<A ID="pythonclass:MGenConstr"></A>
+<BR>
+MGenConstr
+</H2>
+
+<P>
+Gurobi matrix general constraint object.  An <code>MGenConstr</code> object is an
+array-like data structure that represents multiple general constraints (in
+contrast to a <A HREF="py_genconstr.html#pythonclass:GenConstr">GenConstr</A> object, which
+represents a single general constraint).  It behaves similar to NumPy's
+<code>ndarray</code>s, e.g., it has a shape and can be indexed and sliced.  Matrix
+general constraints are always associated with a particular model.  Currently
+only the
+<A HREF="py_model_agc_indicator.html#pythonmethod:Model.addGenConstrIndicator">Model.addGenConstrIndicator</A>
+method produces <code>MGenConstr</code> objects when matrix-friendly objects are used
+as inputs.
+
+<P>
+General constraint objects have a number of attributes.  The full list can be
+found in the <A HREF="attributes.html#sec:Attributes">Attributes</A> section of this
+document.  Some general constraint attributes can only be queried, while others
+can also be set.  Recall that the Gurobi Optimizer employs a lazy update
+approach, so changes to attributes don't take effect until the next call to
+<A HREF="py_model_update.html#pythonmethod:Model.update">Model.update</A>,
+<A HREF="py_model_optimize.html#pythonmethod:Model.optimize">Model.optimize</A>, or
+<A HREF="py_model_write.html#pythonmethod:Model.write">Model.write</A> on the associated model.
+
+<P>
+Note that in most cases to query general constraint data, you will need to
+index into the MGenConstr object and pass individual GenConstr objects to
+methods such as
+<A HREF="py_model_ggc_indicator.html#pythonmethod:Model.getGenConstrIndicator">Model.getGenConstrIndicator</A>
+to read back general constraint data.
+
+<P>
+<BR><HR>
+<!--Table of Child-Links-->
+<A ID="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
+
+<UL CLASS="ChildLinks">
+<LI><A ID="tex2html3862"
+  HREF="py_mgenconstr_fromlist.html">MGenConstr.fromlist()</A>
+<LI><A ID="tex2html3863"
+  HREF="py_mgenconstr_getattr.html">MGenConstr.getAttr()</A>
+<LI><A ID="tex2html3864"
+  HREF="py_mgenconstr_setattr.html">MGenConstr.setAttr()</A>
+<LI><A ID="tex2html3865"
+  HREF="py_mgenconstr_tolist.html">MGenConstr.tolist()</A>
+</UL>
+<!--End of Table of Child-Links-->
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A
+ HREF="py_mgenconstr_fromlist.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="py_python_api_details.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="py_genconstr_setattr.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A>   
+<BR>
+<B> Next:</B> <A
+ HREF="py_mgenconstr_fromlist.html">MGenConstr.fromlist()</A>
+<B> Up:</B> <A
+ HREF="py_python_api_details.html">Python API Details</A>
+<B> Previous:</B> <A
+ HREF="py_genconstr_setattr.html">GenConstr.setAttr()</A></DIV>
+<!--End of Navigation Panel-->
+
+</BODY>
+</HTML>

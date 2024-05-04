@@ -1,0 +1,121 @@
+<!DOCTYPE HTML>
+
+<!--Converted with LaTeX2HTML 2023.2 (Released July 1, 2023) -->
+<HTML lang="en">
+<HEAD>
+<TITLE>MQuadExpr.__getitem__()</TITLE>
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
+<META NAME="viewport" CONTENT="width=device-width, initial-scale=1.0">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2023.2">
+
+<LINK REL="STYLESHEET" HREF="refman.css">
+
+<LINK REL="next" HREF="py_mqex_le_.html">
+<LINK REL="previous" HREF="py_mqex_ge_.html">
+<LINK REL="next" HREF="py_mqex_le_.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A
+ HREF="py_mqex_le_.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="py_mqex.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="py_mqex_ge_.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A>   
+<BR>
+<B> Next:</B> <A
+ HREF="py_mqex_le_.html">MQuadExpr.__le__()</A>
+<B> Up:</B> <A
+ HREF="py_mqex.html">MQuadExpr</A>
+<B> Previous:</B> <A
+ HREF="py_mqex_ge_.html">MQuadExpr.__ge__()</A>
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H3><A ID="SECTION00011161200000000000000"></A>
+<A ID="pythonmethod:MQuadExpr.__getitem__"></A>
+<BR>
+MQuadExpr.__getitem__()
+</H3>
+<SPAN CLASS="LARGE">
+<FONT COLOR="#801a1a"> <SPAN  CLASS="textbf">__getitem__</SPAN></FONT></SPAN> (  )
+
+<P>
+Index or slice this MQuadExpr.
+
+<P>
+<SPAN CLASS="LARGE"><SPAN  CLASS="textbf">Return value:</SPAN></SPAN>
+
+<P>
+An <SPAN  CLASS="texttt">MQuadExpr</SPAN> object.
+
+<P>
+<SPAN CLASS="LARGE"><B>Example usage:</B></SPAN><PRE>
+  mqe = 2 * m.addMVar((2,2))**2
+  col0 = mqe[:, 0]  # The first column of mqe, 1-D result
+  elmt = mqe[1, 0]  # The element at position (1, 0), 0-D result
+</PRE>
+
+<P>
+You can index and slice MQuadExpr objects like you would index NumPy's
+ndarray, and indexing behavior is straightforward to understand if you
+only <SPAN  CLASS="textit">read</SPAN> from the returned object.  When you <SPAN  CLASS="textit">write</SPAN> to
+the returned object, be aware some kinds of indexing return NumPy <SPAN  CLASS="textit">views</SPAN>
+on the indexed expression (e.g., slices), while others
+result in copies being returned (e.g., fancy indexing).  Here is an
+example:
+
+<P>
+<SPAN CLASS="LARGE"><B>Example usage:</B></SPAN><PRE>
+  mqe = 2 * m.addMVar(4)**2
+  leading_part_1 = mqe[:2]
+  leading_part_2 = mqe[[0,1]]
+  leading_part_1 += 99  # This modifies mqe, too
+  leading_part_2 += 1  # This doesn't modify mqe
+</PRE>
+
+<P>
+If you are unsure about any of these concepts and want to avoid any
+risk of accidentally writing back to the indexed object, you should
+always combine indexing with the <code>copy</code> method.
+
+<P>
+<SPAN CLASS="LARGE"><B>Example usage:</B></SPAN><PRE>
+  expr = 2 * model.addMVar((2,2))**2 + 1
+  first_col = expr[:, 0].copy()
+  first_col =+ 1  # Leaves expr untouched
+</PRE>
+
+<P>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A
+ HREF="py_mqex_le_.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="py_mqex.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="py_mqex_ge_.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A>   
+<BR>
+<B> Next:</B> <A
+ HREF="py_mqex_le_.html">MQuadExpr.__le__()</A>
+<B> Up:</B> <A
+ HREF="py_mqex.html">MQuadExpr</A>
+<B> Previous:</B> <A
+ HREF="py_mqex_ge_.html">MQuadExpr.__ge__()</A></DIV>
+<!--End of Navigation Panel-->
+
+</BODY>
+</HTML>

@@ -1,0 +1,456 @@
+<!DOCTYPE HTML>
+
+<!--Converted with LaTeX2HTML 2023.2 (Released July 1, 2023) -->
+<HTML lang="en">
+<HEAD>
+<TITLE>Parameter Descriptions</TITLE>
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
+<META NAME="viewport" CONTENT="width=device-width, initial-scale=1.0">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2023.2">
+
+<LINK REL="STYLESHEET" HREF="refman.css">
+
+<LINK REL="next" HREF="parameter_examples.html">
+<LINK REL="previous" HREF="parameter_guidelines.html">
+<LINK REL="next" HREF="aggfill.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A
+ HREF="aggfill.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="parameters.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="mip_models.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A>   
+<BR>
+<B> Next:</B> <A
+ HREF="aggfill.html">AggFill</A>
+<B> Up:</B> <A
+ HREF="parameters.html">Parameters</A>
+<B> Previous:</B> <A
+ HREF="mip_models.html">MIP Models</A>
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A ID="SECTION000192000000000000000">
+Parameter Descriptions</A>
+</H2>
+
+<P>
+<BR><HR>
+<!--Table of Child-Links-->
+<A ID="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
+
+<UL CLASS="ChildLinks">
+<LI><A ID="tex2html4616"
+  HREF="aggfill.html">AggFill</A>
+<LI><A ID="tex2html4617"
+  HREF="aggregate.html">Aggregate</A>
+<LI><A ID="tex2html4618"
+  HREF="barconvtol.html">BarConvTol</A>
+<LI><A ID="tex2html4619"
+  HREF="barcorrectors.html">BarCorrectors</A>
+<LI><A ID="tex2html4620"
+  HREF="barhomogeneous.html">BarHomogeneous</A>
+<LI><A ID="tex2html4621"
+  HREF="bariterlimit.html">BarIterLimit</A>
+<LI><A ID="tex2html4622"
+  HREF="barorder.html">BarOrder</A>
+<LI><A ID="tex2html4623"
+  HREF="barqcpconvtol.html">BarQCPConvTol</A>
+<LI><A ID="tex2html4624"
+  HREF="bestbdstop.html">BestBdStop</A>
+<LI><A ID="tex2html4625"
+  HREF="bestobjstop.html">BestObjStop</A>
+<LI><A ID="tex2html4626"
+  HREF="bqpcuts.html">BQPCuts</A>
+<LI><A ID="tex2html4627"
+  HREF="branchdir.html">BranchDir</A>
+<LI><A ID="tex2html4628"
+  HREF="cliquecuts.html">CliqueCuts</A>
+<LI><A ID="tex2html4629"
+  HREF="cloudaccessid.html">CloudAccessID</A>
+<LI><A ID="tex2html4630"
+  HREF="cloudhost.html">CloudHost</A>
+<LI><A ID="tex2html4631"
+  HREF="cloudsecretkey.html">CloudSecretKey</A>
+<LI><A ID="tex2html4632"
+  HREF="cloudpool.html">CloudPool</A>
+<LI><A ID="tex2html4633"
+  HREF="computeserver.html">ComputeServer</A>
+<LI><A ID="tex2html4634"
+  HREF="concurrentjobs.html">ConcurrentJobs</A>
+<LI><A ID="tex2html4635"
+  HREF="concurrentmethod.html">ConcurrentMethod</A>
+<LI><A ID="tex2html4636"
+  HREF="concurrentmip.html">ConcurrentMIP</A>
+<LI><A ID="tex2html4637"
+  HREF="concurrentsettings.html">ConcurrentSettings</A>
+<LI><A ID="tex2html4638"
+  HREF="covercuts.html">CoverCuts</A>
+<LI><A ID="tex2html4639"
+  HREF="crossover.html">Crossover</A>
+<LI><A ID="tex2html4640"
+  HREF="crossoverbasis.html">CrossoverBasis</A>
+<LI><A ID="tex2html4641"
+  HREF="csapiaccessid.html">CSAPIAccessID</A>
+<LI><A ID="tex2html4642"
+  HREF="csapisecret.html">CSAPISecret</A>
+<LI><A ID="tex2html4643"
+  HREF="csappname.html">CSAppName</A>
+<LI><A ID="tex2html4644"
+  HREF="csauthtoken.html">CSAuthToken</A>
+<LI><A ID="tex2html4645"
+  HREF="csbatchmode.html">CSBatchMode</A>
+<LI><A ID="tex2html4646"
+  HREF="csclientlog.html">CSClientLog</A>
+<LI><A ID="tex2html4647"
+  HREF="csgroup.html">CSGroup</A>
+<LI><A ID="tex2html4648"
+  HREF="csidletimeout.html">CSIdleTimeout</A>
+<LI><A ID="tex2html4649"
+  HREF="csmanager.html">CSManager</A>
+<LI><A ID="tex2html4650"
+  HREF="cspriority.html">CSPriority</A>
+<LI><A ID="tex2html4651"
+  HREF="csqueuetimeout.html">CSQueueTimeout</A>
+<LI><A ID="tex2html4652"
+  HREF="csrouter.html">CSRouter</A>
+<LI><A ID="tex2html4653"
+  HREF="cstlsinsecure.html">CSTLSInsecure</A>
+<LI><A ID="tex2html4654"
+  HREF="cutaggpasses.html">CutAggPasses</A>
+<LI><A ID="tex2html4655"
+  HREF="cutoff.html">Cutoff</A>
+<LI><A ID="tex2html4656"
+  HREF="cutpasses.html">CutPasses</A>
+<LI><A ID="tex2html4657"
+  HREF="cuts.html">Cuts</A>
+<LI><A ID="tex2html4658"
+  HREF="degenmoves.html">DegenMoves</A>
+<LI><A ID="tex2html4659"
+  HREF="disconnected.html">Disconnected</A>
+<LI><A ID="tex2html4660"
+  HREF="displayinterval.html">DisplayInterval</A>
+<LI><A ID="tex2html4661"
+  HREF="distributedmipjobs.html">DistributedMIPJobs</A>
+<LI><A ID="tex2html4662"
+  HREF="dualreductions.html">DualReductions</A>
+<LI><A ID="tex2html4663"
+  HREF="feasibilitytol.html">FeasibilityTol</A>
+<LI><A ID="tex2html4664"
+  HREF="feasrelaxbigm.html">FeasRelaxBigM</A>
+<LI><A ID="tex2html4665"
+  HREF="flowcovercuts.html">FlowCoverCuts</A>
+<LI><A ID="tex2html4666"
+  HREF="flowpathcuts.html">FlowPathCuts</A>
+<LI><A ID="tex2html4667"
+  HREF="funcpieceerror2.html">FuncPieceError</A>
+<LI><A ID="tex2html4668"
+  HREF="funcpiecelength2.html">FuncPieceLength</A>
+<LI><A ID="tex2html4669"
+  HREF="funcpieceratio2.html">FuncPieceRatio</A>
+<LI><A ID="tex2html4670"
+  HREF="funcpieces2.html">FuncPieces</A>
+<LI><A ID="tex2html4671"
+  HREF="funcmaxval.html">FuncMaxVal</A>
+<LI><A ID="tex2html4672"
+  HREF="funcnonlinear2.html">FuncNonlinear</A>
+<LI><A ID="tex2html4673"
+  HREF="gomorypasses.html">GomoryPasses</A>
+<LI><A ID="tex2html4674"
+  HREF="gubcovercuts.html">GUBCoverCuts</A>
+<LI><A ID="tex2html4675"
+  HREF="heuristics.html">Heuristics</A>
+<LI><A ID="tex2html4676"
+  HREF="ignorenames.html">IgnoreNames</A>
+<LI><A ID="tex2html4677"
+  HREF="iismethod.html">IISMethod</A>
+<LI><A ID="tex2html4678"
+  HREF="impliedcuts.html">ImpliedCuts</A>
+<LI><A ID="tex2html4679"
+  HREF="improvestartgap.html">ImproveStartGap</A>
+<LI><A ID="tex2html4680"
+  HREF="improvestartnodes.html">ImproveStartNodes</A>
+<LI><A ID="tex2html4681"
+  HREF="improvestarttime.html">ImproveStartTime</A>
+<LI><A ID="tex2html4682"
+  HREF="infproofcuts.html">InfProofCuts</A>
+<LI><A ID="tex2html4683"
+  HREF="infunbdinfo.html">InfUnbdInfo</A>
+<LI><A ID="tex2html4684"
+  HREF="inputfile.html">InputFile</A>
+<LI><A ID="tex2html4685"
+  HREF="integralityfocus.html">IntegralityFocus</A>
+<LI><A ID="tex2html4686"
+  HREF="intfeastol.html">IntFeasTol</A>
+<LI><A ID="tex2html4687"
+  HREF="iterationlimit.html">IterationLimit</A>
+<LI><A ID="tex2html4688"
+  HREF="jobid.html">JobID</A>
+<LI><A ID="tex2html4689"
+  HREF="jsonsoldetail.html">JSONSolDetail</A>
+<LI><A ID="tex2html4690"
+  HREF="lazyconstraints.html">LazyConstraints</A>
+<LI><A ID="tex2html4691"
+  HREF="licenseid.html">LicenseID</A>
+<LI><A ID="tex2html4692"
+  HREF="liftprojectcuts.html">LiftProjectCuts</A>
+<LI><A ID="tex2html4693"
+  HREF="lpwarmstart.html">LPWarmStart</A>
+<LI><A ID="tex2html4694"
+  HREF="logfile.html">LogFile</A>
+<LI><A ID="tex2html4695"
+  HREF="logtoconsole.html">LogToConsole</A>
+<LI><A ID="tex2html4696"
+  HREF="markowitztol.html">MarkowitzTol</A>
+<LI><A ID="tex2html4697"
+  HREF="memlimit.html">MemLimit</A>
+<LI><A ID="tex2html4698"
+  HREF="method.html">Method</A>
+<LI><A ID="tex2html4699"
+  HREF="minrelnodes.html">MinRelNodes</A>
+<LI><A ID="tex2html4700"
+  HREF="mipfocus.html">MIPFocus</A>
+<LI><A ID="tex2html4701"
+  HREF="mipgap2.html">MIPGap</A>
+<LI><A ID="tex2html4702"
+  HREF="mipgapabs.html">MIPGapAbs</A>
+<LI><A ID="tex2html4703"
+  HREF="mipsepcuts.html">MIPSepCuts</A>
+<LI><A ID="tex2html4704"
+  HREF="miqcpmethod.html">MIQCPMethod</A>
+<LI><A ID="tex2html4705"
+  HREF="mircuts.html">MIRCuts</A>
+<LI><A ID="tex2html4706"
+  HREF="mixingcuts.html">MixingCuts</A>
+<LI><A ID="tex2html4707"
+  HREF="modkcuts.html">ModKCuts</A>
+<LI><A ID="tex2html4708"
+  HREF="multiobjmethod.html">MultiObjMethod</A>
+<LI><A ID="tex2html4709"
+  HREF="multiobjpre.html">MultiObjPre</A>
+<LI><A ID="tex2html4710"
+  HREF="multiobjsettings.html">MultiObjSettings</A>
+<LI><A ID="tex2html4711"
+  HREF="networkalg.html">NetworkAlg</A>
+<LI><A ID="tex2html4712"
+  HREF="networkcuts.html">NetworkCuts</A>
+<LI><A ID="tex2html4713"
+  HREF="nlpheur.html">NLPHeur</A>
+<LI><A ID="tex2html4714"
+  HREF="nodefiledir.html">NodefileDir</A>
+<LI><A ID="tex2html4715"
+  HREF="nodefilestart.html">NodefileStart</A>
+<LI><A ID="tex2html4716"
+  HREF="nodelimit.html">NodeLimit</A>
+<LI><A ID="tex2html4717"
+  HREF="nodemethod.html">NodeMethod</A>
+<LI><A ID="tex2html4718"
+  HREF="nonconvex.html">NonConvex</A>
+<LI><A ID="tex2html4719"
+  HREF="norelheurtime.html">NoRelHeurTime</A>
+<LI><A ID="tex2html4720"
+  HREF="norelheurwork.html">NoRelHeurWork</A>
+<LI><A ID="tex2html4721"
+  HREF="normadjust.html">NormAdjust</A>
+<LI><A ID="tex2html4722"
+  HREF="numericfocus.html">NumericFocus</A>
+<LI><A ID="tex2html4723"
+  HREF="obbt.html">OBBT</A>
+<LI><A ID="tex2html4724"
+  HREF="objnumber.html">ObjNumber</A>
+<LI><A ID="tex2html4725"
+  HREF="objscale.html">ObjScale</A>
+<LI><A ID="tex2html4726"
+  HREF="optimalitytol.html">OptimalityTol</A>
+<LI><A ID="tex2html4727"
+  HREF="outputflag.html">OutputFlag</A>
+<LI><A ID="tex2html4728"
+  HREF="partitionplace.html">PartitionPlace</A>
+<LI><A ID="tex2html4729"
+  HREF="perturbvalue.html">PerturbValue</A>
+<LI><A ID="tex2html4730"
+  HREF="poolgap.html">PoolGap</A>
+<LI><A ID="tex2html4731"
+  HREF="poolgapabs.html">PoolGapAbs</A>
+<LI><A ID="tex2html4732"
+  HREF="poolsearchmode.html">PoolSearchMode</A>
+<LI><A ID="tex2html4733"
+  HREF="poolsolutions.html">PoolSolutions</A>
+<LI><A ID="tex2html4734"
+  HREF="precrush.html">PreCrush</A>
+<LI><A ID="tex2html4735"
+  HREF="predeprow.html">PreDepRow</A>
+<LI><A ID="tex2html4736"
+  HREF="predual.html">PreDual</A>
+<LI><A ID="tex2html4737"
+  HREF="premiqcpform.html">PreMIQCPForm</A>
+<LI><A ID="tex2html4738"
+  HREF="prepasses.html">PrePasses</A>
+<LI><A ID="tex2html4739"
+  HREF="preqlinearize.html">PreQLinearize</A>
+<LI><A ID="tex2html4740"
+  HREF="presolve.html">Presolve</A>
+<LI><A ID="tex2html4741"
+  HREF="presos1bigm.html">PreSOS1BigM</A>
+<LI><A ID="tex2html4742"
+  HREF="presos1encoding.html">PreSOS1Encoding</A>
+<LI><A ID="tex2html4743"
+  HREF="presos2bigm.html">PreSOS2BigM</A>
+<LI><A ID="tex2html4744"
+  HREF="presos2encoding.html">PreSOS2Encoding</A>
+<LI><A ID="tex2html4745"
+  HREF="presparsify.html">PreSparsify</A>
+<LI><A ID="tex2html4746"
+  HREF="projimpliedcuts.html">ProjImpliedCuts</A>
+<LI><A ID="tex2html4747"
+  HREF="psdcuts.html">PSDCuts</A>
+<LI><A ID="tex2html4748"
+  HREF="psdtol.html">PSDTol</A>
+<LI><A ID="tex2html4749"
+  HREF="pumppasses.html">PumpPasses</A>
+<LI><A ID="tex2html4750"
+  HREF="qcpdual.html">QCPDual</A>
+<LI><A ID="tex2html4751"
+  HREF="quad.html">Quad</A>
+<LI><A ID="tex2html4752"
+  HREF="record.html">Record</A>
+<LI><A ID="tex2html4753"
+  HREF="resultfile.html">ResultFile</A>
+<LI><A ID="tex2html4754"
+  HREF="rins.html">RINS</A>
+<LI><A ID="tex2html4755"
+  HREF="relaxliftcuts.html">RelaxLiftCuts</A>
+<LI><A ID="tex2html4756"
+  HREF="rltcuts.html">RLTCuts</A>
+<LI><A ID="tex2html4757"
+  HREF="scaleflag.html">ScaleFlag</A>
+<LI><A ID="tex2html4758"
+  HREF="scenarionumber.html">ScenarioNumber</A>
+<LI><A ID="tex2html4759"
+  HREF="seed.html">Seed</A>
+<LI><A ID="tex2html4760"
+  HREF="serverpassword.html">ServerPassword</A>
+<LI><A ID="tex2html4761"
+  HREF="servertimeout.html">ServerTimeout</A>
+<LI><A ID="tex2html4762"
+  HREF="sifting.html">Sifting</A>
+<LI><A ID="tex2html4763"
+  HREF="siftmethod.html">SiftMethod</A>
+<LI><A ID="tex2html4764"
+  HREF="simplexpricing.html">SimplexPricing</A>
+<LI><A ID="tex2html4765"
+  HREF="softmemlimit.html">SoftMemLimit</A>
+<LI><A ID="tex2html4766"
+  HREF="solutionlimit.html">SolutionLimit</A>
+<LI><A ID="tex2html4767"
+  HREF="solutiontarget.html">SolutionTarget</A>
+<LI><A ID="tex2html4768"
+  HREF="solfiles.html">SolFiles</A>
+<LI><A ID="tex2html4769"
+  HREF="solutionnumber.html">SolutionNumber</A>
+<LI><A ID="tex2html4770"
+  HREF="startnodelimit.html">StartNodeLimit</A>
+<LI><A ID="tex2html4771"
+  HREF="startnumber.html">StartNumber</A>
+<LI><A ID="tex2html4772"
+  HREF="strongcgcuts.html">StrongCGCuts</A>
+<LI><A ID="tex2html4773"
+  HREF="submipcuts.html">SubMIPCuts</A>
+<LI><A ID="tex2html4774"
+  HREF="submipnodes.html">SubMIPNodes</A>
+<LI><A ID="tex2html4775"
+  HREF="symmetry.html">Symmetry</A>
+<LI><A ID="tex2html4776"
+  HREF="threads.html">Threads</A>
+<LI><A ID="tex2html4777"
+  HREF="timelimit.html">TimeLimit</A>
+<LI><A ID="tex2html4778"
+  HREF="tokenserver.html">TokenServer</A>
+<LI><A ID="tex2html4779"
+  HREF="tsport.html">TSPort</A>
+<LI><A ID="tex2html4780"
+  HREF="tunebasesettings.html">TuneBaseSettings</A>
+<LI><A ID="tex2html4781"
+  HREF="tunecleanup.html">TuneCleanup</A>
+<LI><A ID="tex2html4782"
+  HREF="tunecriterion.html">TuneCriterion</A>
+<LI><A ID="tex2html4783"
+  HREF="tunedynamicjobs.html">TuneDynamicJobs</A>
+<LI><A ID="tex2html4784"
+  HREF="tunejobs.html">TuneJobs</A>
+<LI><A ID="tex2html4785"
+  HREF="tunemetric.html">TuneMetric</A>
+<LI><A ID="tex2html4786"
+  HREF="tuneoutput.html">TuneOutput</A>
+<LI><A ID="tex2html4787"
+  HREF="tuneresults.html">TuneResults</A>
+<LI><A ID="tex2html4788"
+  HREF="tunetargetmipgap.html">TuneTargetMIPGap</A>
+<LI><A ID="tex2html4789"
+  HREF="tunetargettime.html">TuneTargetTime</A>
+<LI><A ID="tex2html4790"
+  HREF="tunetimelimit.html">TuneTimeLimit</A>
+<LI><A ID="tex2html4791"
+  HREF="tunetrials.html">TuneTrials</A>
+<LI><A ID="tex2html4792"
+  HREF="tuneusefilename.html">TuneUseFilename</A>
+<LI><A ID="tex2html4793"
+  HREF="updatemode.html">UpdateMode</A>
+<LI><A ID="tex2html4794"
+  HREF="username.html">UserName</A>
+<LI><A ID="tex2html4795"
+  HREF="varbranch.html">VarBranch</A>
+<LI><A ID="tex2html4796"
+  HREF="wlsaccessid.html">WLSAccessID</A>
+<LI><A ID="tex2html4797"
+  HREF="wlssecret.html">WLSSecret</A>
+<LI><A ID="tex2html4798"
+  HREF="wlstoken.html">WLSToken</A>
+<LI><A ID="tex2html4799"
+  HREF="wlstokenduration.html">WLSTokenDuration</A>
+<LI><A ID="tex2html4800"
+  HREF="wlstokenrefresh.html">WLSTokenRefresh</A>
+<LI><A ID="tex2html4801"
+  HREF="workerpassword.html">WorkerPassword</A>
+<LI><A ID="tex2html4802"
+  HREF="workerpool.html">WorkerPool</A>
+<LI><A ID="tex2html4803"
+  HREF="worklimit.html">WorkLimit</A>
+<LI><A ID="tex2html4804"
+  HREF="zerohalfcuts.html">ZeroHalfCuts</A>
+<LI><A ID="tex2html4805"
+  HREF="zeroobjnodes.html">ZeroObjNodes</A>
+</UL>
+<!--End of Table of Child-Links-->
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A
+ HREF="aggfill.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="parameters.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="mip_models.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A>   
+<BR>
+<B> Next:</B> <A
+ HREF="aggfill.html">AggFill</A>
+<B> Up:</B> <A
+ HREF="parameters.html">Parameters</A>
+<B> Previous:</B> <A
+ HREF="mip_models.html">MIP Models</A></DIV>
+<!--End of Navigation Panel-->
+
+</BODY>
+</HTML>

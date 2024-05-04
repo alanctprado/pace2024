@@ -1,0 +1,127 @@
+<!DOCTYPE HTML>
+
+<!--Converted with LaTeX2HTML 2023.2 (Released July 1, 2023) -->
+<HTML lang="en">
+<HEAD>
+<TITLE>MemLimit</TITLE>
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
+<META NAME="viewport" CONTENT="width=device-width, initial-scale=1.0">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2023.2">
+
+<LINK REL="STYLESHEET" HREF="refman.css">
+
+<LINK REL="next" HREF="method.html">
+<LINK REL="previous" HREF="markowitztol.html">
+<LINK REL="next" HREF="method.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A
+ HREF="method.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="parameter_descriptions.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="markowitztol.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A>   
+<BR>
+<B> Next:</B> <A
+ HREF="method.html">Method</A>
+<B> Up:</B> <A
+ HREF="parameter_descriptions.html">Parameter Descriptions</A>
+<B> Previous:</B> <A
+ HREF="markowitztol.html">MarkowitzTol</A>
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H3><A ID="SECTION0001928200000000000000"></A>
+<A ID="parameter:MemLimit"></A>
+<BR>
+MemLimit
+</H3>
+Memory limit
+
+<TABLE class="PAD " style="">
+<TR><TD ALIGN="LEFT">&nbsp;</TD><TH CLASS="LEFT"><SPAN  CLASS="textbf">Type:</SPAN></TH>
+<TD CLASS="LEFT">double</TD>
+</TR>
+<TR><TD ALIGN="LEFT">&nbsp;</TD><TD CLASS="LEFT"><SPAN  CLASS="textbf">Default value:</SPAN></TD>
+<TD CLASS="LEFT">Infinity</TD>
+</TR>
+<TR><TD ALIGN="LEFT">&nbsp;</TD><TD CLASS="LEFT"><SPAN  CLASS="textbf">Minimum value:</SPAN></TD>
+<TD CLASS="LEFT">0</TD>
+</TR>
+<TR><TD ALIGN="LEFT">&nbsp;</TD><TD CLASS="LEFT"><SPAN  CLASS="textbf">Maximum value:</SPAN></TD>
+<TD CLASS="LEFT">Infinity</TD>
+</TR>
+</TABLE>
+
+<P>
+Limits the total amount of memory (in GB, i.e., <SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.12ex; vertical-align: -0.12ex; " SRC="img277.svg"
+ ALT="$10^9$"></SPAN> bytes)
+available to Gurobi.  If more is needed, Gurobi will fail with an
+<code>OUT_OF_MEMORY</code> error (see the
+<A HREF="error_codes.html#sec:ErrorCodes">Error Code</A> section for further details).
+
+<P>
+Note that it is not possible to retrieve solution information after an
+error termination.  Thus, the behavior of this parameter is different
+from that of other termination criteria like
+<A HREF="softmemlimit.html#parameter:SoftMemLimit">SoftMemLimit</A>,
+<A HREF="timelimit.html#parameter:TimeLimit">TimeLimit</A>, or
+<A HREF="nodelimit.html#parameter:NodeLimit">NodeLimit</A>, where the solver
+will terminate with a <A HREF="optimization_status_codes.html#sec:StatusCodes">Status Code</A> and
+solution information will still be available.
+
+<P>
+One advantage of using this parameter rather than the similar
+<A HREF="softmemlimit.html#parameter:SoftMemLimit">SoftMemLimit</A> is that
+<code>MemLimit</code> is checked after every memory allocation, so Gurobi
+will terminate at precisely the point where the limit is exceeded.
+
+<P>
+Note that allocated memory is tracked across all models within a
+Gurobi environment.  If you create multiple models in one environment,
+these additional models will count towards overall memory consumption.
+
+<P>
+Memory usage is also tracked across all threads.  One consequence of
+this is that termination may be non-deterministic for multi-threaded
+runs.
+
+<P>
+
+<P>
+For examples of how to query or modify parameter values from
+our different APIs, refer to our
+<A HREF="parameter_examples.html#sec:ParameterExamples">Parameter Examples</A>.
+<P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A
+ HREF="method.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="parameter_descriptions.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="markowitztol.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A>   
+<BR>
+<B> Next:</B> <A
+ HREF="method.html">Method</A>
+<B> Up:</B> <A
+ HREF="parameter_descriptions.html">Parameter Descriptions</A>
+<B> Previous:</B> <A
+ HREF="markowitztol.html">MarkowitzTol</A></DIV>
+<!--End of Navigation Panel-->
+
+</BODY>
+</HTML>

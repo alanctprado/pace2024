@@ -1,0 +1,93 @@
+<!DOCTYPE HTML>
+
+<!--Converted with LaTeX2HTML 2023.2 (Released July 1, 2023) -->
+<HTML lang="en">
+<HEAD>
+<TITLE>MQuadExpr.item()</TITLE>
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
+<META NAME="viewport" CONTENT="width=device-width, initial-scale=1.0">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2023.2">
+
+<LINK REL="STYLESHEET" HREF="refman.css">
+
+<LINK REL="next" HREF="py_mqex_ndim.html">
+<LINK REL="previous" HREF="py_mqex_getvalue.html">
+<LINK REL="next" HREF="py_mqex_ndim.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A
+ HREF="py_mqex_ndim.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="py_mqex.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="py_mqex_getvalue.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A>   
+<BR>
+<B> Next:</B> <A
+ HREF="py_mqex_ndim.html">MQuadExpr.ndim</A>
+<B> Up:</B> <A
+ HREF="py_mqex.html">MQuadExpr</A>
+<B> Previous:</B> <A
+ HREF="py_mqex_getvalue.html">MQuadExpr.getValue()</A>
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H3><A ID="SECTION0001116400000000000000"></A>
+<A ID="pythonmethod:MQuadExpr.item"></A>
+<BR>
+MQuadExpr.item()
+</H3>
+<SPAN CLASS="LARGE">
+<FONT COLOR="#801a1a"> <SPAN  CLASS="textbf">item</SPAN></FONT></SPAN> (  )
+
+<P>
+For an MQuadExpr that contains a single element, returns a copy of
+  that element as a QuadExpr object.  Calling this method on an
+  MQuadExpr with more than one element will raise a ValueError.
+
+<P>
+<SPAN CLASS="LARGE"><SPAN  CLASS="textbf">Return value:</SPAN></SPAN>
+
+<P>
+A QuadExpr object
+
+<P>
+<SPAN CLASS="LARGE"><B>Example usage:</B></SPAN><PRE>
+  mqe = 2 * model.addMVar((2, 2))** + 1
+  mqe_sub = mqe[0, 1]  # A 0-D MQuadExpr encapsulating one QuadExpr object
+  mqe_qe = mqe[0, 1].item()  # A copy of the resident QuadExpr object
+</PRE>
+
+<P>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A
+ HREF="py_mqex_ndim.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="py_mqex.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="py_mqex_getvalue.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A>   
+<BR>
+<B> Next:</B> <A
+ HREF="py_mqex_ndim.html">MQuadExpr.ndim</A>
+<B> Up:</B> <A
+ HREF="py_mqex.html">MQuadExpr</A>
+<B> Previous:</B> <A
+ HREF="py_mqex_getvalue.html">MQuadExpr.getValue()</A></DIV>
+<!--End of Navigation Panel-->
+
+</BODY>
+</HTML>

@@ -1,0 +1,93 @@
+<!DOCTYPE HTML>
+
+<!--Converted with LaTeX2HTML 2023.2 (Released July 1, 2023) -->
+<HTML lang="en">
+<HEAD>
+<TITLE>MQConstr.tolist()</TITLE>
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
+<META NAME="viewport" CONTENT="width=device-width, initial-scale=1.0">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2023.2">
+
+<LINK REL="STYLESHEET" HREF="refman.css">
+
+<LINK REL="previous" HREF="py_mqconstr_setattr.html">
+<LINK REL="next" HREF="py_qconstr.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A
+ HREF="py_qconstr.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="py_mqconstr.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="py_mqconstr_setattr.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A>   
+<BR>
+<B> Next:</B> <A
+ HREF="py_qconstr.html">QConstr</A>
+<B> Up:</B> <A
+ HREF="py_mqconstr.html">MQConstr</A>
+<B> Previous:</B> <A
+ HREF="py_mqconstr_setattr.html">MQConstr.setAttr()</A>
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H3><A ID="SECTION000117400000000000000"></A>
+<A ID="pythonmethod:MQConstr.tolist"></A>
+<BR>
+MQConstr.tolist()
+</H3>
+<SPAN CLASS="LARGE">
+<FONT COLOR="#801a1a"> <SPAN  CLASS="textbf">tolist</SPAN></FONT></SPAN> (  )
+
+<P>
+Return the quadratic constraints associated with this matrix quadratic
+constraint as a list of individual <A HREF="py_qconstr.html#pythonclass:QConstr">QConstr</A>
+objects.
+
+<P>
+<SPAN CLASS="LARGE"><SPAN  CLASS="textbf">Return value:</SPAN></SPAN>
+
+<P>
+List of <SPAN  CLASS="texttt">QConstr</SPAN> objects.
+
+<P>
+<SPAN CLASS="LARGE"><B>Example usage:</B></SPAN><PRE>
+  mqc = model.addConstr(x * y &lt;= b)
+  qconstrlist = mqc.tolist()
+  # Do something with the QConstr corresponding to mqc[3]
+  print(qconstrlist[3])
+</PRE>
+
+<P>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A
+ HREF="py_qconstr.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="py_mqconstr.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="py_mqconstr_setattr.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A>   
+<BR>
+<B> Next:</B> <A
+ HREF="py_qconstr.html">QConstr</A>
+<B> Up:</B> <A
+ HREF="py_mqconstr.html">MQConstr</A>
+<B> Previous:</B> <A
+ HREF="py_mqconstr_setattr.html">MQConstr.setAttr()</A></DIV>
+<!--End of Navigation Panel-->
+
+</BODY>
+</HTML>

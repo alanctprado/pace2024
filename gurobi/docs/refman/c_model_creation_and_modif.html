@@ -1,0 +1,172 @@
+<!DOCTYPE HTML>
+
+<!--Converted with LaTeX2HTML 2023.2 (Released July 1, 2023) -->
+<HTML lang="en">
+<HEAD>
+<TITLE>Model Creation and Modification</TITLE>
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
+<META NAME="viewport" CONTENT="width=device-width, initial-scale=1.0">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2023.2">
+
+<LINK REL="STYLESHEET" HREF="refman.css">
+
+<LINK REL="next" HREF="c_model_solution.html">
+<LINK REL="previous" HREF="c_environment_creation_and.html">
+<LINK REL="next" HREF="c_loadmodel.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A
+ HREF="c_loadmodel.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="c_api_details.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="c_discardmultiobjenvs.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A>   
+<BR>
+<B> Next:</B> <A
+ HREF="c_loadmodel.html">GRBloadmodel</A>
+<B> Up:</B> <A
+ HREF="c_api_details.html">C API Details</A>
+<B> Previous:</B> <A
+ HREF="c_discardmultiobjenvs.html">GRBdiscardmultiobjenvs</A>
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A ID="SECTION00032000000000000000">
+Model Creation and Modification</A>
+</H2>
+
+<P>
+<BR><HR>
+<!--Table of Child-Links-->
+<A ID="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
+
+<UL CLASS="ChildLinks">
+<LI><A ID="tex2html1933"
+  HREF="c_loadmodel.html">GRBloadmodel</A>
+<LI><A ID="tex2html1934"
+  HREF="c_newmodel.html">GRBnewmodel</A>
+<LI><A ID="tex2html1935"
+  HREF="c_copymodel.html">GRBcopymodel</A>
+<LI><A ID="tex2html1936"
+  HREF="c_copymodeltoenv.html">GRBcopymodeltoenv</A>
+<LI><A ID="tex2html1937"
+  HREF="c_addconstr.html">GRBaddconstr</A>
+<LI><A ID="tex2html1938"
+  HREF="c_addconstrs.html">GRBaddconstrs</A>
+<LI><A ID="tex2html1939"
+  HREF="c_agc_xxx.html">GRBaddgenconstrXxx</A>
+<LI><A ID="tex2html1940"
+  HREF="c_agc_max.html">GRBaddgenconstrMax</A>
+<LI><A ID="tex2html1941"
+  HREF="c_agc_min.html">GRBaddgenconstrMin</A>
+<LI><A ID="tex2html1942"
+  HREF="c_agc_abs.html">GRBaddgenconstrAbs</A>
+<LI><A ID="tex2html1943"
+  HREF="c_agc_and.html">GRBaddgenconstrAnd</A>
+<LI><A ID="tex2html1944"
+  HREF="c_agc_or.html">GRBaddgenconstrOr</A>
+<LI><A ID="tex2html1945"
+  HREF="c_agc_norm.html">GRBaddgenconstrNorm</A>
+<LI><A ID="tex2html1946"
+  HREF="c_agc_indicator.html">GRBaddgenconstrIndicator</A>
+<LI><A ID="tex2html1947"
+  HREF="c_agc_pwl.html">GRBaddgenconstrPWL</A>
+<LI><A ID="tex2html1948"
+  HREF="c_agc_poly.html">GRBaddgenconstrPoly</A>
+<LI><A ID="tex2html1949"
+  HREF="c_agc_exp.html">GRBaddgenconstrExp</A>
+<LI><A ID="tex2html1950"
+  HREF="c_agc_expa.html">GRBaddgenconstrExpA</A>
+<LI><A ID="tex2html1951"
+  HREF="c_agc_log.html">GRBaddgenconstrLog</A>
+<LI><A ID="tex2html1952"
+  HREF="c_agc_loga.html">GRBaddgenconstrLogA</A>
+<LI><A ID="tex2html1953"
+  HREF="c_agc_logistic.html">GRBaddgenconstrLogistic</A>
+<LI><A ID="tex2html1954"
+  HREF="c_agc_pow.html">GRBaddgenconstrPow</A>
+<LI><A ID="tex2html1955"
+  HREF="c_agc_sin.html">GRBaddgenconstrSin</A>
+<LI><A ID="tex2html1956"
+  HREF="c_agc_cos.html">GRBaddgenconstrCos</A>
+<LI><A ID="tex2html1957"
+  HREF="c_agc_tan.html">GRBaddgenconstrTan</A>
+<LI><A ID="tex2html1958"
+  HREF="c_addqconstr.html">GRBaddqconstr</A>
+<LI><A ID="tex2html1959"
+  HREF="c_addqpterms.html">GRBaddqpterms</A>
+<LI><A ID="tex2html1960"
+  HREF="c_addrangeconstr.html">GRBaddrangeconstr</A>
+<LI><A ID="tex2html1961"
+  HREF="c_addrangeconstrs.html">GRBaddrangeconstrs</A>
+<LI><A ID="tex2html1962"
+  HREF="c_addsos.html">GRBaddsos</A>
+<LI><A ID="tex2html1963"
+  HREF="c_addvar.html">GRBaddvar</A>
+<LI><A ID="tex2html1964"
+  HREF="c_addvars.html">GRBaddvars</A>
+<LI><A ID="tex2html1965"
+  HREF="c_chgcoeffs.html">GRBchgcoeffs</A>
+<LI><A ID="tex2html1966"
+  HREF="c_delconstrs.html">GRBdelconstrs</A>
+<LI><A ID="tex2html1967"
+  HREF="c_delgenconstrs.html">GRBdelgenconstrs</A>
+<LI><A ID="tex2html1968"
+  HREF="c_delq.html">GRBdelq</A>
+<LI><A ID="tex2html1969"
+  HREF="c_delqconstrs.html">GRBdelqconstrs</A>
+<LI><A ID="tex2html1970"
+  HREF="c_delsos.html">GRBdelsos</A>
+<LI><A ID="tex2html1971"
+  HREF="c_delvars.html">GRBdelvars</A>
+<LI><A ID="tex2html1972"
+  HREF="c_setobjectiven.html">GRBsetobjectiven</A>
+<LI><A ID="tex2html1973"
+  HREF="c_setpwlobj.html">GRBsetpwlobj</A>
+<LI><A ID="tex2html1974"
+  HREF="c_updatemodel.html">GRBupdatemodel</A>
+<LI><A ID="tex2html1975"
+  HREF="c_freemodel.html">GRBfreemodel</A>
+<LI><A ID="tex2html1976"
+  HREF="c_xaddconstrs.html">GRBXaddconstrs</A>
+<LI><A ID="tex2html1977"
+  HREF="c_xaddrangeconstrs.html">GRBXaddrangeconstrs</A>
+<LI><A ID="tex2html1978"
+  HREF="c_xaddvars.html">GRBXaddvars</A>
+<LI><A ID="tex2html1979"
+  HREF="c_xchgcoeffs.html">GRBXchgcoeffs</A>
+<LI><A ID="tex2html1980"
+  HREF="c_xloadmodel.html">GRBXloadmodel</A>
+</UL>
+<!--End of Table of Child-Links-->
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A
+ HREF="c_loadmodel.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="c_api_details.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="c_discardmultiobjenvs.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A>   
+<BR>
+<B> Next:</B> <A
+ HREF="c_loadmodel.html">GRBloadmodel</A>
+<B> Up:</B> <A
+ HREF="c_api_details.html">C API Details</A>
+<B> Previous:</B> <A
+ HREF="c_discardmultiobjenvs.html">GRBdiscardmultiobjenvs</A></DIV>
+<!--End of Navigation Panel-->
+
+</BODY>
+</HTML>

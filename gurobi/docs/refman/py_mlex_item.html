@@ -1,0 +1,93 @@
+<!DOCTYPE HTML>
+
+<!--Converted with LaTeX2HTML 2023.2 (Released July 1, 2023) -->
+<HTML lang="en">
+<HEAD>
+<TITLE>MLinExpr.item()</TITLE>
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
+<META NAME="viewport" CONTENT="width=device-width, initial-scale=1.0">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2023.2">
+
+<LINK REL="STYLESHEET" HREF="refman.css">
+
+<LINK REL="next" HREF="py_mlex_ndim.html">
+<LINK REL="previous" HREF="py_mlex_getvalue.html">
+<LINK REL="next" HREF="py_mlex_ndim.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A
+ HREF="py_mlex_ndim.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="py_mlex.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="py_mlex_getvalue.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A>   
+<BR>
+<B> Next:</B> <A
+ HREF="py_mlex_ndim.html">MLinExpr.ndim</A>
+<B> Up:</B> <A
+ HREF="py_mlex.html">MLinExpr</A>
+<B> Previous:</B> <A
+ HREF="py_mlex_getvalue.html">MLinExpr.getValue()</A>
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H3><A ID="SECTION0001115400000000000000"></A>
+<A ID="pythonmethod:MLinExpr.item"></A>
+<BR>
+MLinExpr.item()
+</H3>
+<SPAN CLASS="LARGE">
+<FONT COLOR="#801a1a"> <SPAN  CLASS="textbf">item</SPAN></FONT></SPAN> (  )
+
+<P>
+For an MLinExpr that contains a single element, returns a copy of
+  that element as a LinExpr object.  Calling this method on an
+  MLinExpr with more than one element will raise a ValueError.
+
+<P>
+<SPAN CLASS="LARGE"><SPAN  CLASS="textbf">Return value:</SPAN></SPAN>
+
+<P>
+An LinExpr object
+
+<P>
+<SPAN CLASS="LARGE"><B>Example usage:</B></SPAN><PRE>
+  mle = 2 * model.addMVar((2, 2)) + 1
+  mle_sub = mle[0, 1]  # A 0-D MLinExpr encapsulating one LinExpr object
+  mle_le = mle[0, 1].item()  # A copy of the resident LinExpr object
+</PRE>
+
+<P>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A
+ HREF="py_mlex_ndim.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="py_mlex.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="py_mlex_getvalue.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A>   
+<BR>
+<B> Next:</B> <A
+ HREF="py_mlex_ndim.html">MLinExpr.ndim</A>
+<B> Up:</B> <A
+ HREF="py_mlex.html">MLinExpr</A>
+<B> Previous:</B> <A
+ HREF="py_mlex_getvalue.html">MLinExpr.getValue()</A></DIV>
+<!--End of Navigation Panel-->
+
+</BODY>
+</HTML>

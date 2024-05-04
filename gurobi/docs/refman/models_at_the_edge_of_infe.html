@@ -1,0 +1,145 @@
+<!DOCTYPE HTML>
+
+<!--Converted with LaTeX2HTML 2023.2 (Released July 1, 2023) -->
+<HTML lang="en">
+<HEAD>
+<TITLE>Models at the edge of infeasibility</TITLE>
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
+<META NAME="viewport" CONTENT="width=device-width, initial-scale=1.0">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2023.2">
+
+<LINK REL="STYLESHEET" HREF="refman.css">
+
+<LINK REL="next" HREF="grb_tolerances_and_the_lim.html">
+<LINK REL="previous" HREF="tolerances_and_user_scalin.html">
+<LINK REL="next" HREF="grb_tolerances_and_the_lim.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A
+ HREF="grb_tolerances_and_the_lim.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="tolerances_and_user_scalin.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="tolerances_and_user_scalin.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A>   
+<BR>
+<B> Next:</B> <A
+ HREF="grb_tolerances_and_the_lim.html">Gurobi tolerances and the</A>
+<B> Up:</B> <A
+ HREF="tolerances_and_user_scalin.html">Tolerances and user-scaling</A>
+<B> Previous:</B> <A
+ HREF="tolerances_and_user_scalin.html">Tolerances and user-scaling</A>
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H3><A ID="SECTION000353100000000000000">
+Models at the edge of infeasibility</A>
+</H3>
+
+<P>
+
+<UL>
+<LI>As we saw in the introduction, seemingly contradictory results
+regarding the feasibility or infeasibility of a model can legitimately
+occur for models that are at the boundary between feasibility and
+infeasibility.
+
+<P>
+</LI>
+<LI>A more complicated example is <!-- MATH
+ $x + 10^{8} y = -1, x$
+ -->
+<SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.57ex; vertical-align: -0.57ex; " SRC="img318.svg"
+ ALT="$x + 10^{8} y = -1, x$"></SPAN>, <SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.17ex; vertical-align: -0.57ex; " SRC="img319.svg"
+ ALT="$y &gt;= 0$"></SPAN>.
+It has two bases, one where <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.23ex; vertical-align: -0.12ex; " SRC="img29.svg"
+ ALT="$x$"></SPAN> is basic and one where <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.68ex; vertical-align: -0.57ex; " SRC="img45.svg"
+ ALT="$y$"></SPAN> is basic.
+If <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.23ex; vertical-align: -0.12ex; " SRC="img29.svg"
+ ALT="$x$"></SPAN> is basic, we get <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.92ex; vertical-align: -0.31ex; " SRC="img320.svg"
+ ALT="$x = -1$"></SPAN>, which is clearly infeasible. However,
+if <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.68ex; vertical-align: -0.57ex; " SRC="img45.svg"
+ ALT="$y$"></SPAN> is basic we get <SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.57ex; vertical-align: -0.57ex; " SRC="img321.svg"
+ ALT="$y = -10^{8}$"></SPAN>, which is feasible within tolerance.
+Different algorithms could lead to either of such bases and thus come
+to apparently contradictory feasibility results.
+
+<P>
+</LI>
+<LI>Presolve reductions can also play a role. A presolve reduction,
+e.g. fixing a variable to a bound, implicitly forces a tolerance of 0
+for that variable. When solving the reduced model, the optimizer
+therefore no longer has the option to "spread" a slight infeasibility
+of the model over these variables and produce a solution that is
+feasible within tolerances. This leads to seemingly contradictory
+feasibility results when solving the model with presolve enabled or
+disabled.
+
+<P>
+</LI>
+<LI>What can be done to diagnose such cases:
+
+<UL>
+<LI>First step is to tighten the
+   <TT>FeasibilityTol</TT> to <SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.12ex; vertical-align: -0.12ex; " SRC="img322.svg"
+ ALT="$10^{-9}$"></SPAN> and
+try again. In many cases this will lead to a consistent declaration of
+infeasibility of the model at hand, which tells you that the model is
+on this boundary of infeasibility.
+</LI>
+<LI>Use <code>feasRelax</code> to solve your model (again with a tight
+  <TT>FeasibilityTol</TT>. This boundary
+case is identified by a non-zero relaxation value.
+</LI>
+<LI>Compute the IIS (again with a tight <TT>FeasibilityTol</TT>)
+  to analyze
+  the infeasibility.
+</LI>
+</UL>
+</LI>
+<LI>Another source of seemlingly contradictory results is due to
+numerical issues of the model and will be discussed in the following
+subsections.
+</LI>
+</UL>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A
+ HREF="grb_tolerances_and_the_lim.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="tolerances_and_user_scalin.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="tolerances_and_user_scalin.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A>   
+<BR>
+<B> Next:</B> <A
+ HREF="grb_tolerances_and_the_lim.html">Gurobi tolerances and the</A>
+<B> Up:</B> <A
+ HREF="tolerances_and_user_scalin.html">Tolerances and user-scaling</A>
+<B> Previous:</B> <A
+ HREF="tolerances_and_user_scalin.html">Tolerances and user-scaling</A></DIV>
+<!--End of Navigation Panel-->
+
+</BODY>
+</HTML>

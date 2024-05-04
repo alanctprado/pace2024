@@ -1,0 +1,97 @@
+<!DOCTYPE HTML>
+
+<!--Converted with LaTeX2HTML 2023.2 (Released July 1, 2023) -->
+<HTML lang="en">
+<HEAD>
+<TITLE>GRBCallback.UseSolution()</TITLE>
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
+<META NAME="viewport" CONTENT="width=device-width, initial-scale=1.0">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2023.2">
+
+<LINK REL="STYLESHEET" HREF="refman.css">
+
+<LINK REL="previous" HREF="cs_cb_stoponemultiobj.html">
+<LINK REL="next" HREF="cs_exception.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A
+ HREF="cs_exception.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="cs_cb_.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="cs_cb_stoponemultiobj.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A>   
+<BR>
+<B> Next:</B> <A
+ HREF="cs_exception.html">GRBException</A>
+<B> Up:</B> <A
+ HREF="cs_cb_.html">GRBCallback</A>
+<B> Previous:</B> <A
+ HREF="cs_cb_stoponemultiobj.html">GRBCallback.StopOneMultiObj()</A>
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H3><A ID="SECTION0009141300000000000000"></A>
+<A ID="dotnetmethod:GRBCallback.UseSolution"></A>
+<BR>
+GRBCallback.UseSolution()
+</H3>
+
+<P>
+Once you have imported solution values using
+<A HREF="cs_cb_setsolution.html#dotnetmethod:GRBCallback.SetSolution">SetSolution</A>,
+you can optionally call <code>UseSolution</code> in a <code>GRB.Callback.MIPNODE</code>
+callback to immediately use these values to try to compute a heuristic solution.
+Alternatively, you can call <code>UseSolution</code> in a <code>GRB.Callback.MIP</code>
+or <code>GRB.Callback.MIPSOL</code> callback, which will store the solution until
+it can be processed internally.
+
+<P>
+<TABLE class="PAD " style="">
+<TR><TD CLASS="LEFT">double</TD>
+<TD CLASS="LEFT"><SPAN CLASS="LARGE"><FONT COLOR="#801a1a"> <SPAN  CLASS="textbf">UseSolution</SPAN></FONT></SPAN> ( )</TD>
+</TR>
+</TABLE>
+
+<P>
+<SPAN CLASS="LARGE"><SPAN  CLASS="textbf">Return value:</SPAN></SPAN>
+
+<P>
+The objective value for the solution obtained from
+  your solution values. It equals <SPAN  CLASS="texttt">GRB.INFINITY</SPAN> if no improved solution is found
+  or the method has been called from a callback other than <SPAN  CLASS="texttt">GRB.Callback.MIPNODE</SPAN> as,
+  in these contexts, the solution is stored instead of being processed immediately.
+
+<P>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A
+ HREF="cs_exception.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="cs_cb_.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="cs_cb_stoponemultiobj.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A>   
+<BR>
+<B> Next:</B> <A
+ HREF="cs_exception.html">GRBException</A>
+<B> Up:</B> <A
+ HREF="cs_cb_.html">GRBCallback</A>
+<B> Previous:</B> <A
+ HREF="cs_cb_stoponemultiobj.html">GRBCallback.StopOneMultiObj()</A></DIV>
+<!--End of Navigation Panel-->
+
+</BODY>
+</HTML>

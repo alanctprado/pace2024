@@ -1,0 +1,109 @@
+<!DOCTYPE HTML>
+
+<!--Converted with LaTeX2HTML 2023.2 (Released July 1, 2023) -->
+<HTML lang="en">
+<HEAD>
+<TITLE>Linear Constraints</TITLE>
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
+<META NAME="viewport" CONTENT="width=device-width, initial-scale=1.0">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2023.2">
+
+<LINK REL="STYLESHEET" HREF="refman.css">
+
+<LINK REL="next" HREF="sos_constraints.html">
+<LINK REL="previous" HREF="constraints.html">
+<LINK REL="next" HREF="sos_constraints.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A
+ HREF="sos_constraints.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="constraints.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="constraints.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A>   
+<BR>
+<B> Next:</B> <A
+ HREF="sos_constraints.html">SOS Constraints</A>
+<B> Up:</B> <A
+ HREF="constraints.html">Constraints</A>
+<B> Previous:</B> <A
+ HREF="constraints.html">Constraints</A>
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H3><A ID="SECTION000162100000000000000"></A>
+<A ID="subsubsection:LinearConstraints"></A>
+<BR>
+Linear Constraints
+</H3>
+
+<P>
+A linear constraint allows you to restrict the value of a linear
+expression.  For example, you may require that any feasible solution
+satisfies the constraint <!-- MATH
+ $3 x + 4 y \leq 5z$
+ -->
+<SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.17ex; vertical-align: -0.57ex; " SRC="img117.svg"
+ ALT="$3 x + 4 y \leq 5z$"></SPAN>.  Note that the
+matrix-oriented Gurobi APIs (C, MATLAB, and R) require the right-hand
+side of a linear constraint to be a constant, while the
+object-oriented APIs (C++, Java, .NET, and Python) allow arbitrary
+linear expressions on both sides of the comparator.
+
+<P>
+The computed solution should satisfy the stated constraint to within
+<A HREF="feasibilitytol.html#parameter:FeasibilityTol">FeasibilityTol</A> (although it
+may not in cases of numerical ill-conditioning &mdash; we'll discuss this
+shortly).
+
+<P>
+Gurobi supports a limited set of comparators.  Specifically, you can
+constrain an expression to be less-than-or-equal,
+greater-than-or-equal, or equal another.  We do not support strict
+less-than, strict greater-than, or not-equal comparators.  While these
+other comparators may seem appropriate for mathematical programming,
+we exclude them to avoid potential confusion related to numerical
+tolerances.  Consider a simple example of a strict inequality
+constraint on a pair of continuous variables: <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.93ex; vertical-align: -0.57ex; " SRC="img118.svg"
+ ALT="$x &gt; y$"></SPAN>.  How large
+would <SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.03ex; vertical-align: -0.57ex; " SRC="img119.svg"
+ ALT="$x-y$"></SPAN> need to be in order to satisfy the constraint?  Rather
+than trying to embed a subtle and potentially confusing strategy for
+handling such constraints into the solver, we've chosen not to support
+them instead.
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A
+ HREF="sos_constraints.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="constraints.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="constraints.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A>   
+<BR>
+<B> Next:</B> <A
+ HREF="sos_constraints.html">SOS Constraints</A>
+<B> Up:</B> <A
+ HREF="constraints.html">Constraints</A>
+<B> Previous:</B> <A
+ HREF="constraints.html">Constraints</A></DIV>
+<!--End of Navigation Panel-->
+
+</BODY>
+</HTML>

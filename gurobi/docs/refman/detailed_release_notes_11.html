@@ -1,0 +1,634 @@
+<!DOCTYPE HTML>
+
+<!--Converted with LaTeX2HTML 2023.2 (Released July 1, 2023) -->
+<HTML lang="en">
+<HEAD>
+<TITLE>Detailed Release Notes 11</TITLE>
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
+<META NAME="viewport" CONTENT="width=device-width, initial-scale=1.0">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2023.2">
+
+<LINK REL="STYLESHEET" HREF="refman.css">
+
+<LINK REL="next" HREF="c_api_overview.html">
+<LINK REL="previous" HREF="refman.html">
+<LINK REL="next" HREF="c_api_overview.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A
+ HREF="c_api_overview.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="refman.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="refman.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A>   
+<BR>
+<B> Next:</B> <A
+ HREF="c_api_overview.html">C API Overview</A>
+<B> Up:</B> <A
+ HREF="refman.html">Gurobi Optimizer Reference Manual</A>
+<B> Previous:</B> <A
+ HREF="refman.html">Gurobi Optimizer Reference Manual</A>
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H1><A ID="SECTION00010000000000000000"></A>
+<A ID="sec:DetailedReleaseNotes"></A>
+<BR>
+Detailed Release Notes for Gurobi 11.0.1
+</H1>
+
+<P>
+<SPAN CLASS="LARGE"><SPAN  CLASS="textbf"><SPAN CLASS="XXLARGE"><SPAN  CLASS="textbf">Supported Platforms</SPAN></SPAN></SPAN></SPAN>
+
+<P>
+
+<P>
+<BR>    <DIV class="CENTER">
+<TABLE class="PAD  BORDER" style="">
+<TR><TH CLASS="LEFT"><SPAN  CLASS="textbf">Platform (port)</SPAN></TH>
+<TH CLASS="LEFT"><SPAN  CLASS="textbf">Operating System</SPAN></TH>
+<TH CLASS="LEFT"><SPAN  CLASS="textbf">Compiler</SPAN></TH>
+<TH CLASS="LEFT"><SPAN  CLASS="textbf">Notes</SPAN></TH>
+</TR>
+<TR><TD CLASS="LEFT">Windows <BR>
+64-bit (win64)</TD>
+<TD CLASS="LEFT">Windows 10, 11, Windows Server 2016, 2019, 2022</TD>
+<TD CLASS="LEFT">Visual Studio 2017-2022</TD>
+<TD CLASS="LEFT"><SPAN CLASS="FOOTNOTESIZE">Use <SPAN  CLASS="texttt">gurobi_c++md2017.lib</SPAN> (e.g.) for C++</SPAN></TD>
+</TR>
+<TR><TD CLASS="LEFT">&nbsp;</TD>
+<TD CLASS="LEFT">&nbsp;</TD>
+<TD CLASS="LEFT">&nbsp;</TD>
+<TD CLASS="LEFT">&nbsp;</TD>
+</TR>
+<TR><TD CLASS="LEFT">Linux x86-64 <BR>
+64-bit (linux64)</TD>
+<TD CLASS="LEFT">Red Hat Enterprise Linux 8, 9</TD>
+<TD CLASS="LEFT">GCC &gt;= 8.5</TD>
+<TD CLASS="LEFT">&nbsp;</TD>
+</TR>
+<TR><TD CLASS="LEFT">&nbsp;</TD>
+<TD CLASS="LEFT">SUSE Enterprise Linux 15</TD>
+<TD CLASS="LEFT">&nbsp;</TD>
+<TD CLASS="LEFT">&nbsp;</TD>
+</TR>
+<TR><TD CLASS="LEFT">&nbsp;</TD>
+<TD CLASS="LEFT">Ubuntu 20.04, 22.04</TD>
+<TD CLASS="LEFT">&nbsp;</TD>
+<TD CLASS="LEFT">&nbsp;</TD>
+</TR>
+<TR><TD CLASS="LEFT">&nbsp;</TD>
+<TD CLASS="LEFT">Amazon Linux 2</TD>
+<TD CLASS="LEFT">&nbsp;</TD>
+<TD CLASS="LEFT">&nbsp;</TD>
+</TR>
+<TR><TD CLASS="LEFT">macOS <BR>
+64-bit universal2 (macos_universal2)</TD>
+<TD CLASS="LEFT">12 (Monterey), 13 (Ventura), 14 (Sonoma)</TD>
+<TD CLASS="LEFT">Xcode 13/14</TD>
+<TD CLASS="LEFT">&nbsp;</TD>
+</TR>
+<TR><TD CLASS="LEFT">Linux arm64 <BR>
+64-bit (armlinux64)</TD>
+<TD CLASS="LEFT">Red Hat Enterprise Linux 8, 9</TD>
+<TD CLASS="LEFT">GCC &gt;= 8.5</TD>
+<TD CLASS="LEFT">&nbsp;</TD>
+</TR>
+<TR><TD CLASS="LEFT">&nbsp;</TD>
+<TD CLASS="LEFT">SUSE Enterprise Linux 15</TD>
+<TD CLASS="LEFT">&nbsp;</TD>
+<TD CLASS="LEFT">&nbsp;</TD>
+</TR>
+<TR><TD CLASS="LEFT">&nbsp;</TD>
+<TD CLASS="LEFT">Ubuntu 20.04, 22.04</TD>
+<TD CLASS="LEFT">&nbsp;</TD>
+<TD CLASS="LEFT">&nbsp;</TD>
+</TR>
+<TR><TD CLASS="LEFT">&nbsp;</TD>
+<TD CLASS="LEFT">Amazon Linux 2</TD>
+<TD CLASS="LEFT">&nbsp;</TD>
+<TD CLASS="LEFT">&nbsp;</TD>
+</TR>
+<TR><TD CLASS="LEFT">AIX <BR>
+64-bit (power64)</TD>
+<TD CLASS="LEFT">AIX 7.2, 7.3</TD>
+<TD CLASS="LEFT">XL C/C++ 9</TD>
+<TD CLASS="LEFT"><SPAN CLASS="FOOTNOTESIZE">Note that Gurobi 11 will be the last supported version for AIX. Due to limited Python support on AIX, this port does not include the Interactive Shell or the Python libraries.</SPAN></TD>
+</TR>
+</TABLE>
+</DIV>
+<BR>
+<SPAN CLASS="LARGE"><SPAN  CLASS="textbf"><SPAN CLASS="XXLARGE"><SPAN  CLASS="textbf">Additional Supported Platform Information</SPAN></SPAN></SPAN></SPAN>
+
+<P>
+Gurobi&nbsp;11.0.1 supports the following language/platform versions:
+
+<P>
+<DIV class="CENTER">
+<TABLE class="PAD  BORDER" style="">
+<TR><TH CLASS="LEFT"><SPAN  CLASS="textbf">Language</SPAN></TH>
+<TH CLASS="LEFT"><SPAN  CLASS="textbf">Version</SPAN></TH>
+</TR>
+<TR><TD CLASS="LEFT">Python</TD>
+<TD CLASS="LEFT">3.8, 3.9, 3.10, 3.11, 3.12</TD>
+</TR>
+<TR><TD CLASS="LEFT">MATLAB</TD>
+<TD CLASS="LEFT">R2019a-R2023b</TD>
+</TR>
+<TR><TD CLASS="LEFT">R</TD>
+<TD CLASS="LEFT">4.3</TD>
+</TR>
+<TR><TD CLASS="LEFT">JDK</TD>
+<TD CLASS="LEFT">8, 11, 17</TD>
+</TR>
+<TR><TD CLASS="LEFT">.NET</TD>
+<TD CLASS="LEFT">6.0</TD>
+</TR>
+</TABLE>
+</DIV>
+
+<P>
+<SPAN  CLASS="textbf">Bug Fixes</SPAN>
+
+<P>
+All bug fixes listed by version can be found on our
+<A ID="tex2html5"
+  HREF="https://www.gurobi.com/downloads/recent-bug-fixes-by-version/">website</A>.
+
+<P>
+<SPAN CLASS="LARGE"><SPAN  CLASS="textbf"><SPAN CLASS="XXLARGE"><SPAN  CLASS="textbf">Changed in Gurobi&nbsp;11.0</SPAN></SPAN></SPAN></SPAN>
+
+<P>
+<SPAN  CLASS="textbf">Linux GNU C library (glibc) dependency</SPAN>
+
+<P>
+
+<UL>
+<LI><SPAN  CLASS="textbf">Linux x86_64</SPAN>: The Gurobi Optimizer now requires a minimum glibc version of 2.17. For version 10.0, the minimum required glibc version was 2.3.4.
+
+<P>
+The list of supported platforms above takes these changes into account.
+
+<P>
+</LI>
+</UL>
+
+<P>
+<SPAN CLASS="LARGE"><SPAN  CLASS="textbf"><SPAN CLASS="XXLARGE"><SPAN  CLASS="textbf">New features affecting all APIs</SPAN></SPAN></SPAN></SPAN>
+
+<P>
+<SPAN  CLASS="textbf">Mixed-Integer Non-Linear Programming (MINLP) Problems</SPAN>
+
+<P>
+The Gurobi Optimizer can now use <EM>spatial branching</EM> and <EM>outer approximation</EM>
+to solve models with non-linear functions, instead of using static piecewise-linear
+approximations. See the discussion of
+<A HREF="general_constraints.html#subsubsection:GenConstrFunctionNL">function constraints with dynamic piecewise-linear approximation</A>
+for more information.
+
+<P>
+<SPAN  CLASS="textbf">Default behavior of NonConvex parameter</SPAN>
+
+<P>
+The default behavior of the
+<A HREF="nonconvex.html#parameter:NonConvex">NonConvex</A> parameter has changed.
+Previously, you had to explicitly set this parameter to value 2 if you
+wanted to solve a model with a non-convex quadratic objective or
+constraint.  Now it will solve such models by default.  To revert to
+the previous behavior, set the parameter to 1.
+
+<P>
+<SPAN  CLASS="textbf">Copying models between environments</SPAN>
+
+<P>
+It is now possible to copy a model from one environment to another, using
+the following new routines or signatures:
+
+<UL>
+<LI>C: <SPAN  CLASS="texttt"><A HREF="c_copymodeltoenv.html#routine:GRBcopymodeltoenv">GRBcopymodeltoenv</A></SPAN>
+</LI>
+<LI>C++: <SPAN  CLASS="texttt"><A HREF="cpp_model2.html#cppmethod:GRBModel">GRBModel</A>(const GRBModel&amp; model, const GRBenv&amp; targetenv)</SPAN>
+</LI>
+<LI>Java: <SPAN  CLASS="texttt"><A HREF="java_model2.html#javamethod:GRBModel">GRBModel</A>(GRBModel model, GRBenv targetenv)</SPAN>
+</LI>
+<LI>.NET: <SPAN  CLASS="texttt"><A HREF="cs_model2.html#dotnetmethod:GRBModel">GRBModel</A>(GRBModel model, GRBenv targetenv)</SPAN>
+</LI>
+<LI>Python: <SPAN  CLASS="texttt">model.<A HREF="py_model_copy.html#pythonmethod:Model.copy">copy</A>(env)</SPAN>
+</LI>
+</UL>
+
+<P>
+The primary use case for copying models is when performing optimization on
+multiple, related versions of the same problem on multiple threads.
+Multi-threading within an environment is not supported.
+
+<P>
+For Compute Server users, note that you can copy a model from a client
+to a Compute Server environment, but it is not possible to copy
+models between two Compute Server environments.
+
+<P>
+<SPAN  CLASS="textbf">Better control over the concurrent LP optimizer</SPAN>
+Option 5 of the <A HREF="method.html#parameter:Method">Method</A> parameter has been deprecated
+in favor of the new <A HREF="concurrentmethod.html#parameter:ConcurrentMethod">ConcurrentMethod</A>
+parameter.  The latter allows you to control which methods are run concurrently
+with the deterministic (<SPAN  CLASS="texttt">Method=4</SPAN>) or non-deterministic (<SPAN  CLASS="texttt">Method=3</SPAN>)
+concurrent optimizer.  The deprecated setting <SPAN  CLASS="texttt">Method=5</SPAN> can now be
+replicated by choosing <SPAN  CLASS="texttt">Method=4</SPAN> along with <SPAN  CLASS="texttt">ConcurrentMethod=3</SPAN>.
+To give another example, non-deterministic concurrent execution of the primal
+and dual simplex algorithms can be selected using <SPAN  CLASS="texttt">Method=3</SPAN> along
+with <SPAN  CLASS="texttt">ConcurrentMethod=3</SPAN>.
+
+<P>
+<SPAN  CLASS="textbf">Change the Threads parameter when resuming optimization</SPAN>
+If an optimization is interrupted (e.g., due to a time limit), the user can
+now modify the Threads parameter in order to change the number of threads to
+be used when the solving process is resumed with another call to optimize.
+
+<P>
+<SPAN  CLASS="textbf">Tuning</SPAN>
+
+<P>
+The distributed tuning can use remote workers in a dynamic way. With the
+parameter <A HREF="tunedynamicjobs.html#parameter:TuneDynamicJobs">TuneDynamicJobs</A> you can
+control the size of a dynamic set of remote workers that are used in
+parallel. These workers are used for a limited amount of time and
+afterwards potentially returned so that they are available for other remote
+jobs.
+
+<P>
+Starting from Gurobi 11, we include in the results the first set of
+parameters used to solve the model (base settings). This result is stored
+as first setting in the tune results. Hence, to get the best tuned set of
+parameters, you need to request at least 2 sets (using
+<A HREF="tuneresults.html#parameter:TuneResults">TuneResults</A>) and retrieve the set
+with index 1.
+
+<P>
+The tuner now supports the log callback. You can add a log callback to the
+environment and retrieve all the log messages coming from the tuner.
+
+<P>
+<SPAN  CLASS="textbf">Piecewise-linear approximation</SPAN>
+The default behavior of parameter <A HREF="funcpieces2.html#parameter:FuncPieces">FuncPieces</A>, the main
+parameter for piecewise-linear approximation of function constraints, is changed.
+The new default for version 11.0 uses
+the relative error approach for the approximation, while for version 10.0 or earlier
+it mainly used the number of function constraints to set the total number of pieces.
+
+<P>
+<SPAN  CLASS="textbf">New parameters</SPAN>
+The following parameters are new in Gurobi 11.0:
+
+<UL>
+<LI><A HREF="solutiontarget.html#parameter:SolutionTarget">SolutionTarget</A> to specify the
+    solution target for LP.
+</LI>
+<LI><A HREF="funcnonlinear2.html#parameter:FuncNonlinear">FuncNonlinear</A> to control
+    whether general function constraints shall be treated as nonlinear
+    functions or via piecewise-linear approximation.
+</LI>
+<LI><A HREF="mixingcuts.html#parameter:MixingCuts">MixingCut</A> to control the generation
+    of Mixing Cuts.
+</LI>
+<LI><A HREF="tunedynamicjobs.html#parameter:TuneDynamicJobs">TuneDynamicJobs</A> to enable
+    distributed tuning using a dynamic set of workers.
+</LI>
+<LI><A HREF="tuneusefilename.html#parameter:TuneUseFilename">TuneUseFilename</A> to use
+    the model file names as model names during tuning (Command-line only).
+</LI>
+</UL>
+
+<P>
+<SPAN CLASS="LARGE"><SPAN  CLASS="textbf"><SPAN CLASS="XXLARGE"><SPAN  CLASS="textbf">Changes to gurobipy</SPAN></SPAN></SPAN></SPAN>
+
+<P>
+<SPAN  CLASS="textbf">Installation and packaging changes</SPAN>
+
+<P>
+
+<UL>
+<LI><SPAN  CLASS="texttt">gurobipy</SPAN> and its <SPAN  CLASS="texttt">setup.py</SPAN> file are no longer distributed
+with the Gurobi installers. <SPAN  CLASS="texttt">gurobipy</SPAN> must now be installed into Python
+environments using pip or conda.
+
+<P>
+</LI>
+<LI>The <SPAN  CLASS="texttt">gurobi</SPAN> conda packages have been updated so that pip can now
+recognize when <SPAN  CLASS="texttt">gurobipy</SPAN> has already been installed into an environment
+by conda. As a result, using pip in a conda environment to install a package
+that depends on <SPAN  CLASS="texttt">gurobipy</SPAN> (such as
+<A ID="tex2html6"
+  HREF="https://github.com/Gurobi/gurobi-machinelearning">gurobi-machinelearning</A>
+or
+<A ID="tex2html7"
+  HREF="https://github.com/Gurobi/gurobipy-pandas">gurobipy-pandas</A>)
+no longer leads to a duplicate installation of <SPAN  CLASS="texttt">gurobipy</SPAN>.
+
+<P>
+</LI>
+<LI>Type hints for <SPAN  CLASS="texttt">gurobipy</SPAN> are now included in both the pip wheels
+and conda packages. For Gurobi version 11, users should <SPAN  CLASS="textit">not</SPAN> install
+the
+<A ID="tex2html8"
+  HREF="https://github.com/Gurobi/gurobipy-stubs">gurobipy-stubs</A>
+package as it will override the type annotations packaged with <SPAN  CLASS="texttt">gurobipy</SPAN>.
+The <SPAN  CLASS="texttt">gurobipy-stubs</SPAN> package will not be maintained for future versions of
+<SPAN  CLASS="texttt">gurobipy</SPAN>.
+
+<P>
+</LI>
+</UL>
+
+<P>
+<SPAN  CLASS="textbf">New classes, methods, and properties</SPAN>
+
+<P>
+
+<UL>
+<LI><A HREF="py_sos.html#pythonclass:SOS">SOS</A> objects have a new <SPAN  CLASS="texttt">index</SPAN>
+property returning the index of the SOS constraint in the model.
+
+<P>
+</LI>
+<LI><A HREF="py_mconstr.html#pythonclass:MConstr">MConstr</A> and
+<A HREF="py_mqconstr.html#pythonclass:MQConstr">MQConstr</A> objects now implement the class
+method <SPAN  CLASS="texttt">fromlist</SPAN> which has the same behavior as the corresponding method
+on the <A HREF="py_mvar.html#pythonclass:MVar">MVar</A> class.
+
+<P>
+</LI>
+<LI>New methods <A HREF="py_hstack.html#pythonmethod:hstack">hstack</A>,
+<A HREF="py_vstack.html#pythonmethod:vstack">vstack</A>, and
+<A HREF="py_concatenate.html#pythonmethod:concatenate">concatenate</A>
+allow matrix-friendly objects to be joined together in the same way as the
+corresponding numpy functions.
+
+<P>
+</LI>
+<LI>A new <A HREF="py_mgenconstr.html#pythonclass:MGenConstr">MGenConstr</A> class has been
+added for holding an array of general constraints. For version 11, only the
+<A HREF="py_model_agc_indicator.html#pythonmethod:Model.addGenConstrIndicator">addGenConstrIndicator</A>
+method is able to return objects of this type.
+
+<P>
+</LI>
+<LI><A HREF="py_env.html#pythonclass:Env">Env</A> objects now have an additional method
+<A HREF="py_env_getparam.html#pythonmethod:Env.getParam">getParam</A> which returns the current
+value of the given parameter in the environment.
+
+<P>
+</LI>
+</UL>
+
+<P>
+<SPAN  CLASS="textbf">Enhancements to existing methods</SPAN>
+
+<P>
+
+<UL>
+<LI>The <A HREF="py_model_optimize.html#pythonmethod:Model.optimize">Model.optimize</A> and
+<A HREF="py_model_computeiis.html#pythonmethod:Model.computeIIS">Model.computeIIS</A> methods now
+accept any Python callable as a callback function. The TSP example code has
+been updated to demonstrate the use of a callable class.
+
+<P>
+</LI>
+<LI>The matrix-friendly API is now fully integrated with callback methods:
+<A HREF="py_model_cblazy.html#pythonmethod:Model.cbLazy">Model.cbLazy</A>,
+<A HREF="py_model_cbcut.html#pythonmethod:Model.cbCut">Model.cbCut</A>, and
+<A HREF="py_model_cbsetsolution.html#pythonmethod:Model.cbSetSolution">Model.cbSetSolution</A> now accept
+matrix-friendly API objects.
+
+<P>
+</LI>
+<LI>When constructing a set of linear constraints using
+<A HREF="py_model_addmconstr.html#pythonmethod:Model.addMConstr">Model.addMConstr</A> or
+<A HREF="py_model_addconstr.html#pythonmethod:Model.addConstr">Model.addConstr</A> with the
+matrix-friendly API, user-defined constraint names can be passed as a list or
+ndarray.
+
+<P>
+</LI>
+<LI><A HREF="py_model_agc_indicator.html#pythonmethod:Model.addGenConstrIndicator">Model.addGenConstrIndicator</A>
+and the overloaded <SPAN  CLASS="texttt">»</SPAN> syntax for indicator constraints now handle
+matrix-friendly linear expression objects. This allows indicator constraints to be
+built in a vectorized manner (including broadcasting behavior).
+
+<P>
+</LI>
+<LI>Users can now explicitly disable the default environment by setting the
+environment variable <SPAN  CLASS="texttt">GUROBIPY_ALLOW_DEFAULTENV</SPAN> to <SPAN  CLASS="texttt">0</SPAN> before
+starting a Python program. With this setting, environments must be managed
+explicitly using <A HREF="py_env.html#pythonclass:Env">Env</A> objects in user code.
+Calls to <A HREF="py_model2.html#pythonmethod:Model">Model()</A> without an Env object and
+global function calls such as <A HREF="py_setparam.html#pythonmethod:setParam">setParam</A>
+will raise a <SPAN  CLASS="texttt">GurobiError</SPAN> if this setting is used.
+
+<P>
+</LI>
+</UL>
+
+<P>
+<SPAN  CLASS="textbf">Changes that may require updating your code</SPAN>
+
+<P>
+
+<UL>
+<LI><P>
+<A HREF="py_model_getattr.html#pythonmethod:Model.getAttr">Model.getAttr</A> and
+<A HREF="py_model_setattr.html#pythonmethod:Model.setAttr">Model.setAttr</A> now raise an exception
+if the modeling objects passed to them do not belong to the model. Previously,
+the attribute values would be returned or set for a variable on the model with
+the same index as the modeling object which is typically not the desired
+behavior.
+
+<P>
+</LI>
+<LI>A call to
+<A HREF="py_model_agc_indicator.html#pythonmethod:Model.addGenConstrIndicator">Model.addGenConstrIndicator</A>
+using size-1 matrix-friendly modeling objects, which previously returned a
+<A HREF="py_genconstr.html#pythonclass:GenConstr">GenConstr</A> object, will now return a size-1
+<A HREF="py_mgenconstr.html#pythonclass:MGenConstr">MGenConstr</A>. The constraint name may also
+change depending on the shape of the result. To revert to the previous
+behaviour, call <SPAN  CLASS="texttt">.item()</SPAN> on matrix-friendly modeling objects passed to
+this function.
+
+<P>
+</LI>
+<LI>The <A HREF="py_tupledict.html#pythonclass:tupledict">tupledict</A> now follows Python 3
+dictionary semantics: its <SPAN  CLASS="texttt">keys</SPAN>, <SPAN  CLASS="texttt">values</SPAN>, and <SPAN  CLASS="texttt">items</SPAN> methods
+now return iterable views instead of lists. Importantly, <SPAN  CLASS="texttt">keys</SPAN> no longer
+returns a <A HREF="py_tuplelist.html#pythonclass:tuplelist">tuplelist</A>. If you need this
+behavior, you can instead call <SPAN  CLASS="texttt">gp.tuplelist(td.keys())</SPAN>.
+
+<P>
+</LI>
+<LI><A HREF="py_env_setparam.html#pythonmethod:Env.setParam">Env.setParam</A> now raises a
+<SPAN  CLASS="texttt">GurobiError</SPAN> if the user specifies a parameter which does not exist. In
+previous versions, such calls would print a message but would fail without
+an exception.
+
+<P>
+</LI>
+<LI>Gurobi log messages now go to the `gurobipy' logger instead of
+`gurobipy.gurobipy'. If you use Python's logging library to collect Gurobi log
+messages, handlers should be attached either to the root logger or to
+<SPAN  CLASS="texttt">logging.getLogger("gurobipy")</SPAN>.
+
+<P>
+</LI>
+<LI>Calling the <SPAN  CLASS="texttt">sum()</SPAN> method of an
+<A HREF="py_mvar.html#pythonclass:MVar">MVar</A>,
+<A HREF="py_mlex.html#pythonclass:MLinExpr">MLinExpr</A>, or
+<A HREF="py_mqex.html#pythonclass:MQuadExpr">MQuadExpr</A> which contains no elements
+(i.e. has at least one zero-length dimension) now returns an array of zeros of
+the appropriate shape instead of raising an exception. This matches the
+behavior of numpy arrays.
+
+<P>
+</LI>
+<LI>Passing too many keys (more than the length of the contained tuples) to
+any of the pattern matching methods
+(<A HREF="py_tuplelist_select.html#pythonmethod:tuplelist.select">tuplelist.select</A>,
+<A HREF="py_tupledict_select.html#pythonmethod:tupledict.select">tupledict.select</A>,
+<A HREF="py_tupledict_sum.html#pythonmethod:tupledict.sum">tupledict.sum</A>, and
+<A HREF="py_tupledict_prod.html#pythonmethod:tupledict.prod">tupledict.prod</A>) now raises an
+<SPAN  CLASS="texttt">IndexError</SPAN>. This change almost exclusively affects cases which returned
+an empty set in previous versions. The exception is where the additional
+indices are wildcards. i.e. for a tuplelist containing 2-tuples:
+<SPAN  CLASS="texttt">tl.select("*", 2, "*")</SPAN> now raises an exception, while in previous
+versions it gives the same (non-empty) result as <SPAN  CLASS="texttt">tl.select("*", 2)</SPAN>.
+
+<P>
+</LI>
+<LI>The <SPAN  CLASS="texttt">gurobi</SPAN> Python package alias has been removed from the conda
+packages on all platforms. Any usage of <SPAN  CLASS="texttt">import gurobi</SPAN> must be replaced
+with <SPAN  CLASS="texttt">import gurobipy</SPAN>.
+
+<P>
+</LI>
+</UL>
+
+<P>
+<SPAN  CLASS="textbf">Deprecated functionality</SPAN>
+
+<P>
+If you are upgrading from a previous version of Gurobi, we recommend first
+running your code with Gurobi 10 and warnings enabled to catch deprecations in
+<SPAN  CLASS="texttt">gurobipy</SPAN>. Fixing these deprecated usages will help to keep compatibility for
+Gurobi 11 and later versions. Warnings can be enabled by running your code with
+the <SPAN  CLASS="texttt">-X dev</SPAN> or <SPAN  CLASS="texttt">-W default</SPAN> flags. See the <A ID="tex2html9"
+  HREF="https://docs.python.org/3/library/devmode.html">Python
+Development Mode</A>
+or
+<A ID="tex2html10"
+  HREF="https://docs.python.org/3/library/warnings.html">warnings</A>
+package documentation for further details.
+
+<P>
+In Gurobi 11, the following usage is deprecated and will be removed in a future
+version:
+
+<P>
+
+<UL>
+<LI>Passing a <A HREF="py_tupledict.html#pythonclass:tupledict">tupledict</A> to the
+<A HREF="py_quicksum.html#pythonmethod:quicksum">quicksum</A> function is deprecated as the
+result is inconsistent with passing a native Python dictionary to
+<SPAN  CLASS="texttt">quicksum</SPAN>. The <A HREF="py_tupledict_sum.html#pythonmethod:tupledict.sum">sum</A> method of
+the tupledict should be used instead to compute the sum over the values of the
+tupledict.
+
+<P>
+</LI>
+<LI>The <SPAN  CLASS="texttt">iterkeys()</SPAN>, <SPAN  CLASS="texttt">itervalues()</SPAN>, and <SPAN  CLASS="texttt">iteritems()</SPAN>
+methods for <A HREF="py_tupledict.html#pythonclass:tupledict">tupledicts</A> are deprecated.
+These methods are legacy syntax from Python 2. The corresponding Python 3
+methods <SPAN  CLASS="texttt">keys()</SPAN>, <SPAN  CLASS="texttt">values()</SPAN>, and <SPAN  CLASS="texttt">items()</SPAN> now return iterable
+views and are therefore preferred.
+
+<P>
+</LI>
+<LI>The <SPAN  CLASS="texttt">gurobipy.system()</SPAN> function is deprecated. <SPAN  CLASS="texttt">os.system()</SPAN>
+from the Python standard library should be used instead.
+
+<P>
+</LI>
+<LI>The <SPAN  CLASS="texttt">gurobipy.models()</SPAN> function is deprecated and should no longer
+be used.
+
+<P>
+</LI>
+</UL>
+
+<P>
+<SPAN CLASS="LARGE"><SPAN  CLASS="textbf"><SPAN CLASS="XXLARGE"><SPAN  CLASS="textbf">Changes to the Java package</SPAN></SPAN></SPAN></SPAN>
+
+<P>
+<SPAN  CLASS="textbf">Updates</SPAN>
+
+<P>
+We've made essential changes in the package structure to allow publishing to
+Maven Central. Please take note of the following updates:
+
+<P>
+
+<UL>
+<LI><SPAN  CLASS="textbf">Package Name Change</SPAN>: The Java package name has been updated from
+<SPAN  CLASS="texttt">gurobi</SPAN> to <SPAN  CLASS="texttt">com.gurobi.gurobi</SPAN>. If you are integrating our Java
+package, ensure to update your import statements accordingly.
+
+<P>
+</LI>
+</UL>
+
+<P>
+<SPAN CLASS="LARGE"><SPAN  CLASS="textbf"><SPAN CLASS="XXLARGE"><SPAN  CLASS="textbf">Changes to the MATLAB interface</SPAN></SPAN></SPAN></SPAN>
+
+<P>
+On the macOS platform, the Gurobi mex interface is now also available for native Apple silicon MATLAB
+(mexmaca64).
+
+<P>
+<SPAN CLASS="LARGE"><SPAN  CLASS="textbf"><SPAN CLASS="XXLARGE"><SPAN  CLASS="textbf">Compute Server, Cluster Manager, and Instant Cloud</SPAN></SPAN></SPAN></SPAN>
+
+<P>
+Detailed release notes for Compute Server, Cluster Manager, and
+Instant Cloud can be found
+<A ID="tex2html11"
+  HREF="https://www.gurobi.com/release-notes/server/v11.0/">here</A>
+<P>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A
+ HREF="c_api_overview.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="refman.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="refman.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A>   
+<BR>
+<B> Next:</B> <A
+ HREF="c_api_overview.html">C API Overview</A>
+<B> Up:</B> <A
+ HREF="refman.html">Gurobi Optimizer Reference Manual</A>
+<B> Previous:</B> <A
+ HREF="refman.html">Gurobi Optimizer Reference Manual</A></DIV>
+<!--End of Navigation Panel-->
+
+</BODY>
+</HTML>

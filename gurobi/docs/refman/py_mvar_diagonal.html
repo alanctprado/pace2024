@@ -1,0 +1,112 @@
+<!DOCTYPE HTML>
+
+<!--Converted with LaTeX2HTML 2023.2 (Released July 1, 2023) -->
+<HTML lang="en">
+<HEAD>
+<TITLE>MVar.diagonal()</TITLE>
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
+<META NAME="viewport" CONTENT="width=device-width, initial-scale=1.0">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2023.2">
+
+<LINK REL="STYLESHEET" HREF="refman.css">
+
+<LINK REL="next" HREF="py_mvar_fromlist.html">
+<LINK REL="previous" HREF="py_mvar_copy.html">
+<LINK REL="next" HREF="py_mvar_fromlist.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A
+ HREF="py_mvar_fromlist.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="py_mvar.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="py_mvar_copy.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A>   
+<BR>
+<B> Next:</B> <A
+ HREF="py_mvar_fromlist.html">MVar.fromlist()</A>
+<B> Up:</B> <A
+ HREF="py_mvar.html">MVar</A>
+<B> Previous:</B> <A
+ HREF="py_mvar_copy.html">MVar.copy()</A>
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H3><A ID="SECTION000114200000000000000"></A>
+<A ID="pythonmethod:MVar.diagonal"></A>
+<BR>
+MVar.diagonal()
+</H3>
+<SPAN CLASS="LARGE">
+<FONT COLOR="#801a1a"> <SPAN  CLASS="textbf">diagonal</SPAN></FONT></SPAN> ( offset=0, axis1=0, axis2=1 )
+
+<P>
+Create an MVar corresponding to the variables on the specified
+diagonal of this MVar.
+
+<P>
+<SPAN CLASS="LARGE"><SPAN  CLASS="textbf">Arguments:</SPAN></SPAN>
+<P>
+ <SPAN  CLASS="textbf">offset (optional)</SPAN>: Offset of the diagonal w.r.t.
+the main diagonal.  Values &gt;0 mean above it, and values &lt;0 below it
+
+<P>
+ <SPAN  CLASS="textbf">axis1 (optional)</SPAN>: Axis to be used as the first axis of the
+2-D sub-MVar from which the diagonal should be taken.  Defaults to 0.
+You need to consider this argument only for MVar objects with more
+than 2 dimensions.
+
+<P>
+ <SPAN  CLASS="textbf">axis2 (optional)</SPAN>: Axis to be used as the second axis of the
+2-D sub-MVar from which the diagonal should be taken.  Defaults to 1.
+You need to consider this argument only for MVar objects with more
+than 2 dimensions.
+
+<P>
+<SPAN CLASS="LARGE"><SPAN  CLASS="textbf">Return value:</SPAN></SPAN>
+
+<P>
+An MVar representing the requested diagonal of this MVar.
+
+<P>
+<SPAN CLASS="LARGE"><B>Example usage:</B></SPAN><PRE>
+  x = model.addMVar((8, 8))
+  diag_main = x.diagonal()  # The main diagonal of x
+  diag_sup = x.diagonal(1)  # The first superdiagonal of x
+  diag_sup = x.diagonal(-2)  # The second subdiagonal of x
+  adiag_main = x[:, ::-1].diagonal()  # The main anti-diagonal of x
+</PRE>
+
+<P>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A
+ HREF="py_mvar_fromlist.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="py_mvar.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="py_mvar_copy.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A>   
+<BR>
+<B> Next:</B> <A
+ HREF="py_mvar_fromlist.html">MVar.fromlist()</A>
+<B> Up:</B> <A
+ HREF="py_mvar.html">MVar</A>
+<B> Previous:</B> <A
+ HREF="py_mvar_copy.html">MVar.copy()</A></DIV>
+<!--End of Navigation Panel-->
+
+</BODY>
+</HTML>
