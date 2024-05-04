@@ -1,0 +1,100 @@
+<!DOCTYPE HTML>
+
+<!--Converted with LaTeX2HTML 2023.2 (Released July 1, 2023) -->
+<HTML lang="en">
+<HEAD>
+<TITLE>MGenConstr.fromlist()</TITLE>
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
+<META NAME="viewport" CONTENT="width=device-width, initial-scale=1.0">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2023.2">
+
+<LINK REL="STYLESHEET" HREF="refman.css">
+
+<LINK REL="next" HREF="py_mgenconstr_getattr.html">
+<LINK REL="previous" HREF="py_mgenconstr.html">
+<LINK REL="next" HREF="py_mgenconstr_getattr.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A
+ HREF="py_mgenconstr_getattr.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="py_mgenconstr.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="py_mgenconstr.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A>   
+<BR>
+<B> Next:</B> <A
+ HREF="py_mgenconstr_getattr.html">MGenConstr.getAttr()</A>
+<B> Up:</B> <A
+ HREF="py_mgenconstr.html">MGenConstr</A>
+<B> Previous:</B> <A
+ HREF="py_mgenconstr.html">MGenConstr</A>
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H3><A ID="SECTION0001111100000000000000"></A>
+<A ID="pythonmethod:MGenConstr.fromlist"></A>
+<BR>
+MGenConstr.fromlist()
+</H3>
+<SPAN CLASS="LARGE">
+<FONT COLOR="#801a1a"> <SPAN  CLASS="textbf">fromlist</SPAN></FONT></SPAN> ( genconstrlist )
+
+<P>
+Convert a list of general constraints into an MGenConstr object. The shape is
+inferred from the contents of the list - a list of GenConstr objects produces a
+1-D MGenConstr object, a list of lists of GenConstr objects produces a 2-D
+MGenConstr, etc.
+
+<P>
+<SPAN CLASS="LARGE"><SPAN  CLASS="textbf">Arguments:</SPAN></SPAN>
+<P>
+ <SPAN  CLASS="textbf">genconstrlist</SPAN>: A list of GenConstr objects to populate the returned
+MGenConstr.
+
+<P>
+<SPAN CLASS="LARGE"><SPAN  CLASS="textbf">Return value:</SPAN></SPAN>
+
+<P>
+MGenConstr object corresponding to the input general constraints.
+
+<P>
+<SPAN CLASS="LARGE"><B>Example usage:</B></SPAN><PRE>
+  gc0, gc1, gc2, gc3 = model.getGenConstrs()
+  mgc_1d = MGenConstr.fromlist([gc0, gc1, gc2, gc3])  # 1-D MGenConstr
+  mgc_2d = MGenConstr.fromlist([[gc0, gc1], [gc2, gc3]])  # 2-D MGenConstr
+</PRE>
+
+<P>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A
+ HREF="py_mgenconstr_getattr.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="py_mgenconstr.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="py_mgenconstr.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A>   
+<BR>
+<B> Next:</B> <A
+ HREF="py_mgenconstr_getattr.html">MGenConstr.getAttr()</A>
+<B> Up:</B> <A
+ HREF="py_mgenconstr.html">MGenConstr</A>
+<B> Previous:</B> <A
+ HREF="py_mgenconstr.html">MGenConstr</A></DIV>
+<!--End of Navigation Panel-->
+
+</BODY>
+</HTML>

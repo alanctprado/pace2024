@@ -1,0 +1,99 @@
+<!DOCTYPE HTML>
+
+<!--Converted with LaTeX2HTML 2023.2 (Released July 1, 2023) -->
+<HTML lang="en">
+<HEAD>
+<TITLE>MVar.sum()</TITLE>
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
+<META NAME="viewport" CONTENT="width=device-width, initial-scale=1.0">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2023.2">
+
+<LINK REL="STYLESHEET" HREF="refman.css">
+
+<LINK REL="next" HREF="py_mvar_t.html">
+<LINK REL="previous" HREF="py_mvar_size.html">
+<LINK REL="next" HREF="py_mvar_t.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A
+ HREF="py_mvar_t.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="py_mvar.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="py_mvar_size.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A>   
+<BR>
+<B> Next:</B> <A
+ HREF="py_mvar_t.html">MVar.T</A>
+<B> Up:</B> <A
+ HREF="py_mvar.html">MVar</A>
+<B> Previous:</B> <A
+ HREF="py_mvar_size.html">MVar.size</A>
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H3><A ID="SECTION0001141200000000000000"></A>
+<A ID="pythonmethod:MVar.sum"></A>
+<BR>
+MVar.sum()
+</H3>
+<SPAN CLASS="LARGE">
+<FONT COLOR="#801a1a"> <SPAN  CLASS="textbf">sum</SPAN></FONT></SPAN> ( axis=None )
+
+<P>
+Sum the elements of the MVar; returns an
+<A HREF="py_mlex.html#pythonclass:MLinExpr">MLinExpr</A> object.
+
+<P>
+<SPAN CLASS="LARGE"><SPAN  CLASS="textbf">Arguments:</SPAN></SPAN>
+<P>
+ <SPAN  CLASS="textbf">axis</SPAN>: An int, or None.  Sum along the specified axis.  If
+set to None, summation takes place along all axes of this MVar.
+
+<P>
+<SPAN CLASS="LARGE"><SPAN  CLASS="textbf">Return value:</SPAN></SPAN>
+
+<P>
+An MLinExpr representing the sum.
+
+<P>
+<SPAN CLASS="LARGE"><B>Example usage:</B></SPAN><PRE>
+  x = model.addMVar((2, 2))
+  sum_row = x.sum(axis=0)  # Sum along the rows of X
+  sum_col = x.sum(axis=1)  # Sum along the columns of X
+  sum_all = x.sum()  # Sum all variables in this MVar
+</PRE>
+
+<P>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A
+ HREF="py_mvar_t.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="py_mvar.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="py_mvar_size.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A>   
+<BR>
+<B> Next:</B> <A
+ HREF="py_mvar_t.html">MVar.T</A>
+<B> Up:</B> <A
+ HREF="py_mvar.html">MVar</A>
+<B> Previous:</B> <A
+ HREF="py_mvar_size.html">MVar.size</A></DIV>
+<!--End of Navigation Panel-->
+
+</BODY>
+</HTML>

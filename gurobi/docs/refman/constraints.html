@@ -1,0 +1,123 @@
+<!DOCTYPE HTML>
+
+<!--Converted with LaTeX2HTML 2023.2 (Released July 1, 2023) -->
+<HTML lang="en">
+<HEAD>
+<TITLE>Constraints</TITLE>
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
+<META NAME="viewport" CONTENT="width=device-width, initial-scale=1.0">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2023.2">
+
+<LINK REL="STYLESHEET" HREF="refman.css">
+
+<LINK REL="next" HREF="objectives.html">
+<LINK REL="previous" HREF="variables.html">
+<LINK REL="next" HREF="linear_constraints.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A
+ HREF="linear_constraints.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="variables_and_constraints_.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="variables.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A>   
+<BR>
+<B> Next:</B> <A
+ HREF="linear_constraints.html">Linear Constraints</A>
+<B> Up:</B> <A
+ HREF="variables_and_constraints_.html">Variables and Constraints and</A>
+<B> Previous:</B> <A
+ HREF="variables.html">Variables</A>
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A ID="SECTION000162000000000000000"></A>
+<A ID="subsection:Constraints"></A>
+<BR>
+Constraints
+</H2>
+
+<P>
+A constraint in Gurobi captures a restriction on the values that a set
+of variables may take.  The simplest example is a linear constraint,
+which states that a linear expression on a set of variables take a
+value that is either less-than-or-equal, greater-than-or-equal, or
+equal to another linear expression.  More complicated constraints are
+also supported, including quadratic constraints (e.g.,
+<!-- MATH
+ $x^2 + y^2 <= z^2$
+ -->
+<SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.57ex; vertical-align: -0.57ex; " SRC="img116.svg"
+ ALT="$x^2 + y^2 &lt;= z^2$"></SPAN>), logical constraints (e.g., logical AND on binary
+variables, if-then, etc.), and a few non-linear functions (e.g.,
+<SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.55ex; vertical-align: -0.70ex; " SRC="img18.svg"
+ ALT="$y = \sin(x)$"></SPAN>).
+
+<P>
+We now consider a few more details about
+<A HREF="linear_constraints.html#subsubsection:LinearConstraints">linear</A>,
+<A HREF="sos_constraints.html#subsubsection:SOSConstraints">SOS</A>,
+<A HREF="quadratic_constraints.html#subsubsection:QuadraticConstraints">quadratic</A> (both
+convex and non-convex), and
+<A HREF="general_constraints.html#subsubsection:GeneralConstraints">general</A>
+constraints.  General
+constraints are the catch-all we use for the constraint types that
+don't fit in the other categories.
+
+<P>
+Recall that Gurobi works in finite-precision arithmetic, so
+constraints are only satisfied <EM>to tolerances</EM>.  Tolerances can
+be tightened to reduce such violations, but there are limits to how
+small the violations can be &mdash; errors are inherent in
+floating-point arithmetic.  This point will be reiterated in several
+places in this section.
+
+<P>
+<BR><HR>
+<!--Table of Child-Links-->
+<A ID="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
+
+<UL CLASS="ChildLinks">
+<LI><A ID="tex2html4019"
+  HREF="linear_constraints.html">Linear Constraints</A>
+<LI><A ID="tex2html4020"
+  HREF="sos_constraints.html">SOS Constraints</A>
+<LI><A ID="tex2html4021"
+  HREF="quadratic_constraints.html">Quadratic Constraints</A>
+<LI><A ID="tex2html4022"
+  HREF="general_constraints.html">General Constraints</A>
+</UL>
+<!--End of Table of Child-Links-->
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A
+ HREF="linear_constraints.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="variables_and_constraints_.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="variables.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A>   
+<BR>
+<B> Next:</B> <A
+ HREF="linear_constraints.html">Linear Constraints</A>
+<B> Up:</B> <A
+ HREF="variables_and_constraints_.html">Variables and Constraints and</A>
+<B> Previous:</B> <A
+ HREF="variables.html">Variables</A></DIV>
+<!--End of Navigation Panel-->
+
+</BODY>
+</HTML>

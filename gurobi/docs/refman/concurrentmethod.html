@@ -1,0 +1,111 @@
+<!DOCTYPE HTML>
+
+<!--Converted with LaTeX2HTML 2023.2 (Released July 1, 2023) -->
+<HTML lang="en">
+<HEAD>
+<TITLE>ConcurrentMethod</TITLE>
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
+<META NAME="viewport" CONTENT="width=device-width, initial-scale=1.0">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2023.2">
+
+<LINK REL="STYLESHEET" HREF="refman.css">
+
+<LINK REL="next" HREF="concurrentmip.html">
+<LINK REL="previous" HREF="concurrentjobs.html">
+<LINK REL="next" HREF="concurrentmip.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A
+ HREF="concurrentmip.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="parameter_descriptions.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="concurrentjobs.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A>   
+<BR>
+<B> Next:</B> <A
+ HREF="concurrentmip.html">ConcurrentMIP</A>
+<B> Up:</B> <A
+ HREF="parameter_descriptions.html">Parameter Descriptions</A>
+<B> Previous:</B> <A
+ HREF="concurrentjobs.html">ConcurrentJobs</A>
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H3><A ID="SECTION0001922000000000000000"></A>
+<A ID="parameter:ConcurrentMethod"></A>
+<BR>
+ConcurrentMethod
+</H3>
+Controls the methods used by the concurrent continuous solver
+
+<TABLE class="PAD " style="">
+<TR><TD ALIGN="LEFT">&nbsp;</TD><TH CLASS="LEFT"><SPAN  CLASS="textbf">Type:</SPAN></TH>
+<TD CLASS="LEFT">int</TD>
+</TR>
+<TR><TD ALIGN="LEFT">&nbsp;</TD><TD CLASS="LEFT"><SPAN  CLASS="textbf">Default value:</SPAN></TD>
+<TD CLASS="LEFT">-1</TD>
+</TR>
+<TR><TD ALIGN="LEFT">&nbsp;</TD><TD CLASS="LEFT"><SPAN  CLASS="textbf">Minimum value:</SPAN></TD>
+<TD CLASS="LEFT">-1</TD>
+</TR>
+<TR><TD ALIGN="LEFT">&nbsp;</TD><TD CLASS="LEFT"><SPAN  CLASS="textbf">Maximum value:</SPAN></TD>
+<TD CLASS="LEFT">3</TD>
+</TR>
+</TABLE>
+
+<P>
+This parameter is only evaluated when solving an LP with a concurrent
+solver (<A HREF="method.html#parameter:Method">Method</A> = 3 or 4). It controls
+which methods are run concurrently
+by the concurrent solver.  Options are:
+
+<UL>
+<LI>-1=automatic,
+</LI>
+<LI>0=barrier, dual, primal simplex,
+</LI>
+<LI>1=barrier and dual simplex,
+</LI>
+<LI>2=barrier and primal simplex, and
+</LI>
+<LI>3=dual and primal simplex.
+</LI>
+</UL>
+Which methods are actually run also depends on the number of threads available.
+
+<P>
+For examples of how to query or modify parameter values from
+our different APIs, refer to our
+<A HREF="parameter_examples.html#sec:ParameterExamples">Parameter Examples</A>.
+<P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A
+ HREF="concurrentmip.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="parameter_descriptions.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="concurrentjobs.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A>   
+<BR>
+<B> Next:</B> <A
+ HREF="concurrentmip.html">ConcurrentMIP</A>
+<B> Up:</B> <A
+ HREF="parameter_descriptions.html">Parameter Descriptions</A>
+<B> Previous:</B> <A
+ HREF="concurrentjobs.html">ConcurrentJobs</A></DIV>
+<!--End of Navigation Panel-->
+
+</BODY>
+</HTML>

@@ -1,0 +1,145 @@
+<!DOCTYPE HTML>
+
+<!--Converted with LaTeX2HTML 2023.2 (Released July 1, 2023) -->
+<HTML lang="en">
+<HEAD>
+<TITLE>SOS Constraints</TITLE>
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
+<META NAME="viewport" CONTENT="width=device-width, initial-scale=1.0">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2023.2">
+
+<LINK REL="STYLESHEET" HREF="refman.css">
+
+<LINK REL="next" HREF="quadratic_constraints.html">
+<LINK REL="previous" HREF="linear_constraints.html">
+<LINK REL="next" HREF="quadratic_constraints.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A
+ HREF="quadratic_constraints.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="constraints.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="linear_constraints.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A>   
+<BR>
+<B> Next:</B> <A
+ HREF="quadratic_constraints.html">Quadratic Constraints</A>
+<B> Up:</B> <A
+ HREF="constraints.html">Constraints</A>
+<B> Previous:</B> <A
+ HREF="linear_constraints.html">Linear Constraints</A>
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H3><A ID="SECTION000162200000000000000"></A>
+<A ID="subsubsection:SOSConstraints"></A>
+<BR>
+SOS Constraints
+</H3>
+
+<P>
+A Special-Ordered Set, or SOS constraint, is a highly specialized
+constraint that places restrictions on the values that variables in a
+given list can take.  There are two types of SOS constraints.  In an
+SOS constraint of type 1 (an SOS1 constraint), at most one variable in
+the specified list is allowed to take a non-zero value.  In an SOS
+constraint of type 2 (an SOS2 constraint), at most two variables in
+the specified, ordered list are allowed to take a non-zero value, and
+those non-zero variables must be contiguous in the list.  The
+variables in an SOS constraint can be continuous, integer, or binary.
+
+<P>
+Again, tolerances play an important role in SOS constraints.
+Specifically, variables that take values less than
+<A HREF="intfeastol.html#parameter:IntFeasTol">IntFeasTol</A> (in absolute value)
+are considered to be zero for the purposes of determining whether an
+SOS constraint is satisfied.
+
+<P>
+An SOS constraint is described using a list of variables and a list of
+corresponding weights.  While the weights have historically had
+intuitive meanings associated with them, we simply use them to order
+the list of variables.  The weights should be unique.  This is
+especially important for an SOS2 constraint, which relies on the
+notion of <EM>contiguous</EM> variables.  Since the variables in the
+SOS are ordered by weight, contiguity becomes ambiguous when multiple
+variables have the same weight.
+
+<P>
+It is often more efficient to capture SOS structure using linear
+constraints rather than SOS constraints.  The optimizer will often
+perform this reformulation automatically. This is controlled
+with four parameters:
+<A HREF="presos1bigm.html#parameter:PreSOS1BigM">PreSOS1BigM</A>,
+<A HREF="presos1encoding.html#parameter:PreSOS1Encoding">PreSOS1Encoding</A>,
+<A HREF="presos2bigm.html#parameter:PreSOS2BigM">PreSOS2BigM</A> and
+<A HREF="presos2encoding.html#parameter:PreSOS2Encoding">PreSOS2Encoding</A>.
+
+<P>
+The reformulation adds constraints of the form <SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.15ex; vertical-align: -0.43ex; " SRC="img120.svg"
+ ALT="$x \leq M b$"></SPAN>, where <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.23ex; vertical-align: -0.12ex; " SRC="img29.svg"
+ ALT="$x$"></SPAN>
+is the variable that participates in the SOS constraint, <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.84ex; vertical-align: -0.12ex; " SRC="img60.svg"
+ ALT="$b$"></SPAN> is a
+binary variable, and <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.81ex; vertical-align: -0.12ex; " SRC="img121.svg"
+ ALT="$M$"></SPAN> is an upper bound on the value of variable
+<SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.23ex; vertical-align: -0.12ex; " SRC="img29.svg"
+ ALT="$x$"></SPAN>.  Large values of <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.81ex; vertical-align: -0.12ex; " SRC="img121.svg"
+ ALT="$M$"></SPAN> can lead to numerical issues. The two
+parameters <A HREF="presos1bigm.html#parameter:PreSOS1BigM">PreSOS1BigM</A> and
+<A HREF="presos2bigm.html#parameter:PreSOS2BigM">PreSOS2BigM</A> control the maximum
+value of <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.81ex; vertical-align: -0.12ex; " SRC="img121.svg"
+ ALT="$M$"></SPAN> that can be introduced by this reformulation.  SOS
+constraints that would require a larger value aren't converted.
+Setting one of these parameters to 0 disables the corresponding
+reformulation.
+
+<P>
+Additionally, there are several known integer formulations
+for SOS1 and SOS2 constraints. These reformulations differ in the
+number of variables that they introduce to the problem, in the
+complexity of the resulting LP relaxations, and in their properties
+in terms of branching and cutting planes. The two parameters
+<A HREF="presos1encoding.html#parameter:PreSOS1Encoding">PreSOS1Encoding</A> and
+<A HREF="presos2encoding.html#parameter:PreSOS2Encoding">PreSOS2Encoding</A>
+control the choice of the reformulation performed.
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A
+ HREF="quadratic_constraints.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="constraints.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="linear_constraints.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A>   
+<BR>
+<B> Next:</B> <A
+ HREF="quadratic_constraints.html">Quadratic Constraints</A>
+<B> Up:</B> <A
+ HREF="constraints.html">Constraints</A>
+<B> Previous:</B> <A
+ HREF="linear_constraints.html">Linear Constraints</A></DIV>
+<!--End of Navigation Panel-->
+
+</BODY>
+</HTML>

@@ -1,0 +1,170 @@
+<!DOCTYPE HTML>
+
+<!--Converted with LaTeX2HTML 2023.2 (Released July 1, 2023) -->
+<HTML lang="en">
+<HEAD>
+<TITLE>MLinExpr</TITLE>
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
+<META NAME="viewport" CONTENT="width=device-width, initial-scale=1.0">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2023.2">
+
+<LINK REL="STYLESHEET" HREF="refman.css">
+
+<LINK REL="next" HREF="py_mqex.html">
+<LINK REL="previous" HREF="py_genexpr.html">
+<LINK REL="next" HREF="py_mlex_clear.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A
+ HREF="py_mlex_clear.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="py_python_api_details.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="py_genexpr.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A>   
+<BR>
+<B> Next:</B> <A
+ HREF="py_mlex_clear.html">MLinExpr.clear()</A>
+<B> Up:</B> <A
+ HREF="py_python_api_details.html">Python API Details</A>
+<B> Previous:</B> <A
+ HREF="py_genexpr.html">GenExpr</A>
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A ID="SECTION0001115000000000000000"></A>
+<A ID="pythonclass:MLinExpr"></A>
+<BR>
+MLinExpr
+</H2>
+
+<P>
+Gurobi linear matrix expression object.  A linear matrix expression
+results from an arithmetic operation with an
+<A HREF="py_mvar.html#pythonclass:MVar">MVar</A> object.  A common example is a
+matrix-vector product, where the matrix is a NumPy ndarray or a SciPy
+sparse matrix and the vector is a Gurobi
+<A HREF="py_mvar.html#pythonclass:MVar">MVar</A> object.  Linear matrix
+expressions are used to build linear objectives and constraints.  They
+are temporary objects that typically have short lifespans.
+
+<P>
+You generally build linear matrix expressions using overloaded
+operators, typically by multiplying a 2-D matrix (dense or sparse) by
+a 1-D <A HREF="py_mvar.html#pythonclass:MVar">MVar</A> object using the Python
+matrix multiply (<code>@</code>) operator (e.g., <code>expr = A @ x</code>).  You
+can also promote an <code>MVar</code> object to an <code>MLinExpr</code> using
+arithmetic expressions (e.g., <code>expr = x + 1</code>).  Most arithmetic
+operations are supported on <code>MLinExpr</code> objects, including
+addition and subtraction (e.g., <code>expr = A @ x - B @ y</code>),
+multiplication by a constant (e.g. <code>expr = 2 * A @ x</code>), and
+point-wise multiplication with an ndarray or a sparse matrix.  An
+<code>MLinExpr</code> object containing empty expressions can be created
+using the
+<A HREF="py_mlex_zeros.html#pythonmethod:MLinExpr.zeros">zeros</A> method.
+
+<P>
+An <code>MLinExpr</code> object has a <code>shape</code> representing its
+dimensions, a <code>size</code> that counts the total number of elements,
+and an <code>ndim</code> that gives the number of dimensions.  These
+properties lean on their counterparts in NumPy's ndarray class.
+
+<P>
+When working with <code>MLinExpr</code> objects, you need to make sure that
+the operands' shapes are compatible.  For matrix multiplication, we
+follow the rules of Python's matrix multiplication operator: both
+operands need to have at least one dimension, and their inner
+dimensions must agree.  For more information we refer you to Python's
+documentation.  Other binary operations such as addition and
+multiplication are straightforward to understand if both operands have
+the same shape: the operation is applied point wise on the matching
+indices.  For operands that have different shapes, the arithmetic
+follows NumPy's broadcasting rules.  We refer you to the NumPy
+documentation for more information.
+
+<P>
+The full list of overloaded operators on
+<A HREF="#pythonclass:MLinExpr">MLinExpr</A> objects is as follows:
+<code>+</code>, <code>+=</code>,
+<code>-</code>, <code>-=</code>, <code>*</code>, <code>*=</code>,
+and <code>@</code>.
+In Python parlance, we've defined the following
+<code>MLinExpr</code> functions:
+<code>__add__</code>, <code>__radd__</code>, <code>__iadd__</code>,
+<code>__sub__</code>, <code>__rsub__</code>, <code>__isub__</code>, <code>__neg__</code>,
+<code>__mul__</code>, <code>__rmul__</code>, <code>__imul__</code>,
+<code>__matmul__</code>, and <code>__rmatmul__</code>.
+
+<P>
+We've also overloaded the comparison operators
+(<A HREF="py_mlex_eq_.html#pythonmethod:MLinExpr.__eq__">==</A>,
+<A HREF="py_mlex_le_.html#pythonmethod:MLinExpr.__le__">&lt;=</A>, and
+<A HREF="py_mlex_ge_.html#pythonmethod:MLinExpr.__ge__">&gt;=</A>), to make it easier to
+build constraints from linear matrix expressions.
+
+<P>
+<BR><HR>
+<!--Table of Child-Links-->
+<A ID="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
+
+<UL CLASS="ChildLinks">
+<LI><A ID="tex2html3897"
+  HREF="py_mlex_clear.html">MLinExpr.clear()</A>
+<LI><A ID="tex2html3898"
+  HREF="py_mlex_copy.html">MLinExpr.copy()</A>
+<LI><A ID="tex2html3899"
+  HREF="py_mlex_getvalue.html">MLinExpr.getValue()</A>
+<LI><A ID="tex2html3900"
+  HREF="py_mlex_item.html">MLinExpr.item()</A>
+<LI><A ID="tex2html3901"
+  HREF="py_mlex_ndim.html">MLinExpr.ndim</A>
+<LI><A ID="tex2html3902"
+  HREF="py_mlex_shape.html">MLinExpr.shape</A>
+<LI><A ID="tex2html3903"
+  HREF="py_mlex_size.html">MLinExpr.size</A>
+<LI><A ID="tex2html3904"
+  HREF="py_mlex_sum.html">MLinExpr.sum()</A>
+<LI><A ID="tex2html3905"
+  HREF="py_mlex_zeros.html">MLinExpr.zeros()</A>
+<LI><A ID="tex2html3906"
+  HREF="py_mlex_eq_.html">MLinExpr.__eq__()</A>
+<LI><A ID="tex2html3907"
+  HREF="py_mlex_ge_.html">MLinExpr.__ge__()</A>
+<LI><A ID="tex2html3908"
+  HREF="py_mlex_getitem_.html">MLinExpr.__getitem__()</A>
+<LI><A ID="tex2html3909"
+  HREF="py_mlex_le_.html">MLinExpr.__le__()</A>
+<LI><A ID="tex2html3910"
+  HREF="py_mlex_setitem_.html">MLinExpr.__setitem__()</A>
+</UL>
+<!--End of Table of Child-Links-->
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A
+ HREF="py_mlex_clear.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="py_python_api_details.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="py_genexpr.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A>   
+<BR>
+<B> Next:</B> <A
+ HREF="py_mlex_clear.html">MLinExpr.clear()</A>
+<B> Up:</B> <A
+ HREF="py_python_api_details.html">Python API Details</A>
+<B> Previous:</B> <A
+ HREF="py_genexpr.html">GenExpr</A></DIV>
+<!--End of Navigation Panel-->
+
+</BODY>
+</HTML>

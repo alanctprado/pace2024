@@ -1,0 +1,121 @@
+<!DOCTYPE HTML>
+
+<!--Converted with LaTeX2HTML 2023.2 (Released July 1, 2023) -->
+<HTML lang="en">
+<HEAD>
+<TITLE>MLinExpr.__getitem__()</TITLE>
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
+<META NAME="viewport" CONTENT="width=device-width, initial-scale=1.0">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2023.2">
+
+<LINK REL="STYLESHEET" HREF="refman.css">
+
+<LINK REL="next" HREF="py_mlex_le_.html">
+<LINK REL="previous" HREF="py_mlex_ge_.html">
+<LINK REL="next" HREF="py_mlex_le_.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A
+ HREF="py_mlex_le_.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="py_mlex.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="py_mlex_ge_.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A>   
+<BR>
+<B> Next:</B> <A
+ HREF="py_mlex_le_.html">MLinExpr.__le__()</A>
+<B> Up:</B> <A
+ HREF="py_mlex.html">MLinExpr</A>
+<B> Previous:</B> <A
+ HREF="py_mlex_ge_.html">MLinExpr.__ge__()</A>
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H3><A ID="SECTION00011151200000000000000"></A>
+<A ID="pythonmethod:MLinExpr.__getitem__"></A>
+<BR>
+MLinExpr.__getitem__()
+</H3>
+<SPAN CLASS="LARGE">
+<FONT COLOR="#801a1a"> <SPAN  CLASS="textbf">__getitem__</SPAN></FONT></SPAN> (  )
+
+<P>
+Index or slice this MLinExpr.
+
+<P>
+<SPAN CLASS="LARGE"><SPAN  CLASS="textbf">Return value:</SPAN></SPAN>
+
+<P>
+An <SPAN  CLASS="texttt">MLinExpr</SPAN> object.
+
+<P>
+<SPAN CLASS="LARGE"><B>Example usage:</B></SPAN><PRE>
+  mle = 2 * m.addMVar((2,2))
+  col0 = mle[:, 0]  # The first column of mle, 1-D result
+  elmt = mle[1, 0]  # The element at position (1, 0), 0-D result
+</PRE>
+
+<P>
+You can index and slice MLinExpr objects like you would index NumPy's
+ndarray, and indexing behavior is straightforward to understand if you
+only <SPAN  CLASS="textit">read</SPAN> from the returned object.  When you <SPAN  CLASS="textit">write</SPAN> to
+the returned object, be aware that some kinds of indexing return NumPy <SPAN  CLASS="textit">views</SPAN>
+on the indexed expression (e.g., slices), while others
+result in copies being returned (e.g., fancy indexing).  Here is an
+example:
+
+<P>
+<SPAN CLASS="LARGE"><B>Example usage:</B></SPAN><PRE>
+  mle = 2 * m.addMVar(4)
+  leading_part_1 = mle[:2]
+  leading_part_2 = mle[[0,1]]
+  leading_part_1 += 99  # This modifies mle, too
+  leading_part_2 += 1  # This doesn't modify mle
+</PRE>
+
+<P>
+If you are unsure about any of these concepts and want to avoid any
+risk of accidentally writing back to the indexed object, you should
+always combine indexing with the <code>copy</code> method.
+
+<P>
+<SPAN CLASS="LARGE"><B>Example usage:</B></SPAN><PRE>
+  expr = 2 * model.addMVar((2,2)) + 1
+  first_col = expr[:, 0].copy()
+  first_col =+ 1  # Leaves expr untouched
+</PRE>
+
+<P>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A
+ HREF="py_mlex_le_.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="py_mlex.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="py_mlex_ge_.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A>   
+<BR>
+<B> Next:</B> <A
+ HREF="py_mlex_le_.html">MLinExpr.__le__()</A>
+<B> Up:</B> <A
+ HREF="py_mlex.html">MLinExpr</A>
+<B> Previous:</B> <A
+ HREF="py_mlex_ge_.html">MLinExpr.__ge__()</A></DIV>
+<!--End of Navigation Panel-->
+
+</BODY>
+</HTML>

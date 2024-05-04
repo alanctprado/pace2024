@@ -1,0 +1,124 @@
+<!DOCTYPE HTML>
+
+<!--Converted with LaTeX2HTML 2023.2 (Released July 1, 2023) -->
+<HTML lang="en">
+<HEAD>
+<TITLE>SoftMemLimit</TITLE>
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
+<META NAME="viewport" CONTENT="width=device-width, initial-scale=1.0">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2023.2">
+
+<LINK REL="STYLESHEET" HREF="refman.css">
+
+<LINK REL="next" HREF="solutionlimit.html">
+<LINK REL="previous" HREF="simplexpricing.html">
+<LINK REL="next" HREF="solutionlimit.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A
+ HREF="solutionlimit.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="parameter_descriptions.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="simplexpricing.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A>   
+<BR>
+<B> Next:</B> <A
+ HREF="solutionlimit.html">SolutionLimit</A>
+<B> Up:</B> <A
+ HREF="parameter_descriptions.html">Parameter Descriptions</A>
+<B> Previous:</B> <A
+ HREF="simplexpricing.html">SimplexPricing</A>
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H3><A ID="SECTION00019215000000000000000"></A>
+<A ID="parameter:SoftMemLimit"></A>
+<BR>
+SoftMemLimit
+</H3>
+Soft memory limit
+
+<TABLE class="PAD " style="">
+<TR><TD ALIGN="LEFT">&nbsp;</TD><TH CLASS="LEFT"><SPAN  CLASS="textbf">Type:</SPAN></TH>
+<TD CLASS="LEFT">double</TD>
+</TR>
+<TR><TD ALIGN="LEFT">&nbsp;</TD><TD CLASS="LEFT"><SPAN  CLASS="textbf">Default value:</SPAN></TD>
+<TD CLASS="LEFT">Infinity</TD>
+</TR>
+<TR><TD ALIGN="LEFT">&nbsp;</TD><TD CLASS="LEFT"><SPAN  CLASS="textbf">Minimum value:</SPAN></TD>
+<TD CLASS="LEFT">0</TD>
+</TR>
+<TR><TD ALIGN="LEFT">&nbsp;</TD><TD CLASS="LEFT"><SPAN  CLASS="textbf">Maximum value:</SPAN></TD>
+<TD CLASS="LEFT">Infinity</TD>
+</TR>
+</TABLE>
+
+<P>
+Limits the total amount of memory (in GB, i.e., <SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.12ex; vertical-align: -0.12ex; " SRC="img277.svg"
+ ALT="$10^9$"></SPAN> bytes)
+available to Gurobi.  If more is needed, Gurobi will terminate with a
+<code>MEM_LIMIT</code> status code (see the
+<A HREF="optimization_status_codes.html#sec:StatusCodes">Status Code</A> section for further details).
+
+<P>
+In contrast to the <A HREF="memlimit.html#parameter:MemLimit">MemLimit</A>
+parameter, the <code>SoftMemLimit</code> parameter leads to a graceful exit
+of the optimization, such that it is possible to retrieve solution
+information afterwards or (in the case of a MIP solve) resume the
+optimization.
+
+<P>
+A disadvantage compared to <A HREF="memlimit.html#parameter:MemLimit">MemLimit</A>
+is that the <code>SoftMemLimit</code> is only checked at places where
+optimization can be terminated gracefully, so memory use may exceed
+the limit between these checks.
+
+<P>
+Note that allocated memory is tracked across all models within a
+Gurobi environment.  If you create multiple models in one environment,
+these additional models will count towards overall memory consumption.
+
+<P>
+Memory usage is also tracked across all threads.  One consequence of
+this is that termination may be non-deterministic for multi-threaded
+runs.
+
+<P>
+
+<P>
+For examples of how to query or modify parameter values from
+our different APIs, refer to our
+<A HREF="parameter_examples.html#sec:ParameterExamples">Parameter Examples</A>.
+<P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A
+ HREF="solutionlimit.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="parameter_descriptions.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="simplexpricing.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A>   
+<BR>
+<B> Next:</B> <A
+ HREF="solutionlimit.html">SolutionLimit</A>
+<B> Up:</B> <A
+ HREF="parameter_descriptions.html">Parameter Descriptions</A>
+<B> Previous:</B> <A
+ HREF="simplexpricing.html">SimplexPricing</A></DIV>
+<!--End of Navigation Panel-->
+
+</BODY>
+</HTML>

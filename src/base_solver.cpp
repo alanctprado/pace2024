@@ -15,20 +15,34 @@
 
 #include "base_solver.h"
 #include "environment.h"
+#include "ip_solver_or.h"
+#include "ip_solver_gurobi.h"
 #include "ip_solver_lpsolve.h"
 #include "options.h"
 #include "utils.h"
 
-#include <cassert>
-#include <iostream>
-#include <string>
+#include <memory>
 
 namespace banana {
 namespace solver {
 
-BaseSolver::BaseSolver(graph::BipartiteGraph graph)
-    : m_ipSolver(new ip::LPSolveSolver(graph)), m_graph(graph)
-{}
+BaseSolver::BaseSolver(graph::BipartiteGraph graph) : m_graph(graph)
+{
+  const auto &ip_solver = Environment::options().ip.solverMode;
+  const auto &ip_sub_solver = Environment::options().ip.subSolverMode;
+  switch (ip_solver)
+  {
+  case options::IPSolverMode::LPSOLVE:
+    m_ipSolver = std::make_unique<ip::LPSolveSolver>(graph);
+    break;
+  case options::IPSolverMode::GUROBI:
+    m_ipSolver = std::make_unique<ip::GurobiSolver>(graph);
+    break;
+  case options::IPSolverMode::OR_TOOLS:
+    m_ipSolver = std::make_unique<ip::OrToolsSolver>(graph, ip_sub_solver);
+    break;
+  }
+}
 
 void BaseSolver::verifySolution(int expected_crossings)
 {
