@@ -1,0 +1,99 @@
+<!DOCTYPE HTML>
+
+<!--Converted with LaTeX2HTML 2023.2 (Released July 1, 2023) -->
+<HTML lang="en">
+<HEAD>
+<TITLE>MQuadExpr.sum()</TITLE>
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
+<META NAME="viewport" CONTENT="width=device-width, initial-scale=1.0">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2023.2">
+
+<LINK REL="STYLESHEET" HREF="refman.css">
+
+<LINK REL="next" HREF="py_mqex_zeros.html">
+<LINK REL="previous" HREF="py_mqex_size.html">
+<LINK REL="next" HREF="py_mqex_zeros.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A
+ HREF="py_mqex_zeros.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="py_mqex.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="py_mqex_size.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A>   
+<BR>
+<B> Next:</B> <A
+ HREF="py_mqex_zeros.html">MQuadExpr.zeros()</A>
+<B> Up:</B> <A
+ HREF="py_mqex.html">MQuadExpr</A>
+<B> Previous:</B> <A
+ HREF="py_mqex_size.html">MQuadExpr.size</A>
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H3><A ID="SECTION0001116800000000000000"></A>
+<A ID="pythonmethod:MQuadExpr.sum"></A>
+<BR>
+MQuadExpr.sum()
+</H3>
+<SPAN CLASS="LARGE">
+<FONT COLOR="#801a1a"> <SPAN  CLASS="textbf">sum</SPAN></FONT></SPAN> ( axis=None )
+
+<P>
+Sum the elements of this MQuadExpr; returns an
+<A HREF="py_mqex.html#pythonclass:MQuadExpr">MQuadExpr</A> object.
+
+<P>
+<SPAN CLASS="LARGE"><SPAN  CLASS="textbf">Arguments:</SPAN></SPAN>
+<P>
+ <SPAN  CLASS="textbf">axis</SPAN>: An int, or None.  Sum along the specified axis.  If
+set to None, summation takes place along all axes of this MQuadExpr.
+
+<P>
+<SPAN CLASS="LARGE"><SPAN  CLASS="textbf">Return value:</SPAN></SPAN>
+
+<P>
+An MQuadExpr representing the sum.
+
+<P>
+<SPAN CLASS="LARGE"><B>Example usage:</B></SPAN><PRE>
+  expr = 2 * model.addMVar((2, 2))**2 - 1
+  sum_row = expr.sum(axis=0)  # Sum along the rows
+  sum_col = expr.sum(axis=1)  # Sum along the columns
+  sum_all = expr.sum()  # Sum all elements, result is 0-D
+</PRE>
+
+<P>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A
+ HREF="py_mqex_zeros.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="py_mqex.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="py_mqex_size.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A>   
+<BR>
+<B> Next:</B> <A
+ HREF="py_mqex_zeros.html">MQuadExpr.zeros()</A>
+<B> Up:</B> <A
+ HREF="py_mqex.html">MQuadExpr</A>
+<B> Previous:</B> <A
+ HREF="py_mqex_size.html">MQuadExpr.size</A></DIV>
+<!--End of Navigation Panel-->
+
+</BODY>
+</HTML>

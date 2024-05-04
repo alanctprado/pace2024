@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<title>Gurobi Optimization</title>
+	<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+	<style>
+	body {
+		background-color: #FFFFFF;
+		padding: 20px 40px;
+		font-family: Helvetica, Arial, sans-serif;
+		font-size:11pt;
+		line-height:20px;
+		margin:0px;
+		max-width:1200px;
+		margin-right: auto;
+		margin-left: auto;
+	}
+	img {
+		border: none;
+	}
+	h2 {
+		margin: 36px 0 8px;
+	}
+	.menu {
+		padding-bottom: 40px;
+	}
+	.menu td {
+		padding-right: 30px;
+		font-size: 14pt;
+		font-weight: bold;
+	}
+	.menu a {
+		text-decoration: none;
+		color: #292929;
+	}
+	.menu a:hover {
+		color: #909090;
+	}
+	.platforms {
+		border-collapse: collapse;
+	}
+	.platforms td, .platforms th {
+		font-size: 10pt;
+		border: solid 1px black;
+		padding: 4px 8px;
+		text-align: left;
+	}
+	</style>
+</head>
+<body>
+<table class='menu'>
+	<tr>
+		<td><a href="https://www.gurobi.com"><img style='width:211px' src="docs/logo.png" alt="Gurobi Optimization" title="Gurobi Optimization" /></a></td>
+		<td><a href="https://www.gurobi.com">gurobi.com</a></td>
+		<td><a href="docs/refman/refman.html">Reference Manual</a></td>
+		<td><a href="https://support.gurobi.com">Customer Support</a></td>
+	</tr>
+</table>
+<h1>
+	WELCOME
+</h1>
+<p>
+	You have successfully installed version 11.0.1 of the Gurobi Optimizer.
+</p>
+<p>
+You'll find instructions for setting up your Gurobi license in this
+document, as well as a list of supported platforms, and Release Notes and
+guidelines for converting existing Gurobi code to run with this new
+version. Once you have finished browsing this document, you should refer to
+the <a href="docs/refman/detailed_release_notes_11.html">Detailed Release
+Notes</a>, the <a href="https://www.gurobi.com/getting-started">
+Getting Started Knowledge Base article</a>, the
+<a href="docs/examples/examples.html">Example Tour</a>,
+the <a href="docs/refman/refman.html">Reference Manual</a>, or
+the <a href="docs/remoteservices/remoteservices.html">Remote Services
+Reference Manual</a> to get started using the Gurobi Optimizer.
+</p>
+<h2>
+	Obtaining Your License
+</h2>
+<p>
+To obtain a Gurobi 11 license, you will need to visit
+the <a href="https://portal.gurobi.com" target="_blank">Gurobi User
+Portal</a>. If you are a commercial user under maintenance, you should see
+your Gurobi 11 license
+under <a href="https://portal.gurobi.com/iam/licenses/list">Licenses</a>. If
+you would like to request a free academic license, you can do so from
+the <a href="https://portal.gurobi.com/iam/licenses/request"
+target="_blank">Licenses Request</a> section. Once you have a license in
+the <a href="https://portal.gurobi.com/iam/licenses/list">Gurobi User
+Portal</a>, you will need to follow the instructions for installing or
+downloading a license by clicking on the <code>Install</code>
+or <code>Open</code> button next to your license.
+</p>
+
+<h2>
+  Release Notes for Version 11.0
+</h2>
+<p>
+  In addition to performance enhancements, Gurobi 11.0 adds the following new features:
+</p>
+<ul>
+	<li><b>Mixed-Integer Non-Linear Programming (MINLP) Problems:</b> Gurobi 11
+		offers solving non-linear models using spatial branch-and-bound and outer
+		approximation as an alternative to the static piecewise-linear approximation
+		of non-linear constraints supported in earlier versions.
+		See the discussion of
+		<a href="docs/refman/general_constraints.html#subsubsection:GenConstrFunctionNL">
+		<b>function constraints with dynamic piecewise-linear approximation</b></a>
+		for more information.
+	</li>
+	  <li><b>Default behavior of <a href="docs/refman/nonconvex.html"><b>NonConvex</b></a>
+	parameter changed:</b> now, in default settings, Gurobi
+	will solve models with non-convex quadratic constraints.</li>
+  <li><b>Models can now be copied between environments</b>.</li>
+  <li><b>Better control over the concurrent LP optimizer</b>
+	with <a href="docs/refman/concurrentmethod.html"><b>ConcurrentMethod</b></a>.</li>
+  <li><b>New parameters</b>:
+	<ul>
+        <li><a href="docs/refman/solutiontarget.html"><b>SolutionTarget</b></a> to specify the solution target for LP.</li>
+		<li><a href="docs/refman/tunedynamicjobs.html"><b>TuneDynamicJobs</b></a> to allow
+			distributed tuning using a dynamic set of workers.</li>
+		<li><a href="docs/refman/tuneusefilename.html"><b>TuneUseFilename</b></a> to use the
+			file name instead of the model name.</li>
+	<li><a href="docs/refman/mixingcuts.html"><b>MixingCuts</b></a> to control the generation
+		of Mixing Cuts.</li>
+	</ul>
+  </li>
+  <li><b>Numerous changes to gurobipy</b>:
+	<ul>
+		<li>Installation and packaging changes.</li>
+		<li>New classes, methods and properties.</li>
+		<li>Other enhancements.</li>
+	</ul></li>
+</ul>
+<p>
+Please refer to the  <a href="docs/refman/detailed_release_notes_11.html">Detailed
+Release Notes</a> for more details, including supported platforms and code conversion notes.
+All bug fixes listed by version can be found on our
+<a href="https://www.gurobi.com/downloads/recent-bug-fixes-by-version/">website</a>.
+</p>
+
+<h2>
+  License Agreement
+</h2>
+<p>
+  Note that this software is covered by the <a href="EULA.pdf">Gurobi End
+    User License Agreement</a>. By completing the Gurobi installation process
+  and using the software, you are accepting the terms of this agreement.
+</p>
+<p>
+  Thank you for using Gurobi products!
+</p>
+<hr />
+<p>
+  &copy; 2024 Gurobi Optimization. All Rights Reserved.
+</p>
+</body>
+</html>

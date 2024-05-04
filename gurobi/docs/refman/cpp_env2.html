@@ -1,0 +1,209 @@
+<!DOCTYPE HTML>
+
+<!--Converted with LaTeX2HTML 2023.2 (Released July 1, 2023) -->
+<HTML lang="en">
+<HEAD>
+<TITLE>GRBEnv()</TITLE>
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
+<META NAME="viewport" CONTENT="width=device-width, initial-scale=1.0">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2023.2">
+
+<LINK REL="STYLESHEET" HREF="refman.css">
+
+<LINK REL="next" HREF="cpp_env_get.html">
+<LINK REL="previous" HREF="cpp_env.html">
+<LINK REL="next" HREF="cpp_env_get.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A
+ HREF="cpp_env_get.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="cpp_env.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="cpp_env.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A>   
+<BR>
+<B> Next:</B> <A
+ HREF="cpp_env_get.html">GRBEnv::get()</A>
+<B> Up:</B> <A
+ HREF="cpp_env.html">GRBEnv</A>
+<B> Previous:</B> <A
+ HREF="cpp_env.html">GRBEnv</A>
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H3><A ID="SECTION00051100000000000000"></A>
+<A ID="cppmethod:GRBEnv"></A>
+<BR>
+GRBEnv()
+</H3>
+
+<P>
+Constructor for <code>GRBEnv</code> object.
+You have the option of constructing either a local environment, which
+solves Gurobi models on the local machine, a client environment for a
+Gurobi Compute Server, which will solve Gurobi models on a server
+machine, or an Instant Cloud environment, which will launch a Gurobi
+Cloud server and solve models on that server.  Choose the appropriate
+signature for the type of environment you wish to launch.
+
+<P>
+<TABLE class="PAD " style="">
+<TR><TD CLASS="LEFT">GRBEnv</TD>
+<TD CLASS="LEFT"><SPAN CLASS="LARGE"><FONT COLOR="#801a1a"> <SPAN  CLASS="textbf">GRBEnv</SPAN></FONT></SPAN> ( )</TD>
+</TR>
+</TABLE>
+
+<P>
+Create a Gurobi environment (with logging disabled).
+This method will also populate any
+parameter (<TT>ComputeServer</TT>, <TT>TokenServer</TT>,
+<TT>ServerPassword</TT>, etc.) specified in your <TT>gurobi.lic</TT> file. This method will also check the current working directory for a file
+named <TT>gurobi.env</TT>, and it will attempt to read
+parameter settings from this file if it exists.  The file should
+be in <A HREF="prm_format.html#format:PRM">PRM</A> format (briefly, each line
+should contain a parameter name, followed by the desired value
+for that parameter).
+
+<P>
+In general, you should aim to create a single Gurobi environment in
+your program, even if you plan to work with multiple models.  Reusing
+one environment is much more efficient than creating and destroying
+multiple environments.  The one exception is if you are writing a
+multi-threaded program, since environments are not thread safe.  In
+this case, you will need a separate environment for each of your
+threads.
+
+<P>
+<SPAN CLASS="LARGE"><SPAN  CLASS="textbf">Return value:</SPAN></SPAN>
+
+<P>
+An environment object (with no associated log file).
+
+<P>
+
+<P>
+<TABLE class="PAD " style="">
+<TR><TD CLASS="LEFT">GRBEnv</TD>
+<TD CLASS="LEFT"><SPAN CLASS="LARGE"><FONT COLOR="#801a1a"> <SPAN  CLASS="textbf">GRBEnv</SPAN></FONT></SPAN> (</TD>
+<TD CLASS="LEFT">bool</TD>
+<TD CLASS="LEFT">empty )</TD>
+</TR>
+</TABLE>
+
+<P>
+Create an empty Gurobi environment.  Use
+<A HREF="cpp_env_start.html#cppmethod:GRBEnv::start">GRBEnv::start</A> to
+start the environment.
+
+<P>
+If the environment is not empty,
+This method will also populate any
+parameter (<TT>ComputeServer</TT>, <TT>TokenServer</TT>,
+<TT>ServerPassword</TT>, etc.) specified in your <TT>gurobi.lic</TT> file. This method will also check the current working directory for a file
+named <TT>gurobi.env</TT>, and it will attempt to read
+parameter settings from this file if it exists.  The file should
+be in <A HREF="prm_format.html#format:PRM">PRM</A> format (briefly, each line
+should contain a parameter name, followed by the desired value
+for that parameter).
+
+<P>
+In general, you should aim to create a single Gurobi environment in
+your program, even if you plan to work with multiple models.  Reusing
+one environment is much more efficient than creating and destroying
+multiple environments.  The one exception is if you are writing a
+multi-threaded program, since environments are not thread safe.  In
+this case, you will need a separate environment for each of your
+threads.
+
+<P>
+<SPAN CLASS="LARGE"><SPAN  CLASS="textbf">Arguments:</SPAN></SPAN>
+<P>
+ <SPAN  CLASS="textbf">empty</SPAN>: Indicates whether the environment should be empty.
+You should use <TT>empty=true</TT> if you want to set parameters before actually
+starting the environment.  This can be useful if you want to
+connect to a Compute Server, a Token Server, the Gurobi
+Instant Cloud, a Cluster Manager or use a WLS license. See the
+<A HREF="environments.html#sec:Environment">Environment</A>&nbsp;Section for more details.
+
+<P>
+<SPAN CLASS="LARGE"><SPAN  CLASS="textbf">Return value:</SPAN></SPAN>
+
+<P>
+An environment object.
+
+<P>
+
+<P>
+<TABLE class="PAD " style="">
+<TR><TD CLASS="LEFT">GRBEnv</TD>
+<TD CLASS="LEFT"><SPAN CLASS="LARGE"><FONT COLOR="#801a1a"> <SPAN  CLASS="textbf">GRBEnv</SPAN></FONT></SPAN> (</TD>
+<TD CLASS="LEFT">const string&amp;</TD>
+<TD CLASS="LEFT">logFileName )</TD>
+</TR>
+</TABLE>
+
+<P>
+Create a Gurobi environment (with logging enabled).
+This method will also populate any
+parameter (<TT>ComputeServer</TT>, <TT>TokenServer</TT>,
+<TT>ServerPassword</TT>, etc.) specified in your <TT>gurobi.lic</TT> file. This method will also check the current working directory for a file
+named <TT>gurobi.env</TT>, and it will attempt to read
+parameter settings from this file if it exists.  The file should
+be in <A HREF="prm_format.html#format:PRM">PRM</A> format (briefly, each line
+should contain a parameter name, followed by the desired value
+for that parameter).
+
+<P>
+In general, you should aim to create a single Gurobi environment in
+your program, even if you plan to work with multiple models.  Reusing
+one environment is much more efficient than creating and destroying
+multiple environments.  The one exception is if you are writing a
+multi-threaded program, since environments are not thread safe.  In
+this case, you will need a separate environment for each of your
+threads.
+
+<P>
+<SPAN CLASS="LARGE"><SPAN  CLASS="textbf">Arguments:</SPAN></SPAN>
+<P>
+ <SPAN  CLASS="textbf">logFileName</SPAN>: The desired log file name.
+
+<P>
+<SPAN CLASS="LARGE"><SPAN  CLASS="textbf">Return value:</SPAN></SPAN>
+
+<P>
+An environment object.
+
+<P>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A
+ HREF="cpp_env_get.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="cpp_env.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="cpp_env.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A>   
+<BR>
+<B> Next:</B> <A
+ HREF="cpp_env_get.html">GRBEnv::get()</A>
+<B> Up:</B> <A
+ HREF="cpp_env.html">GRBEnv</A>
+<B> Previous:</B> <A
+ HREF="cpp_env.html">GRBEnv</A></DIV>
+<!--End of Navigation Panel-->
+
+</BODY>
+</HTML>

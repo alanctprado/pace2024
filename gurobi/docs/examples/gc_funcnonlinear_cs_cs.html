@@ -1,0 +1,170 @@
+<!DOCTYPE HTML>
+
+<!--Converted with LaTeX2HTML 2023.2 (Released July 1, 2023) -->
+<HTML lang="en">
+<HEAD>
+<TITLE>gc_funcnonlinear_cs.cs</TITLE>
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
+<META NAME="viewport" CONTENT="width=device-width, initial-scale=1.0">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2023.2">
+
+<LINK REL="STYLESHEET" HREF="examples.css">
+
+<LINK REL="next" HREF="gc_pwl_cs_cs.html">
+<LINK REL="previous" HREF="fixanddive_cs_cs.html">
+<LINK REL="next" HREF="gc_pwl_cs_cs.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A
+ HREF="gc_pwl_cs_cs.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="cs_examples.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="fixanddive_cs_cs.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A>   
+<BR>
+<B> Next:</B> <A
+ HREF="gc_pwl_cs_cs.html">gc_pwl_cs.cs</A>
+<B> Up:</B> <A
+ HREF="cs_examples.html">C# Examples</A>
+<B> Previous:</B> <A
+ HREF="fixanddive_cs_cs.html">fixanddive_cs.cs</A>
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H3><A ID="SECTION00024900000000000000"></A>
+<A ID="subsubsection:gc_funcnonlinear_cs.cs"></A>
+<BR>
+gc_funcnonlinear_cs.cs
+</H3>
+<SCRIPT SRC="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></SCRIPT>
+<BR>
+<PRE CLASS="prettyprint">/* Copyright 2024, Gurobi Optimization, LLC
+
+This example considers the following nonconvex nonlinear problem
+
+ minimize   sin(x) + cos(2*x) + 1
+  subject to  0.25*exp(x) - x &lt;= 0
+              -1 &lt;= x &lt;= 4
+
+ We show you two approaches to solve it as a nonlinear model:
+
+  1) Set the paramter FuncNonlinear = 1 to handle all general function
+     constraints as true nonlinear functions.
+
+  2) Set the attribute FuncNonlinear = 1 for each general function
+     constraint to handle these as true nonlinear functions.
+*/
+
+using System;
+using Gurobi;
+
+class gc_funcnonlinear_cs {
+
+   private static void printsol(GRBModel m, GRBVar x) {
+     Console.WriteLine("x = " + x.X);
+     Console.WriteLine("Obj = " + m.ObjVal);
+   }
+
+   static void Main() {
+     try {
+
+      // Create environment
+
+      GRBEnv env = new GRBEnv();
+
+      // Create a new model
+
+      GRBModel m = new GRBModel(env);
+
+      GRBVar x     = m.AddVar(-1.0, 4.0, 0.0, GRB.CONTINUOUS, "x");
+      GRBVar twox  = m.AddVar(-2.0, 8.0, 0.0, GRB.CONTINUOUS, "twox");
+      GRBVar sinx  = m.AddVar(-1.0, 1.0, 0.0, GRB.CONTINUOUS, "sinx");
+      GRBVar cos2x = m.AddVar(-1.0, 1.0, 0.0, GRB.CONTINUOUS, "cos2x");
+      GRBVar expx  = m.AddVar(0.0, GRB.INFINITY, 0.0, GRB.CONTINUOUS, "expx");
+
+      // Set objective
+
+      m.SetObjective(sinx + cos2x + 1, GRB.MINIMIZE);
+
+      // Add linear constraints
+
+      m.AddConstr(0.25*expx - x &lt;= 0, "l1");
+      m.AddConstr(2*x - twox == 0, "l2");
+
+      // Add general function constraints
+      // sinx = sin(x)
+      GRBGenConstr gcf1 = m.AddGenConstrSin(x, sinx, "gcf1", "");
+      // cos2x = cos(twox)
+      GRBGenConstr gcf2 = m.AddGenConstrCos(twox, cos2x, "gcf2", "");
+      // expx = exp(x)
+      GRBGenConstr gcf3 = m.AddGenConstrExp(x, expx, "gcf3", "");
+
+   // Approach 1) Set FuncNonlinear parameter
+
+      m.Parameters.FuncNonlinear = 1;
+
+      // Optimize the model and print solution
+
+      m.Optimize();
+      printsol(m, x);
+
+      // Restore unsolved state and set parameter Funcnonlinear to its
+      // default value
+      m.Reset();
+      m.Parameters.FuncNonlinear = 0;
+
+   // Approach 2) Set FuncNonlinear attribute for every
+   //             general function constraint
+
+      gcf1.Set(GRB.IntAttr.FuncNonlinear, 1);
+      gcf2.Set(GRB.IntAttr.FuncNonlinear, 1);
+      gcf3.Set(GRB.IntAttr.FuncNonlinear, 1);
+
+      // Optimize the model and print solution
+
+      m.Optimize();
+      printsol(m, x);
+
+      // Dispose of model and environment
+
+      m.Dispose();
+      env.Dispose();
+    } catch (GRBException e) {
+      Console.WriteLine("Error code: " + e.ErrorCode + ". " + e.Message);
+    }
+  }
+}
+</PRE>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A
+ HREF="gc_pwl_cs_cs.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="cs_examples.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="fixanddive_cs_cs.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A>   
+<BR>
+<B> Next:</B> <A
+ HREF="gc_pwl_cs_cs.html">gc_pwl_cs.cs</A>
+<B> Up:</B> <A
+ HREF="cs_examples.html">C# Examples</A>
+<B> Previous:</B> <A
+ HREF="fixanddive_cs_cs.html">fixanddive_cs.cs</A></DIV>
+<!--End of Navigation Panel-->
+
+</BODY>
+</HTML>

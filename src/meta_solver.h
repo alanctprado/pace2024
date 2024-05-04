@@ -48,7 +48,7 @@ protected:
 };
 
 template <class T, class U>
-void MetaSolver<T,U>::explain(std::vector<U> &order)
+void MetaSolver<T, U>::explain(std::vector<U> &order)
 {
   assert(order.size() == 0);
   for (U vertex : m_order)
@@ -58,7 +58,7 @@ void MetaSolver<T,U>::explain(std::vector<U> &order)
 }
 
 template <class T, class U>
-int MetaSolver<T,U>::numberOfCrossings(const std::vector<U> &order) const
+int MetaSolver<T, U>::numberOfCrossings(const std::vector<U> &order) const
 {
   int nA = m_graph.countVerticesA();
   int nB = m_graph.countVerticesB();
@@ -84,7 +84,7 @@ int MetaSolver<T,U>::numberOfCrossings(const std::vector<U> &order) const
   });
 
   int crossings = 0;
-  library::FenwickTree<int> tree(nA);  // shouldn't it be <U>? @mvkaio
+  library::FenwickTree<int> tree(nA);
 
   for (int l = 0, r = 0; l < (int)edges.size(); l = r)
   {
@@ -114,8 +114,8 @@ int MetaSolver<T,U>::numberOfCrossings(const std::vector<U> &order) const
 }
 
 template <class T, class U>
-bool MetaSolver<T,U>::verify(const std::vector<U> &order,
-                             int expected_crossings) const
+bool MetaSolver<T, U>::verify(const std::vector<U> &order,
+                              int expected_crossings) const
 {
   assert(order.size() == m_graph.countVerticesB());
   return numberOfCrossings(order) == expected_crossings;

@@ -1,0 +1,147 @@
+<!DOCTYPE HTML>
+
+<!--Converted with LaTeX2HTML 2023.2 (Released July 1, 2023) -->
+<HTML lang="en">
+<HEAD>
+<TITLE>Model.addMVar()</TITLE>
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
+<META NAME="viewport" CONTENT="width=device-width, initial-scale=1.0">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2023.2">
+
+<LINK REL="STYLESHEET" HREF="refman.css">
+
+<LINK REL="next" HREF="py_model_addqconstr.html">
+<LINK REL="previous" HREF="py_model_addmqconstr.html">
+<LINK REL="next" HREF="py_model_addqconstr.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A
+ HREF="py_model_addqconstr.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="py_model.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="py_model_addmqconstr.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A>   
+<BR>
+<B> Next:</B> <A
+ HREF="py_model_addqconstr.html">Model.addQConstr()</A>
+<B> Up:</B> <A
+ HREF="py_model.html">Model</A>
+<B> Previous:</B> <A
+ HREF="py_model_addmqconstr.html">Model.addMQConstr()</A>
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H3><A ID="SECTION0001122600000000000000"></A>
+<A ID="pythonmethod:Model.addMVar"></A>
+<BR>
+Model.addMVar()
+</H3>
+<SPAN CLASS="LARGE">
+<FONT COLOR="#801a1a"> <SPAN  CLASS="textbf">addMVar</SPAN></FONT></SPAN> ( shape, lb=0.0, ub=float('inf'), obj=0.0, vtype=GRB.CONTINUOUS, name="" )
+
+<P>
+Add an <A HREF="py_mvar.html#pythonclass:MVar">MVar</A> object to a model.  An
+<code>MVar</code> acts like a NumPy ndarray of Gurobi decision variables.
+An <code>MVar</code> can have an arbitrary number of dimensions, defined by the
+<code>shape</code> argument.
+
+<P>
+You can use arithmetic operations with <SPAN  CLASS="texttt">MVar</SPAN> objects to create
+<A HREF="py_mlex.html#pythonclass:MLinExpr">linear matrix expressions</A> or
+<A HREF="py_mqex.html#pythonclass:MQuadExpr">quadratic matrix expressions</A>,
+which can then be used to build linear or quadratic objectives or
+constraints.
+
+<P>
+The returned <A HREF="py_mvar.html#pythonclass:MVar">MVar</A> object supports standard
+NumPy indexing and slicing.  An MVar of size <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.72ex; vertical-align: -0.12ex; " SRC="img31.svg"
+ ALT="$1$"></SPAN> can be passed in all places
+where gurobipy accepts a <A HREF="py_var.html#pythonclass:Var">Var</A> object.
+
+<P>
+<SPAN CLASS="LARGE"><SPAN  CLASS="textbf">Arguments:</SPAN></SPAN>
+<P>
+ <SPAN  CLASS="textbf">shape</SPAN>: An int, or tuple of int.  The <SPAN  CLASS="texttt">shape</SPAN> of the array.
+
+<P>
+ <SPAN  CLASS="textbf">lb (optional)</SPAN>: Lower bound(s) for new variables.
+
+<P>
+ <SPAN  CLASS="textbf">ub (optional)</SPAN>: Upper bound(s) for new variables.
+
+<P>
+ <SPAN  CLASS="textbf">obj (optional)</SPAN>: Objective coefficient(s) for new variables.
+
+<P>
+ <SPAN  CLASS="textbf">vtype (optional)</SPAN>: Variable type(s) for new variables.
+
+<P>
+ <SPAN  CLASS="textbf">name (optional)</SPAN>: Names for new variables.  The given name will be subscripted by the index of the generator
+expression, so if the index is an integer, <SPAN  CLASS="texttt">c</SPAN> would become
+<SPAN  CLASS="texttt">c[0]</SPAN>, <SPAN  CLASS="texttt">c[1]</SPAN>, etc.
+Note that the generated names will be stored as ASCII strings, so you
+should avoid using names that contain non-ASCII characters. In
+addition, names that contain spaces are strongly discouraged, because
+they can't be written to LP format files.
+
+<P>
+The values of the <code>lb</code>, <code>ub</code>, <code>obj</code>, and <code>vtype</code>
+arguments can either be scalars, lists, or ndarrays.  Their shapes
+should match the shape of the new <code>MVar</code> object, or they should
+be broadcastable to the given shape.
+
+<P>
+The <code>name</code> argument can either be a single string, used as a
+common base name that will be suffixed for each variable by its
+indices, or an ndarray of strings matching the shape of the
+new <code>MVar</code> object.
+
+<P>
+<SPAN CLASS="LARGE"><SPAN  CLASS="textbf">Return value:</SPAN></SPAN>
+
+<P>
+New <SPAN  CLASS="texttt">MVar</SPAN> object.
+
+<P>
+<SPAN CLASS="LARGE"><B>Example usage:</B></SPAN><PRE>
+  # Add a 4-by-2 matrix binary variable
+  x = model.addMVar((4,2), vtype=GRB.BINARY)
+  # Add a vector of three variables with non-default lower bounds
+  y = model.addMVar((3,), lb=[-1, -2, -1])
+</PRE>
+
+<P>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A
+ HREF="py_model_addqconstr.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="py_model.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="py_model_addmqconstr.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A>   
+<BR>
+<B> Next:</B> <A
+ HREF="py_model_addqconstr.html">Model.addQConstr()</A>
+<B> Up:</B> <A
+ HREF="py_model.html">Model</A>
+<B> Previous:</B> <A
+ HREF="py_model_addmqconstr.html">Model.addMQConstr()</A></DIV>
+<!--End of Navigation Panel-->
+
+</BODY>
+</HTML>

@@ -1,0 +1,106 @@
+<!DOCTYPE HTML>
+
+<!--Converted with LaTeX2HTML 2023.2 (Released July 1, 2023) -->
+<HTML lang="en">
+<HEAD>
+<TITLE>hstack()</TITLE>
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
+<META NAME="viewport" CONTENT="width=device-width, initial-scale=1.0">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2023.2">
+
+<LINK REL="STYLESHEET" HREF="refman.css">
+
+<LINK REL="next" HREF="py_vstack.html">
+<LINK REL="previous" HREF="py_matrix_friendly_api_fun.html">
+<LINK REL="next" HREF="py_vstack.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A
+ HREF="py_vstack.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="py_matrix_friendly_api_fun.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="py_matrix_friendly_api_fun.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A>   
+<BR>
+<B> Next:</B> <A
+ HREF="py_vstack.html">vstack()</A>
+<B> Up:</B> <A
+ HREF="py_matrix_friendly_api_fun.html">Matrix-Friendly API Functions</A>
+<B> Previous:</B> <A
+ HREF="py_matrix_friendly_api_fun.html">Matrix-Friendly API Functions</A>
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H3><A ID="SECTION0001127100000000000000"></A>
+<A ID="pythonmethod:hstack"></A>
+<BR>
+hstack()
+</H3>
+<SPAN CLASS="LARGE">
+<FONT COLOR="#801a1a"> <SPAN  CLASS="textbf">hstack</SPAN></FONT></SPAN> ( tup )
+
+
+<P>
+Stack arrays in sequence horizontally (column wise). This is equivalent to
+concatenation along the second axis, except for 1-D arrays where it
+concatenates along the first axis.
+
+<P>
+This method has the same behavior as <A ID="tex2html24"
+  HREF="https://numpy.org/doc/stable/reference/generated/numpy.hstack.html">numpy.hstack</A>, except
+that it always returns a gurobipy matrix-friendly API object of the appropriate
+type.
+
+<P>
+<SPAN CLASS="LARGE"><SPAN  CLASS="textbf">Arguments:</SPAN></SPAN>
+<P>
+ <SPAN  CLASS="textbf">tup</SPAN>: A sequence of matrix-friendly API objects
+
+<P>
+<SPAN CLASS="LARGE"><SPAN  CLASS="textbf">Return value:</SPAN></SPAN>
+
+<P>
+Returns a matrix-friendly API object. Note that the return type
+depends on the types of the input objects.
+
+<P>
+<SPAN CLASS="LARGE"><B>Example usage:</B></SPAN><PRE>
+X = model.addMVar((k, n))
+Y = model.addMVar((k, m))
+XY = gp.hstack((X, Y))     # (k, n+m) MVar
+</PRE>
+
+<P>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A
+ HREF="py_vstack.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="py_matrix_friendly_api_fun.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="py_matrix_friendly_api_fun.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A>   
+<BR>
+<B> Next:</B> <A
+ HREF="py_vstack.html">vstack()</A>
+<B> Up:</B> <A
+ HREF="py_matrix_friendly_api_fun.html">Matrix-Friendly API Functions</A>
+<B> Previous:</B> <A
+ HREF="py_matrix_friendly_api_fun.html">Matrix-Friendly API Functions</A></DIV>
+<!--End of Navigation Panel-->
+
+</BODY>
+</HTML>

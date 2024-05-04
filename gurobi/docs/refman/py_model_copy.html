@@ -1,0 +1,118 @@
+<!DOCTYPE HTML>
+
+<!--Converted with LaTeX2HTML 2023.2 (Released July 1, 2023) -->
+<HTML lang="en">
+<HEAD>
+<TITLE>Model.copy()</TITLE>
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
+<META NAME="viewport" CONTENT="width=device-width, initial-scale=1.0">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2023.2">
+
+<LINK REL="STYLESHEET" HREF="refman.css">
+
+<LINK REL="next" HREF="py_model_discardconcurrent.html">
+<LINK REL="previous" HREF="py_model_computeiis.html">
+<LINK REL="next" HREF="py_model_discardconcurrent.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A
+ HREF="py_model_discardconcurrent.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="py_model.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="py_model_computeiis.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A>   
+<BR>
+<B> Next:</B> <A
+ HREF="py_model_discardconcurrent.html">Model.discardConcurrentEnvs()</A>
+<B> Up:</B> <A
+ HREF="py_model.html">Model</A>
+<B> Previous:</B> <A
+ HREF="py_model_computeiis.html">Model.computeIIS()</A>
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H3><A ID="SECTION0001124400000000000000"></A>
+<A ID="pythonmethod:Model.copy"></A>
+<BR>
+Model.copy()
+</H3>
+<SPAN CLASS="LARGE">
+<FONT COLOR="#801a1a"> <SPAN  CLASS="textbf">copy</SPAN></FONT></SPAN> ( targetenv=None )
+
+<P>
+Copy a model.
+
+<P>
+With no arguments, the copy will live in the same environment as the
+original model.  Provide an argument to copy an existing model to a
+different environment, typically to enable different threads to
+operate on different versions of the same model, since multiple
+threads can not simultaneously work within the same environment.
+
+<P>
+Note that this method itself is not thread safe, so you should either
+call it from the main thread or protect access to it with a lock.
+
+<P>
+Note that pending updates will not be applied to the model, so you
+should call
+<A HREF="py_model_update.html#pythonmethod:Model.update">update</A>
+before copying if you would like those to be included in the copy.
+
+<P>
+For Compute Server users, note that you can copy a model from a
+client to a Compute Server environment, but it is not possible to
+copy models from a Compute Server environment to another
+(client or Compute Server) environment.
+
+<P>
+<SPAN CLASS="LARGE"><SPAN  CLASS="textbf">Arguments:</SPAN></SPAN>
+<P>
+ <SPAN  CLASS="textbf">targetenv (optional)</SPAN>: Environment to copy the model into.
+
+<P>
+<SPAN CLASS="LARGE"><SPAN  CLASS="textbf">Return value:</SPAN></SPAN>
+
+<P>
+Copy of model.
+
+<P>
+<SPAN CLASS="LARGE"><B>Example usage:</B></SPAN><PRE>
+  model.update() # If you have unstaged changes in the model
+  copy = model.copy()
+</PRE>
+
+<P>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A
+ HREF="py_model_discardconcurrent.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="py_model.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="py_model_computeiis.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A>   
+<BR>
+<B> Next:</B> <A
+ HREF="py_model_discardconcurrent.html">Model.discardConcurrentEnvs()</A>
+<B> Up:</B> <A
+ HREF="py_model.html">Model</A>
+<B> Previous:</B> <A
+ HREF="py_model_computeiis.html">Model.computeIIS()</A></DIV>
+<!--End of Navigation Panel-->
+
+</BODY>
+</HTML>

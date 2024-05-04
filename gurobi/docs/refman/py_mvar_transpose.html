@@ -1,0 +1,93 @@
+<!DOCTYPE HTML>
+
+<!--Converted with LaTeX2HTML 2023.2 (Released July 1, 2023) -->
+<HTML lang="en">
+<HEAD>
+<TITLE>MVar.transpose()</TITLE>
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
+<META NAME="viewport" CONTENT="width=device-width, initial-scale=1.0">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2023.2">
+
+<LINK REL="STYLESHEET" HREF="refman.css">
+
+<LINK REL="previous" HREF="py_mvar_tolist.html">
+<LINK REL="next" HREF="py_constr.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A
+ HREF="py_constr.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="py_mvar.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="py_mvar_tolist.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A>   
+<BR>
+<B> Next:</B> <A
+ HREF="py_constr.html">Constr</A>
+<B> Up:</B> <A
+ HREF="py_mvar.html">MVar</A>
+<B> Previous:</B> <A
+ HREF="py_mvar_tolist.html">MVar.tolist()</A>
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H3><A ID="SECTION0001141500000000000000"></A>
+<A ID="pythonmethod:MVar.transpose"></A>
+<BR>
+MVar.transpose()
+</H3>
+<SPAN CLASS="LARGE">
+<FONT COLOR="#801a1a"> <SPAN  CLASS="textbf">transpose</SPAN></FONT></SPAN> (  )
+
+<P>
+Transpose this MVar; create a new MVar object by reversing the order
+of the original MVar's axes.  For 1-D MVar objects, this routine
+simply returns a copy of the original MVar.
+
+<P>
+<SPAN CLASS="LARGE"><SPAN  CLASS="textbf">Return value:</SPAN></SPAN>
+
+<P>
+An MVar object representing the transpose.
+
+<P>
+<SPAN CLASS="LARGE"><B>Example usage:</B></SPAN><PRE>
+  x = model.addMVar((4, 1))  # Resembles a "column vector"
+  x_t = x.transpose()  # Same variables, but as a "row vector"
+  y = model.addMVar((3, 2))
+  y_t = x.transpose()  # Has shape (2, 3)
+</PRE>
+
+<P>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A
+ HREF="py_constr.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="py_mvar.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="py_mvar_tolist.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A>   
+<BR>
+<B> Next:</B> <A
+ HREF="py_constr.html">Constr</A>
+<B> Up:</B> <A
+ HREF="py_mvar.html">MVar</A>
+<B> Previous:</B> <A
+ HREF="py_mvar_tolist.html">MVar.tolist()</A></DIV>
+<!--End of Navigation Panel-->
+
+</BODY>
+</HTML>

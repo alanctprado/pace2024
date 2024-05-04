@@ -1,0 +1,203 @@
+<!DOCTYPE HTML>
+
+<!--Converted with LaTeX2HTML 2023.2 (Released July 1, 2023) -->
+<HTML lang="en">
+<HEAD>
+<TITLE>MVar</TITLE>
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
+<META NAME="viewport" CONTENT="width=device-width, initial-scale=1.0">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2023.2">
+
+<LINK REL="STYLESHEET" HREF="refman.css">
+
+<LINK REL="next" HREF="py_constr.html">
+<LINK REL="previous" HREF="py_var.html">
+<LINK REL="next" HREF="py_mvar_copy.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A
+ HREF="py_mvar_copy.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="py_python_api_details.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="py_var_setattr.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A>   
+<BR>
+<B> Next:</B> <A
+ HREF="py_mvar_copy.html">MVar.copy()</A>
+<B> Up:</B> <A
+ HREF="py_python_api_details.html">Python API Details</A>
+<B> Previous:</B> <A
+ HREF="py_var_setattr.html">Var.setAttr()</A>
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A ID="SECTION000114000000000000000"></A>
+<A ID="pythonclass:MVar"></A>
+<BR>
+MVar
+</H2>
+
+<P>
+Gurobi matrix variable object.  An <code>MVar</code> is a NumPy ndarray of
+Gurobi variables.  Variables are always associated with a particular
+model.  You typically create these objects using
+<A HREF="py_model_addmvar.html#pythonmethod:Model.addMVar">Model.addMVar</A>.
+
+<P>
+Many concepts, properties and methods of the MVar class lean on
+equivalents in NumPy's ndarray class.  For explanations of concepts
+like shape, dimensions, or broadcasting, we refer you to the NumPy
+documentation.
+
+<P>
+You generally use <code>MVar</code> objects to build matrix expressions,
+typically using overloaded operators.  You can build
+<A HREF="py_mlex.html#pythonclass:MLinExpr">linear matrix expressions</A> or
+<A HREF="py_mqex.html#pythonclass:MQuadExpr">quadratic matrix expressions</A>:
+<PRE>
+  expr1 = A @ x
+  expr2 = A @ x + B @ y + z
+  expr3 = x @ A @ x + y @ B @ y
+</PRE>
+The first two expressions are linear, while the third is quadratic.
+
+<P>
+In the examples above (and in general), <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.81ex; vertical-align: -0.12ex; " SRC="img65.svg"
+ ALT="$A$"></SPAN> and <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.81ex; vertical-align: -0.12ex; " SRC="img59.svg"
+ ALT="$B$"></SPAN> can be NumPy
+ndarray objects or any of the sparse matrix classes defined in
+SciPy.sparse.  Dimensions of the operands must compatible, in the
+usual sense of Python's matrix multiplication operator.  For example,
+in the expression <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.84ex; vertical-align: -0.12ex; " SRC="img81.svg"
+ ALT="$A @ x$"></SPAN>, both <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.81ex; vertical-align: -0.12ex; " SRC="img65.svg"
+ ALT="$A$"></SPAN> and <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.23ex; vertical-align: -0.12ex; " SRC="img29.svg"
+ ALT="$x$"></SPAN> must have at least one
+dimension, and their inner-most dimensions must agree.  For a complete
+description of shape compatibility rules, we refer you to Python's
+documentation
+
+<P>
+An expression is typically then passed to
+<A HREF="py_model_setobjective.html#pythonmethod:Model.setObjective">setObjective</A>
+(to set the optimization objective) or
+<A HREF="py_model_addconstr.html#pythonmethod:Model.addConstr">addConstr</A>
+(to add a constraint).
+
+<P>
+MVar objects support standard NumPy indexing and slicing.  An MVar
+of size <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.72ex; vertical-align: -0.12ex; " SRC="img31.svg"
+ ALT="$1$"></SPAN> can be passed in all places where gurobipy accepts a
+Var object.
+
+<P>
+Variable objects have a number of attributes.  The full list can be
+found in the <A HREF="attributes.html#sec:Attributes">Attributes</A> section of this
+document.  Some variable attributes can only be queried, while others
+can also be set.  Recall that the Gurobi Optimizer employs a lazy
+update approach, so changes to attributes don't take effect until the
+next call to <A HREF="py_model_update.html#pythonmethod:Model.update">Model.update</A>,
+<A HREF="py_model_optimize.html#pythonmethod:Model.optimize">Model.optimize</A>, or
+<A HREF="py_model_write.html#pythonmethod:Model.write">Model.write</A> on the associated
+model.
+
+<P>
+We should point out a few things about variable attributes.  Consider
+the <code>lb</code> attribute.  Its value can be queried using
+<code>mvar.lb</code>.  The Gurobi library ignores letter case in attribute
+names, so it can also be queried as <code>var.LB</code>.
+Attribute values are returned as a NumPy <code>ndarray</code> that has the
+same shape as <code>mvar</code>, where each element contains the attribute
+value for the corresponding element of the <code>MVar</code> object.
+An attribute can be set,
+using a standard assignment statement (e.g., <code>var.lb = l</code>),
+with <code>l</code> being either an <code>ndarray</code> with the appropriate
+shape, or a scalar which is then applied to all of the associated
+variables.
+However, as mentioned earlier, attribute modification is done in a
+lazy fashion, so you won't see the effect of the change immediately.
+And some attributes can not be set (e.g., the <code>x</code> attribute), so
+attempts to assign new values to them will raise an exception.
+
+<P>
+You can also use <A HREF="py_mvar_getattr.html#pythonmethod:MVar.getAttr">MVar.getAttr</A>/
+<A HREF="py_mvar_setattr.html#pythonmethod:MVar.setAttr">MVar.setAttr</A> to access
+attributes.  The attribute name can be passed to these routines as a
+string, or you can use the constants defined in the
+<A HREF="py_attr.html#pythonconstants:GRB.Attr">GRB.Attr</A> class (e.g.,
+<code>GRB.Attr.LB</code>).
+
+<P>
+<BR><HR>
+<!--Table of Child-Links-->
+<A ID="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
+
+<UL CLASS="ChildLinks">
+<LI><A ID="tex2html3828"
+  HREF="py_mvar_copy.html">MVar.copy()</A>
+<LI><A ID="tex2html3829"
+  HREF="py_mvar_diagonal.html">MVar.diagonal()</A>
+<LI><A ID="tex2html3830"
+  HREF="py_mvar_fromlist.html">MVar.fromlist()</A>
+<LI><A ID="tex2html3831"
+  HREF="py_mvar_fromvar.html">MVar.fromvar()</A>
+<LI><A ID="tex2html3832"
+  HREF="py_mvar_getattr.html">MVar.getAttr()</A>
+<LI><A ID="tex2html3833"
+  HREF="py_mvar_item.html">MVar.item()</A>
+<LI><A ID="tex2html3834"
+  HREF="py_mvar_ndim.html">MVar.ndim</A>
+<LI><A ID="tex2html3835"
+  HREF="py_mvar_reshape.html">MVar.reshape()</A>
+<LI><A ID="tex2html3836"
+  HREF="py_mvar_setattr.html">MVar.setAttr()</A>
+<LI><A ID="tex2html3837"
+  HREF="py_mvar_shape.html">MVar.shape</A>
+<LI><A ID="tex2html3838"
+  HREF="py_mvar_size.html">MVar.size</A>
+<LI><A ID="tex2html3839"
+  HREF="py_mvar_sum.html">MVar.sum()</A>
+<LI><A ID="tex2html3840"
+  HREF="py_mvar_t.html">MVar.T</A>
+<LI><A ID="tex2html3841"
+  HREF="py_mvar_tolist.html">MVar.tolist()</A>
+<LI><A ID="tex2html3842"
+  HREF="py_mvar_transpose.html">MVar.transpose()</A>
+</UL>
+<!--End of Table of Child-Links-->
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A
+ HREF="py_mvar_copy.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="py_python_api_details.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="py_var_setattr.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A>   
+<BR>
+<B> Next:</B> <A
+ HREF="py_mvar_copy.html">MVar.copy()</A>
+<B> Up:</B> <A
+ HREF="py_python_api_details.html">Python API Details</A>
+<B> Previous:</B> <A
+ HREF="py_var_setattr.html">Var.setAttr()</A></DIV>
+<!--End of Navigation Panel-->
+
+</BODY>
+</HTML>

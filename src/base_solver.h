@@ -17,7 +17,7 @@
 #define __PACE2024__BASE_SOLVER_HPP
 
 #include "bipartite_graph.h"
-#include "ip_solver_lpsolve.h"
+#include "ip_solver.h"
 
 #include <memory>
 
@@ -36,7 +36,7 @@ public:
 
 protected:
   /** Integer programming solver. */
-  std::unique_ptr<ip::LPSolveSolver> m_ipSolver;
+  std::unique_ptr<ip::IntegerProgrammingSolverBase> m_ipSolver;
   const graph::BipartiteGraph m_graph;
   void verifySolution(int expectedCrossings);
 };

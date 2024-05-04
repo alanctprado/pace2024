@@ -1,0 +1,113 @@
+<!DOCTYPE HTML>
+
+<!--Converted with LaTeX2HTML 2023.2 (Released July 1, 2023) -->
+<HTML lang="en">
+<HEAD>
+<TITLE>GRBpresolvemodel</TITLE>
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
+<META NAME="viewport" CONTENT="width=device-width, initial-scale=1.0">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2023.2">
+
+<LINK REL="STYLESHEET" HREF="refman.css">
+
+<LINK REL="next" HREF="c_computeiis.html">
+<LINK REL="previous" HREF="c_optimizeasync.html">
+<LINK REL="next" HREF="c_computeiis.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A
+ HREF="c_computeiis.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="c_model_solution.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="c_optimizeasync.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A>   
+<BR>
+<B> Next:</B> <A
+ HREF="c_computeiis.html">GRBcomputeIIS</A>
+<B> Up:</B> <A
+ HREF="c_model_solution.html">Model Solution</A>
+<B> Previous:</B> <A
+ HREF="c_optimizeasync.html">GRBoptimizeasync</A>
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H3><A ID="SECTION00033300000000000000"></A>
+<A ID="routine:GRBpresolvemodel"></A>
+<BR>
+GRBpresolvemodel
+</H3>
+<TABLE class="PAD " style="">
+<TR><TD CLASS="LEFT">int</TD>
+<TD CLASS="LEFT"><SPAN CLASS="LARGE"><FONT COLOR="#801a1a"> <SPAN  CLASS="textbf">GRBpresolvemodel</SPAN></FONT></SPAN> (</TD>
+<TD CLASS="LEFT">GRBmodel</TD>
+<TD CLASS="LEFT">*model,</TD>
+</TR>
+<TR><TD CLASS="LEFT">&nbsp;</TD>
+<TD CLASS="LEFT">&nbsp;</TD>
+<TD CLASS="LEFT">GRBmodel</TD>
+<TD CLASS="LEFT">**presolvedP )</TD>
+</TR>
+</TABLE>
+
+<P>
+Perform presolve on a model.
+
+<P>
+Please note that the presolved model computed by this function may be
+different from the presolved model computed when optimizing the model.
+
+<P>
+<SPAN CLASS="LARGE"><SPAN  CLASS="textbf">Return value:</SPAN></SPAN>
+
+<P>
+A non-zero return value indicates that a problem occurred while presolving the model.
+Refer to the <A HREF="error_codes.html#sec:ErrorCodes">Error Code</A> table for a
+list of possible return values.  Details on the error can be obtained
+by calling <A HREF="c_geterrormsg.html#routine:GRBgeterrormsg">GRBgeterrormsg</A>.
+
+<P>
+<SPAN CLASS="LARGE"><SPAN  CLASS="textbf">Arguments:</SPAN></SPAN>
+<P>
+ <SPAN  CLASS="textbf">model</SPAN>: The model to be presolved.
+
+<P>
+ <SPAN  CLASS="textbf">presolveP</SPAN>: The location in which the pointer to the presolved model
+  should be placed.
+
+<P>
+<SPAN CLASS="LARGE"><B>Example usage:</B></SPAN><PRE>
+  error = GRBpresolvemodel(model, &amp;presolvedP);
+</PRE>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A
+ HREF="c_computeiis.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="c_model_solution.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="c_optimizeasync.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A>   
+<BR>
+<B> Next:</B> <A
+ HREF="c_computeiis.html">GRBcomputeIIS</A>
+<B> Up:</B> <A
+ HREF="c_model_solution.html">Model Solution</A>
+<B> Previous:</B> <A
+ HREF="c_optimizeasync.html">GRBoptimizeasync</A></DIV>
+<!--End of Navigation Panel-->
+
+</BODY>
+</HTML>

@@ -1,0 +1,177 @@
+<!DOCTYPE HTML>
+
+<!--Converted with LaTeX2HTML 2023.2 (Released July 1, 2023) -->
+<HTML lang="en">
+<HEAD>
+<TITLE>gc_funcnonlinear_c++.cpp</TITLE>
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
+<META NAME="viewport" CONTENT="width=device-width, initial-scale=1.0">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2023.2">
+
+<LINK REL="STYLESHEET" HREF="examples.css">
+
+<LINK REL="next" HREF="gc_pwl_cpp_cpp.html">
+<LINK REL="previous" HREF="fixanddive_cpp_cpp.html">
+<LINK REL="next" HREF="gc_pwl_cpp_cpp.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A
+ HREF="gc_pwl_cpp_cpp.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="cpp_examples.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="fixanddive_cpp_cpp.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A>   
+<BR>
+<B> Next:</B> <A
+ HREF="gc_pwl_cpp_cpp.html">gc_pwl_c++.cpp</A>
+<B> Up:</B> <A
+ HREF="cpp_examples.html">C++ Examples</A>
+<B> Previous:</B> <A
+ HREF="fixanddive_cpp_cpp.html">fixanddive_c++.cpp</A>
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H3><A ID="SECTION00022900000000000000"></A>
+<A ID="subsubsection:gc_funcnonlinear_c++.cpp"></A>
+<BR>
+gc_funcnonlinear_c++.cpp
+</H3>
+<SCRIPT SRC="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></SCRIPT>
+<BR>
+<PRE CLASS="prettyprint">/* Copyright 2024, Gurobi Optimization, LLC
+
+This example considers the following nonconvex nonlinear problem
+
+ minimize   sin(x) + cos(2*x) + 1
+ subject to  0.25*exp(x) - x &lt;= 0
+             -1 &lt;= x &lt;= 4
+
+ We show you two approaches to solve it as a nonlinear model:
+
+  1) Set the paramter FuncNonlinear = 1 to handle all general function
+     constraints as true nonlinear functions.
+
+  2) Set the attribute FuncNonlinear = 1 for each general function
+     constraint to handle these as true nonlinear functions.
+*/
+#if defined (WIN32) || defined (WIN64)
+#include &lt;Windows.h&gt;
+#endif
+
+#include "gurobi_c++.h"
+using namespace std;
+
+static void
+printsol(GRBModel&amp; m, GRBVar&amp; x)
+{
+  cout &lt;&lt; "x = " &lt;&lt; x.get(GRB_DoubleAttr_X) &lt;&lt; endl;
+  cout &lt;&lt; "Obj = " &lt;&lt; m.get(GRB_DoubleAttr_ObjVal) &lt;&lt; endl;
+}
+
+int
+main(int argc, char* argv[])
+{
+  try {
+
+    // Create environment
+
+    GRBEnv env = GRBEnv();
+
+    // Create a new model
+
+    GRBModel m = GRBModel(env);
+
+    // Create variables
+
+    GRBVar x     = m.addVar(-1.0, 4.0, 0.0, GRB_CONTINUOUS, "x");
+    GRBVar twox  = m.addVar(-2.0, 8.0, 0.0, GRB_CONTINUOUS, "twox");
+    GRBVar sinx  = m.addVar(-1.0, 1.0, 0.0, GRB_CONTINUOUS, "sinx");
+    GRBVar cos2x = m.addVar(-1.0, 1.0, 0.0, GRB_CONTINUOUS, "cos2x");
+    GRBVar expx  = m.addVar(0.0, GRB_INFINITY, 0.0, GRB_CONTINUOUS, "expx");
+
+    // Set objective
+
+    m.setObjective(sinx + cos2x + 1, GRB_MINIMIZE);
+
+    // Add linear constraints
+
+    m.addConstr(0.25*expx - x &lt;= 0, "l1");
+    m.addConstr(2*x - twox == 0, "l2");
+
+    // Add general function constraints
+    // sinx = sin(x)
+    GRBGenConstr gcf1 = m.addGenConstrSin(x, sinx, "gcf1");
+    // cos2x = cos(twox)
+    GRBGenConstr gcf2 = m.addGenConstrCos(twox, cos2x, "gcf2");
+    // expx = exp(x)
+    GRBGenConstr gcf3 = m.addGenConstrExp(x, expx, "gcf3");
+
+  // Approach 1) Set FuncNonlinear parameter
+
+    m.set(GRB_IntParam_FuncNonlinear, 1);
+
+    // Optimize the model and print solution
+
+    m.optimize();
+    printsol(m, x);
+
+    // Restore unsolved state and reset FuncNonlinear parameter to its
+    // default value
+    m.reset();
+    m.set(GRB_IntParam_FuncNonlinear, 0);
+
+  // Approach 2) Set FuncNonlinear attribute for every
+  //             general function constraint
+
+    gcf1.set(GRB_IntAttr_FuncNonlinear, 1);
+    gcf2.set(GRB_IntAttr_FuncNonlinear, 1);
+    gcf3.set(GRB_IntAttr_FuncNonlinear, 1);
+
+    // Optimize the model and print solution
+
+    m.optimize();
+    printsol(m, x);
+
+  } catch(GRBException e) {
+    cout &lt;&lt; "Error code = " &lt;&lt; e.getErrorCode() &lt;&lt; endl;
+    cout &lt;&lt; e.getMessage() &lt;&lt; endl;
+  } catch(...) {
+    cout &lt;&lt; "Exception during optimization" &lt;&lt; endl;
+  }
+
+  return 0;
+}
+</PRE>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A
+ HREF="gc_pwl_cpp_cpp.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="cpp_examples.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="fixanddive_cpp_cpp.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A>   
+<BR>
+<B> Next:</B> <A
+ HREF="gc_pwl_cpp_cpp.html">gc_pwl_c++.cpp</A>
+<B> Up:</B> <A
+ HREF="cpp_examples.html">C++ Examples</A>
+<B> Previous:</B> <A
+ HREF="fixanddive_cpp_cpp.html">fixanddive_c++.cpp</A></DIV>
+<!--End of Navigation Panel-->
+
+</BODY>
+</HTML>

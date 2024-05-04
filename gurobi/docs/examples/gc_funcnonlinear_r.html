@@ -1,0 +1,154 @@
+<!DOCTYPE HTML>
+
+<!--Converted with LaTeX2HTML 2023.2 (Released July 1, 2023) -->
+<HTML lang="en">
+<HEAD>
+<TITLE>gc_funcnonlinear.R</TITLE>
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
+<META NAME="viewport" CONTENT="width=device-width, initial-scale=1.0">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2023.2">
+
+<LINK REL="STYLESHEET" HREF="examples.css">
+
+<LINK REL="next" HREF="gc_pwl_r.html">
+<LINK REL="previous" HREF="fixanddive_r.html">
+<LINK REL="next" HREF="gc_pwl_r.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A
+ HREF="gc_pwl_r.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="r_examples.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="fixanddive_r.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A>   
+<BR>
+<B> Next:</B> <A
+ HREF="gc_pwl_r.html">gc_pwl.R</A>
+<B> Up:</B> <A
+ HREF="r_examples.html">R Examples</A>
+<B> Previous:</B> <A
+ HREF="fixanddive_r.html">fixanddive.R</A>
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H3><A ID="SECTION00028600000000000000"></A>
+<A ID="subsubsection:gc_funcnonlinear.R"></A>
+<BR>
+gc_funcnonlinear.R
+</H3>
+<SCRIPT SRC="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></SCRIPT>
+<BR>
+<PRE CLASS="prettyprint"># Copyright 2024, Gurobi Optimization, LLC
+#
+# This example considers the following nonconvex nonlinear problem
+#
+#  minimize   sin(x) + cos(2*x) + 1
+#  subject to  0.25*exp(x) - x &lt;= 0
+#              -1 &lt;= x &lt;= 4
+#
+#  We show you two approaches to solve it as a nonlinear model:
+#
+#  1) Set the paramter FuncNonlinear = 1 to handle all general function
+#     constraints as true nonlinear functions.
+#
+#  2) Set the attribute FuncNonlinear = 1 for each general function
+#     constraint to handle these as true nonlinear functions.
+
+library(gurobi)
+
+printsol &lt;- function(model, result) {
+    print(sprintf('%s = %g',
+                  model$varnames[1], result$x[1]))
+    print(sprintf('Obj = %g',  + result$objval))
+}
+
+model &lt;- list()
+
+# Five variables, two linear constraints
+model$varnames &lt;- c('x', 'twox', 'sinx', 'cos2x', 'expx')
+model$lb       &lt;- c(-1, -2, -1, -1, 0)
+model$ub       &lt;- c(4, 8, 1, 1, Inf)
+model$A        &lt;- matrix(c(-1, 0, 0, 0, 0.25, 2, -1, 0, 0, 0), nrow=2, ncol=5, byrow=T)
+model$rhs      &lt;- c(0, 0)
+
+# Objective
+model$modelsense &lt;- 'min'
+model$obj        &lt;- c(0, 0, 1, 1, 0)
+model$objcon     &lt;- 1
+
+# Set sinx = sin(x)
+model$genconsin           &lt;- list()
+model$genconsin[[1]]      &lt;- list()
+model$genconsin[[1]]$xvar &lt;- 1L
+model$genconsin[[1]]$yvar &lt;- 3L
+model$genconsin[[1]]$name &lt;- 'gcf1'
+
+# Set cos2x = cos(twox)
+model$genconcos           &lt;- list()
+model$genconcos[[1]]      &lt;- list()
+model$genconcos[[1]]$xvar &lt;- 2L
+model$genconcos[[1]]$yvar &lt;- 4L
+model$genconcos[[1]]$name &lt;- 'gcf2'
+
+# Set expx = exp(x)
+model$genconexp           &lt;- list()
+model$genconexp[[1]]      &lt;- list()
+model$genconexp[[1]]$xvar &lt;- 1L
+model$genconexp[[1]]$yvar &lt;- 5L
+model$genconexp[[1]]$name &lt;- 'gcf3'
+
+# First approach: Set Funcnonlinear parameter
+params               &lt;- list()
+params$FuncNonlinear &lt;- 1
+
+# Solve and print solution
+result = gurobi(model, params)
+printsol(model, result)
+
+# Second approach: Set FuncNonlinear attribute for every
+#                  general function constraint
+
+model$genconsin[[1]]$funcnonlinear &lt;- 1
+model$genconcos[[1]]$funcnonlinear &lt;- 1
+model$genconexp[[1]]$funcnonlinear &lt;- 1
+
+# Solve and print solution
+result = gurobi(model)
+printsol(model, result)
+
+# Clear space
+rm(model, result)
+</PRE>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A
+ HREF="gc_pwl_r.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="r_examples.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="fixanddive_r.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A>   
+<BR>
+<B> Next:</B> <A
+ HREF="gc_pwl_r.html">gc_pwl.R</A>
+<B> Up:</B> <A
+ HREF="r_examples.html">R Examples</A>
+<B> Previous:</B> <A
+ HREF="fixanddive_r.html">fixanddive.R</A></DIV>
+<!--End of Navigation Panel-->
+
+</BODY>
+</HTML>

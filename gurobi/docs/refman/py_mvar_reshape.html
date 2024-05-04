@@ -1,0 +1,106 @@
+<!DOCTYPE HTML>
+
+<!--Converted with LaTeX2HTML 2023.2 (Released July 1, 2023) -->
+<HTML lang="en">
+<HEAD>
+<TITLE>MVar.reshape()</TITLE>
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
+<META NAME="viewport" CONTENT="width=device-width, initial-scale=1.0">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2023.2">
+
+<LINK REL="STYLESHEET" HREF="refman.css">
+
+<LINK REL="next" HREF="py_mvar_setattr.html">
+<LINK REL="previous" HREF="py_mvar_ndim.html">
+<LINK REL="next" HREF="py_mvar_setattr.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A
+ HREF="py_mvar_setattr.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="py_mvar.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="py_mvar_ndim.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A>   
+<BR>
+<B> Next:</B> <A
+ HREF="py_mvar_setattr.html">MVar.setAttr()</A>
+<B> Up:</B> <A
+ HREF="py_mvar.html">MVar</A>
+<B> Previous:</B> <A
+ HREF="py_mvar_ndim.html">MVar.ndim</A>
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H3><A ID="SECTION000114800000000000000"></A>
+<A ID="pythonmethod:MVar.reshape"></A>
+<BR>
+MVar.reshape()
+</H3>
+<SPAN CLASS="LARGE">
+<FONT COLOR="#801a1a"> <SPAN  CLASS="textbf">reshape</SPAN></FONT></SPAN> ( shape, order='C' )
+
+<P>
+Return a copy of this MVar with the same variables, but with a new
+shape.
+
+<P>
+<SPAN CLASS="LARGE"><SPAN  CLASS="textbf">Arguments:</SPAN></SPAN>
+<P>
+ <SPAN  CLASS="textbf">shape</SPAN>: An int, or a tuple of int.  The new shape should be
+compatible with this MVar's shape.  The special value of -1 can be
+passed in at one position, which then infers the length of that
+dimension from the overall number of Var objects in the MVar and the
+provided lengths of the other dimensions.
+
+<P>
+ <SPAN  CLASS="textbf">order (optional)</SPAN>: A string 'C' or 'F'.  Read the elements of
+this MVar using C-like ('C') or Fortran-like ('F') order, and write
+the elements into the reshaped array in this order.
+
+<P>
+<SPAN CLASS="LARGE"><SPAN  CLASS="textbf">Return value:</SPAN></SPAN>
+
+<P>
+An MVar of requested shape
+
+<P>
+<SPAN CLASS="LARGE"><B>Example usage:</B></SPAN><PRE>
+  x = model.addMVar((2, 2))
+  x_vec = x.reshape(-1, order='C')  # 1-D result, rows of x stacked
+  x_vec = x.reshape(-1, order='F')  # 1-D result, columns of x stacked
+</PRE>
+
+<P>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A
+ HREF="py_mvar_setattr.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="py_mvar.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="py_mvar_ndim.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A>   
+<BR>
+<B> Next:</B> <A
+ HREF="py_mvar_setattr.html">MVar.setAttr()</A>
+<B> Up:</B> <A
+ HREF="py_mvar.html">MVar</A>
+<B> Previous:</B> <A
+ HREF="py_mvar_ndim.html">MVar.ndim</A></DIV>
+<!--End of Navigation Panel-->
+
+</BODY>
+</HTML>

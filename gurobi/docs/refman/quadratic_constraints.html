@@ -1,0 +1,181 @@
+<!DOCTYPE HTML>
+
+<!--Converted with LaTeX2HTML 2023.2 (Released July 1, 2023) -->
+<HTML lang="en">
+<HEAD>
+<TITLE>Quadratic Constraints</TITLE>
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
+<META NAME="viewport" CONTENT="width=device-width, initial-scale=1.0">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2023.2">
+
+<LINK REL="STYLESHEET" HREF="refman.css">
+
+<LINK REL="next" HREF="general_constraints.html">
+<LINK REL="previous" HREF="sos_constraints.html">
+<LINK REL="next" HREF="general_constraints.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A
+ HREF="general_constraints.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="constraints.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="sos_constraints.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A>   
+<BR>
+<B> Next:</B> <A
+ HREF="general_constraints.html">General Constraints</A>
+<B> Up:</B> <A
+ HREF="constraints.html">Constraints</A>
+<B> Previous:</B> <A
+ HREF="sos_constraints.html">SOS Constraints</A>
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H3><A ID="SECTION000162300000000000000"></A>
+<A ID="subsubsection:QuadraticConstraints"></A>
+<BR>
+Quadratic Constraints
+</H3>
+
+<P>
+A quadratic constraint allows you to restrict the value of a quadratic
+expression.  For example, you may require that any feasible solution
+satisfy the constraint <!-- MATH
+ $3 x^2 + 4 y^2 + 5 z \leq 10$
+ -->
+<SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.57ex; vertical-align: -0.57ex; " SRC="img122.svg"
+ ALT="$3 x^2 + 4 y^2 + 5 z \leq 10$"></SPAN>.  Note that the
+matrix-oriented Gurobi APIs (C, MATLAB, and R) require the right-hand
+side of a quadratic constraint to be a constant, while the
+object-oriented APIs (C++, Java, .NET, and Python) allow arbitrary
+quadratic expressions on both sides of the comparator.
+
+<P>
+The computed solution should satisfy the stated constraint to within
+<A HREF="feasibilitytol.html#parameter:FeasibilityTol">FeasibilityTol</A>.  Quadratic
+constraints are often much more challenging to satisfy than linear
+constraints, so tightening the parameter may increase runtimes
+dramatically.
+
+<P>
+Gurobi can handle both convex and non-convex quadratic constraints.
+However, there are some subtle and important differences in how the
+different constraint types are handled.  In general, it is much easier
+to solve a model whose constraints all have convex feasible regions.
+It is actually quite difficult to
+recognize all such cases, but the following forms are always
+recognized:
+
+<UL>
+<LI><!-- MATH
+ $x^TQx + q^Tx \le b$
+ -->
+<SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.63ex; vertical-align: -0.57ex; " SRC="img52.svg"
+ ALT="$x^TQx + q^Tx \le b$"></SPAN>, where <SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.26ex; vertical-align: -0.57ex; " SRC="img54.svg"
+ ALT="$Q$"></SPAN> is Positive Semi-Definite (PSD)
+</LI>
+<LI><!-- MATH
+ $x^TQx \le y^{2}$
+ -->
+<SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.63ex; vertical-align: -0.57ex; " SRC="img123.svg"
+ ALT="$x^TQx \le y^{2}$"></SPAN>, where <SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.26ex; vertical-align: -0.57ex; " SRC="img54.svg"
+ ALT="$Q$"></SPAN> is Positive Semi-Definite (PSD),
+    <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.23ex; vertical-align: -0.12ex; " SRC="img29.svg"
+ ALT="$x$"></SPAN> is a vector of variables, and
+    <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.68ex; vertical-align: -0.57ex; " SRC="img45.svg"
+ ALT="$y$"></SPAN> is a non-negative variable (a Second-Order Cone constraint,
+    if <SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.26ex; vertical-align: -0.57ex; " SRC="img124.svg"
+ ALT="$Q = I$"></SPAN>, identity matrix)
+</LI>
+<LI><SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.63ex; vertical-align: -0.57ex; " SRC="img125.svg"
+ ALT="$x^TQx \le y z$"></SPAN>, where <SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.26ex; vertical-align: -0.57ex; " SRC="img54.svg"
+ ALT="$Q$"></SPAN> is Positive Semi-Definite (PSD),
+    <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.23ex; vertical-align: -0.12ex; " SRC="img29.svg"
+ ALT="$x$"></SPAN> is a vector of variables,
+    and <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.68ex; vertical-align: -0.57ex; " SRC="img45.svg"
+ ALT="$y$"></SPAN> and <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.23ex; vertical-align: -0.12ex; " SRC="img36.svg"
+ ALT="$z$"></SPAN> are non-negative variables
+    (a rotated Second-Order Cone constraint, if <SPAN CLASS="MATH"><IMG
+ STYLE="height: 2.26ex; vertical-align: -0.57ex; " SRC="img124.svg"
+ ALT="$Q = I$"></SPAN>, identity matrix)
+</LI>
+</UL>
+To be more precise, a quadratic constraint will always be recognized
+as convex if presolve is able to transform it into one of these forms.
+Note that if all quadratic terms in a quadratic constraint contain at
+least one binary variable, then presolve will always be able to
+transform it to a convex form.
+
+<P>
+Why distinguish between convex and non-convex quadratic constraints?  In some
+situations you may know that your problem should be convex, and thus
+it may be a sign of a modeling error if your model isn't recognized as
+such.  To avoid accidentally solving a much harder problem than you may
+have intended, you can set the
+<A HREF="nonconvex.html#parameter:NonConvex">NonConvex</A> parameter to either 0 or
+1. In the default setting of -1 or if the
+<A HREF="nonconvex.html#parameter:NonConvex">NonConvex</A> parameter is set to 2,
+Gurobi will accept arbitrary quadratic constraints and attempt to
+solve the resulting model using the appropriate algorithm.
+
+<P>
+Note that other non-convex quadratic solvers often only find locally
+optimal solutions.  The algorithms in Gurobi explore the entire search
+space, so they provide a globally valid lower bound on the optimal
+objective value, and given enough time they will find a globally
+optimal solution (subject to tolerances).
+
+<P>
+We would like to note a subtle point here regarding terminology.  A
+quadratic constraint that involves only products of disjoint pairs of
+variables is often called a <EM>bilinear constraint</EM>, and a model
+that contains bilinear constraints is often called a <EM>bilinear
+  program</EM>.  Bilinear constraints are a special case of non-convex
+quadratic constraints, and the algorithms Gurobi uses to handle the
+latter are also well suited to solving bilinear programming problems.
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A
+ HREF="general_constraints.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="constraints.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="sos_constraints.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A>   
+<BR>
+<B> Next:</B> <A
+ HREF="general_constraints.html">General Constraints</A>
+<B> Up:</B> <A
+ HREF="constraints.html">Constraints</A>
+<B> Previous:</B> <A
+ HREF="sos_constraints.html">SOS Constraints</A></DIV>
+<!--End of Navigation Panel-->
+
+</BODY>
+</HTML>
