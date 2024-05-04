@@ -11,10 +11,17 @@ set (pace2024_VERSION_MINOR 0)
 # Headers
 include_directories(src)
 include_directories(lp_solve_5.5)
+include_directories(gurobi/include)
 
 message("Building LP Solve")
 execute_process(
   COMMAND sh compile_lpsolve.sh
+  WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+)
+
+message("Building Gurobi")
+execute_process(
+  COMMAND sh compile_gurobi.sh
   WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
 )
 
@@ -27,6 +34,7 @@ set(SRC_FILES
   "${PROJECT_SOURCE_DIR}/src/environment.cpp"
   "${PROJECT_SOURCE_DIR}/src/graph.cpp"
   "${PROJECT_SOURCE_DIR}/src/ip_solver_lpsolve.cpp"
+  "${PROJECT_SOURCE_DIR}/src/ip_solver_gurobi.cpp"
   "${PROJECT_SOURCE_DIR}/src/options.cpp"
   "${PROJECT_SOURCE_DIR}/src/wlgraph.cpp"
   "${PROJECT_SOURCE_DIR}/src/lgraph.cpp"
@@ -44,8 +52,11 @@ set(CMAKE_CXX_FLAGS "-Ofast")
 SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 add_executable(pace $<TARGET_OBJECTS:common> "${PROJECT_SOURCE_DIR}/src/main.cpp")
 target_link_libraries(pace "${PROJECT_SOURCE_DIR}/lp_solve_5.5/lpsolve55/bin/ux64/liblpsolve55.a" dl)
+target_link_libraries(pace "${PROJECT_SOURCE_DIR}/gurobi/src/build/libgurobi_c++.a" dl)
+target_link_libraries(pace "${PROJECT_SOURCE_DIR}/gurobi/lib/libgurobi110.so" dl)
 
 add_custom_target(run_tiny
+  COMMAND make -C build
   COMMAND sh run_set.sh tiny-set "$(ARGS)"
   WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
 )
