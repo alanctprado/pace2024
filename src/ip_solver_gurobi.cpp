@@ -46,7 +46,8 @@ int GurobiSolver::shorter()
   unsigned columns = n * (n - 1) / 2;
 
   GRBEnv env = GRBEnv(true);
-  env.set("LogFile", "gurobi-solver.log");
+  env.set(GRB_IntParam_OutputFlag, 0);
+  // env.set("LogFile", "gurobi-solver.log");
   env.start();
 
   GRBModel model = GRBModel(env);
