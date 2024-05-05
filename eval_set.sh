@@ -5,7 +5,7 @@ if [ $# -lt 3 ]; then
     exit 1
 fi
 
-out=/tmp/"$1".out
+out=/tmp/"$1".csv
 
 if [ -f "$out" ]; then
     rm -f "$out"
