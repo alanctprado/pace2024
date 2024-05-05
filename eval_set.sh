@@ -12,7 +12,7 @@ if [ -f "$out" ]; then
 fi
 
 echo "# SET:$1 TL:$2 ML:$3" >> "$out"
-echo "CASE, STATUS" >> "$out"
+echo "CASE, STATUS, TIME(s), MEMORY(KiB)" >> "$out"
 
 # Run each instance from the given set
 for file in ./test/"$1"/instances/*; do
@@ -21,5 +21,6 @@ for file in ./test/"$1"/instances/*; do
     file=${file##*/}
     file=${file%.*}
 
-    echo "$file," "$(sh eval_case.sh "$1" "$file" "$2" "$3" | tail -n 1)" >> "$out" &
+    echo "$file," "$(sh eval_case.sh "$1" "$file" "$2" "$3" | tail -n 1)," \
+         "$(/usr/bin/time -f'%e\n%M' sh eval_case.sh "$1" "$file" "$2" "$3" 2>&1 | sed -n '3,4p' | tr '\n' ',')" >> "$out" &
 done
