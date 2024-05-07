@@ -24,37 +24,36 @@ namespace median {
 MedianHeuristic::MedianHeuristic(graph::BipartiteGraph graph)
     : ApproximationRoutine(graph)
 {
-  couting = new std::vector<int>(33000, 0); 
+  couting = new std::vector<int>(33000, 0);
 }
 
+int MedianHeuristic::median(std::vector<int> &neighbors)
+{
 
-int MedianHeuristic::median(std::vector<int>& neighbors)
-{   
+  if (neighbors.size() == 0)
+    return 0;
+  int max_node = 0;
+  for (int i = 0; i < neighbors.size(); i++)
+  {
+    couting->at(neighbors[i]) += 1;
+    max_node = std::max(max_node, neighbors.at(i));
+  }
 
-    if(neighbors.size()==0) return 0;
-    int max_node = 0;
-    for(int i = 0; i < neighbors.size(); i++)
+  std::vector<int> ordered;
+  for (int i = 0; i <= max_node; i++)
+  {
+    while (couting->at(i) > 0)
     {
-        couting->at(neighbors[i])+=1;
-        max_node = std::max(max_node, neighbors.at(i));
-    } 
-    
-    std::vector<int> ordered;
-    for(int i = 0; i <= max_node; i++)
-    {
-        while(couting->at(i)>0)
-        {
-            ordered.push_back(i);
-            couting->at(i)-=1;
-        }
+      ordered.push_back(i);
+      couting->at(i) -= 1;
     }
+  }
 
-    if((ordered.size()&1)==1) return ordered[ordered.size()/2];
+  if ((ordered.size() & 1) == 1)
+    return ordered[ordered.size() / 2];
 
-    return ordered[ordered.size()/2 - 1];
+  return ordered[ordered.size() / 2 - 1];
 }
-
-
 
 int MedianHeuristic::solve()
 {
@@ -62,7 +61,7 @@ int MedianHeuristic::solve()
   int n1 = m_graph.countVerticesB();
   std::vector<std::vector<int>> med_layer(n0);
 
-  for(int i = n0; i < n1+n0; i++)
+  for (int i = n0; i < n1 + n0; i++)
   {
     std::vector<int> neighborhood = m_graph.neighborhood(i);
     int med = MedianHeuristic::median(neighborhood);
@@ -70,12 +69,12 @@ int MedianHeuristic::solve()
   }
 
   std::vector<int> b_layer;
-  for(int i = 0; i < n0; i++)
+  for (int i = 0; i < n0; i++)
   {
-      for(int j = 0; j < med_layer[i].size(); j++)
-      {
-          b_layer.push_back(med_layer[i][j]);
-      } 
+    for (int j = 0; j < med_layer[i].size(); j++)
+    {
+      b_layer.push_back(med_layer[i][j]);
+    }
   }
 
   return numberOfCrossings(b_layer);
