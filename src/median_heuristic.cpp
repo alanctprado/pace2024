@@ -36,7 +36,7 @@ int MedianHeuristic::median(std::vector<int>& neighbors)
     for(int i = 0; i < neighbors.size(); i++)
     {
         couting->at(neighbors[i])+=1;
-        max_node = std::max(max_node, neighbors->at(i));
+        max_node = std::max(max_node, neighbors.at(i));
     } 
     
     std::vector<int> ordered;
