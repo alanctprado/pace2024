@@ -36,8 +36,8 @@ public:
   int solve() override;
 
 private:
-  std::vector<int>* couting;
-  int median(std::vector<int>& neighbors);
+  std::vector<int> *couting;
+  int median(std::vector<int> &neighbors);
 };
 
 } // namespace median
