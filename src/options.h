@@ -40,9 +40,8 @@ enum class IPSolverMode
 
 enum class IPFormulation
 {
-  ONE,
-  TWO,
-  __MAX_VALUE = TWO
+  SIMPLE, SHORTER, QUADRATIC,
+  __MAX_VALUE = SHORTER
 };
 
 enum class VerifyMode
@@ -55,7 +54,7 @@ enum class VerifyMode
 struct HolderIP
 {
   IPSolverMode solverMode = IPSolverMode::LPSOLVE;
-  IPFormulation formulation = IPFormulation::TWO;
+  IPFormulation formulation = IPFormulation::SHORTER;
 };
 
 struct HolderVerify
