@@ -17,6 +17,7 @@
 #define __PACE2024__BIPARTITE_GRAPH_H
 
 #include "lgraph.h"
+#include "interval_system.h"
 
 namespace banana {
 namespace graph {
@@ -43,7 +44,11 @@ public:
    * Builds a crossing matrix (edge crosses between each pair of vertices)
    * indexed by the vertices in part B.
    * */
-  std::vector<std::vector<int>> buildCrossingMatrix() const;
+  std::vector<std::vector<int>> buildCrossingMatrix() const; 
+
+  /* Get vertices in partitions A and B */
+  std::vector<int> getA() const;
+  std::vector<int> getB() const;
 
 protected:
   std::vector<int> m_partA, m_partB;
