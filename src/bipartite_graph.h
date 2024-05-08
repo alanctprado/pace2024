@@ -17,7 +17,6 @@
 #define __PACE2024__BIPARTITE_GRAPH_H
 
 #include "graph.h"
-#include "interval_system.h"
 
 namespace banana {
 namespace graph {

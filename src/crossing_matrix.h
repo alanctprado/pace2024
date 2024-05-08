@@ -17,7 +17,6 @@
 #define __PACE2024__CROSSING_MATRIX_H
 
 #include "bipartite_graph.h"
-#include "interval_system.h"
 #include <unordered_map>
 
 namespace banana {
