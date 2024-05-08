@@ -131,5 +131,16 @@ std::vector<std::pair<int, int>> BipartiteGraph ::intervalPairs() const
   }
   return pairs;
 }
+
+std::vector<int> BipartiteGraph::getA() const
+{
+  return m_partA;
+}
+
+std::vector<int> BipartiteGraph::getB() const
+{
+  return m_partB;
+}
+
 } // namespace graph
 } // namespace banana
