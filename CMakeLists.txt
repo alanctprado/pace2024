@@ -34,7 +34,9 @@ set(SRC_FILES
   "${PROJECT_SOURCE_DIR}/src/subdivided_wheel_recognizer.cpp"
   "${PROJECT_SOURCE_DIR}/src/starforest_recognizer.cpp"
   "${PROJECT_SOURCE_DIR}/src/outerplanar_recognizer.cpp"
-  "${PROJECT_SOURCE_DIR}/src/lobster_recognizer.cpp")
+  "${PROJECT_SOURCE_DIR}/src/lobster_recognizer.cpp"
+  "${PROJECT_SOURCE_DIR}/src/interval_system.cpp"
+  "${PROJECT_SOURCE_DIR}/src/crossing_matrix.cpp")
 
 ## Objetos comuns a todos os targets
 add_library(common OBJECT ${SRC_FILES})
