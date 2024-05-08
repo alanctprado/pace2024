@@ -1,6 +1,6 @@
 /******************************************************************************
  * Top contributors (to current version):
- *   Alan Prado
+ *   Alan Prado, Heitor Leite
  *
  * This file is part of Banana, a one-sided crossing minimization solver.
  *
@@ -17,7 +17,6 @@
 #define __PACE2024__BIPARTITE_GRAPH_H
 
 #include "lgraph.h"
-#include "interval_system.h"
 
 namespace banana {
 namespace graph {
@@ -62,4 +61,4 @@ protected:
 } // namespace graph
 } // namespace banana
 
-#endif // __PACE2024__BIPARTITE_GRAPH_HPP
+#endif // __PACE2024__BIPARTITE_GRAPH_H

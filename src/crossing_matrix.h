@@ -17,8 +17,8 @@
 #define __PACE2024__CROSSING_MATRIX_H
 
 #include "bipartite_graph.h"
-#include "interval_system.h"
 #include <unordered_map>
+#include <map>
 
 namespace banana {
 namespace crossing {
@@ -30,12 +30,23 @@ public:
   ~CrossingMatrix() = default;
 
   int operator()(int u, int v) const;
+  std::vector<std::pair<int, int>> getOrientablePairs();
 
 protected:
-  std::unordered_map<int, std::unordered_map<int, int>> m_map;
+  /* Is this the best way to hash pairs? It works fine assuming size_t is 8
+   * bytes and int 4 bytes */
+  struct pair_hash
+  {
+    size_t operator()(const std::pair<int, int> &p) const
+    {
+      return ((size_t)p.first << 32) | p.second;
+    }
+  };
+
+  std::unordered_map<std::pair<int, int>, int, pair_hash> m_map;
 };
 
 } // namespace crossing
 } // namespace banana
 
-#endif  // __PACE2024__CROSSING_MATRIX_H
+#endif // __PACE2024__CROSSING_MATRIX_H
