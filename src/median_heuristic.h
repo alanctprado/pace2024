@@ -26,16 +26,16 @@ namespace heuristic {
 namespace median {
 
 /**
- * 
+ *
  * The algorithm sorts the vertices of layer B based on the median of their
  * neighborhood. If two vertices have the same median, their relative
  * positions are preserved. Isolated vertices are positioned at the beginning.
  * Its asymptotic complexity is O(|B| * |A| log|A|).
- * 
- * This algorithm has been proven to be 3-approximate. Furthermore, it can be proven
- * that there is no approximation algorithm that decides the position of a vertex 
- * based on its neighborhood with an approximation factor less than 3.
- *  
+ *
+ * This algorithm has been proven to be 3-approximate. Furthermore, it can be
+ * proven that there is no approximation algorithm that decides the position of
+ * a vertex based on its neighborhood with an approximation factor less than 3.
+ *
  */
 
 class MedianHeuristic : public ApproximationRoutine
@@ -46,7 +46,7 @@ public:
   int solve() override;
 
 private:
-  int median(std::vector<int>& neighbors);
+  int median(std::vector<int> &neighbors);
 };
 
 } // namespace median

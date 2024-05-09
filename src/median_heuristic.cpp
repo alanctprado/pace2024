@@ -23,17 +23,17 @@ namespace median {
 
 MedianHeuristic::MedianHeuristic(graph::BipartiteGraph graph)
     : ApproximationRoutine(graph)
+{}
+
+int MedianHeuristic::median(std::vector<int> &neighbors)
 {
-}
+  if (neighbors.size() == 0)
+    return 0;
 
-int MedianHeuristic::median(std::vector<int>& neighbors)
-{   
-    if(neighbors.size()==0) return 0;
+  auto m = neighbors.begin() + neighbors.size() / 2;
+  std::nth_element(neighbors.begin(), m, neighbors.end());
 
-    auto m = neighbors.begin() + neighbors.size() / 2;
-    std::nth_element(neighbors.begin(), m, neighbors.end());
-    
-    return neighbors[neighbors.size()/2];
+  return neighbors[neighbors.size() / 2];
 }
 
 int MedianHeuristic::solve()
