@@ -12,6 +12,6 @@ for file in ./test/"$1"/instances/*; do
     file=${file##*/}
     file=${file%.*}
 
-    sh run_case.sh "$1" "$file" "$@"
+    /usr/bin/bash run_case.sh "$1" "$file" "$@"
     echo
 done
