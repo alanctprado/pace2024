@@ -15,6 +15,7 @@
 
 #include "base_solver.h"
 #include "bipartite_graph.h"
+#include "median_heuristic.h"
 #include "environment.h"
 #include "utils.h"
 

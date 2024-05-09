@@ -24,35 +24,16 @@ namespace median {
 MedianHeuristic::MedianHeuristic(graph::BipartiteGraph graph)
     : ApproximationRoutine(graph)
 {
-  couting = new std::vector<int>(33000, 0);
 }
 
-int MedianHeuristic::median(std::vector<int> &neighbors)
-{
+int MedianHeuristic::median(std::vector<int>& neighbors)
+{   
+    if(neighbors.size()==0) return 0;
 
-  if (neighbors.size() == 0)
-    return 0;
-  int max_node = 0;
-  for (int i = 0; i < neighbors.size(); i++)
-  {
-    couting->at(neighbors[i]) += 1;
-    max_node = std::max(max_node, neighbors.at(i));
-  }
-
-  std::vector<int> ordered;
-  for (int i = 0; i <= max_node; i++)
-  {
-    while (couting->at(i) > 0)
-    {
-      ordered.push_back(i);
-      couting->at(i) -= 1;
-    }
-  }
-
-  if ((ordered.size() & 1) == 1)
-    return ordered[ordered.size() / 2];
-
-  return ordered[ordered.size() / 2 - 1];
+    auto m = neighbors.begin() + neighbors.size() / 2;
+    std::nth_element(neighbors.begin(), m, neighbors.end());
+    
+    return neighbors[neighbors.size()/2];
 }
 
 int MedianHeuristic::solve()
