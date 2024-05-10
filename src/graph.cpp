@@ -1,6 +1,6 @@
 /******************************************************************************
  * Top contributors (to current version):
- *   Alan Prado, Kaio Vieira
+ *   Alan Prado, Kaio Vieira, Gabriel Lucas
  *
  * This file is part of Banana, a one-sided crossing minimization solver.
  *
@@ -22,7 +22,7 @@
 namespace banana {
 namespace graph {
 
-Graph::Graph(int n) : TGraph<int>()
+Graph::Graph(int n) : TGraph<Vertex, Edge>()
 {
   m_adjacencyMatrix.assign(n, std::vector<bool>(n, false));
   m_vertexDegrees.assign(n, 0);
@@ -38,8 +38,9 @@ Graph::Graph(const Graph &H)
   m_edgeCount = H.m_edgeCount;
 }
 
-void Graph::addEdge(int u, int v)
+void Graph::addEdge(Vertex v, Edge u)
 {
+  
   assert(u != v);
   if (m_adjacencyMatrix[u][v])
     return;
@@ -48,7 +49,7 @@ void Graph::addEdge(int u, int v)
   m_edgeCount++;
 }
 
-void Graph::removeEdge(int u, int v)
+void Graph::removeEdge(Vertex v, Edge u)
 {
   assert(u != v);
   if (!m_adjacencyMatrix[u][v])
@@ -58,7 +59,7 @@ void Graph::removeEdge(int u, int v)
   m_edgeCount--;
 }
 
-bool Graph::hasEdge(int u, int v) const
+bool Graph::hasEdge(Vertex v, Edge u) const
 {
   assert(u != v);
   return m_adjacencyMatrix[u][v];
@@ -71,9 +72,9 @@ unsigned Graph::countVertices() const
   return (unsigned)m_adjacencyMatrix.size();
 }
 
-std::vector<int> Graph::neighborhood(int u) const
+std::vector<Graph::Edge> Graph::neighborhood(Vertex u) const
 {
-  std::vector<int> neighbors;
+  std::vector<Edge> neighbors;
   for (unsigned i = 0; i < countVertices(); i++)
   {
     if (m_adjacencyMatrix[u][i])
@@ -84,7 +85,7 @@ std::vector<int> Graph::neighborhood(int u) const
   return neighbors;
 }
 
-std::vector<int> Graph::symmetricDifference(int u, int v) const
+std::vector<Graph::Edge> Graph::symmetricDifference(Vertex u, Vertex v) const
 {
   std::vector<int> symmetric_difference;
   for (unsigned i = 0; i < countVertices(); i++)
@@ -97,9 +98,9 @@ std::vector<int> Graph::symmetricDifference(int u, int v) const
   return symmetric_difference;
 }
 
-std::vector<Graph::Edge> Graph::edges() const
+std::vector<std::pair<Graph::Vertex, Graph::Edge>> Graph::edges() const
 {
-  std::vector<Edge> edge_set;
+  std::vector<std::pair<Graph::Vertex, Graph::Edge>> edge_set;
   for (unsigned i = 0; i < countVertices(); i++)
   {
     for (int j = i + 1; j < countVertices(); j++)
@@ -113,11 +114,11 @@ std::vector<Graph::Edge> Graph::edges() const
   return edge_set;
 }
 
-unsigned Graph::degree(int v) const { return m_vertexDegrees[v]; }
+unsigned Graph::degree(Vertex v) const { return m_vertexDegrees[v]; }
 
 std::vector<unsigned> Graph::degree() const { return m_vertexDegrees; }
 
-unsigned Graph::label(int v) const { return m_vertexLabels[v]; }
+unsigned Graph::label(Vertex v) const { return m_vertexLabels[v]; }
 
 bool Graph::isConnected() const
 {
@@ -185,7 +186,7 @@ bool Graph::isBipartite() const
   return true;
 }
 
-std::unique_ptr<TGraph<int>> Graph::complement() const
+std::unique_ptr<TGraph<Graph::Vertex, Graph::Edge>> Graph::complement() const
 {
   Graph H(*this);
   for (unsigned i = 0; i < countVertices(); i++)
@@ -201,8 +202,8 @@ std::unique_ptr<TGraph<int>> Graph::complement() const
   return std::make_unique<Graph>(H);
 }
 
-std::vector<std::unique_ptr<TGraph<int>>>
-Graph::disjointSubgraphs(std::vector<std::vector<int>> &subsets) const
+std::vector<std::unique_ptr<TGraph<Graph::Vertex, Graph::Edge>>>
+Graph::disjointSubgraphs(std::vector<std::vector<Edge>> &subsets) const
 {
   std::vector<int> new_label(countVertices());
   std::vector<int> subset_id(countVertices());
@@ -235,8 +236,8 @@ Graph::disjointSubgraphs(std::vector<std::vector<int>> &subsets) const
   return subgraphs;
 }
 
-std::unique_ptr<TGraph<int>>
-Graph::quotient(std::vector<std::vector<int>> &partition) const
+std::unique_ptr<TGraph<Graph::Vertex, Graph::Edge>>
+Graph::quotient(std::vector<std::vector<Edge>> &partition) const
 {
   Graph quotient_graph((int)partition.size());
   for (unsigned i = 0; i < (unsigned)partition.size(); i++)
@@ -252,8 +253,8 @@ Graph::quotient(std::vector<std::vector<int>> &partition) const
   return std::make_unique<Graph>(quotient_graph);
 }
 
-std::vector<std::vector<int>>
-Graph::modularPartition(std::vector<std::vector<int>> &partition) const
+std::vector<std::vector<Graph::Edge>>
+Graph::modularPartition(std::vector<std::vector<Edge>> &partition) const
 {
   const Graph &G = *this;
   std::vector<std::vector<int>> Q, K, L;
@@ -372,7 +373,7 @@ Graph::modularPartition(std::vector<std::vector<int>> &partition) const
   return Q;
 }
 
-std::vector<std::vector<int>> Graph::primeDecomposition() const
+std::vector<std::vector<Graph::Edge>> Graph::primeDecomposition() const
 {
   int n = m_adjacencyMatrix.size();
   std::vector<std::vector<int>> ret;
@@ -443,7 +444,7 @@ std::vector<std::vector<int>> Graph::primeDecomposition() const
   return ret;
 }
 
-std::vector<std::vector<int>> Graph::adjacencyList() const
+std::vector<std::vector<Graph::Edge>> Graph::adjacencyList() const
 {
   int n = countVertices();
   std::vector<std::vector<int>> adjacency_list(n);

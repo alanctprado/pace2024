@@ -1,6 +1,6 @@
 /******************************************************************************
  * Top contributors (to current version):
- *   Alan Prado, Kaio Vieira, Gabriel Lucas
+ *   Gabriel Lucas
  *
  * This file is part of Banana, a one-sided crossing minimization solver.
  *
@@ -10,14 +10,14 @@
  * licensing information.
  * ****************************************************************************
  *
- * Basic graph class.
+ * Basic graph class with adjacency list representation.
  */
 
-#ifndef __PACE2024__GRAPH_HPP
-#define __PACE2024__GRAPH_HPP
+#ifndef __PACE2024__LGRAPH_HPP
+#define __PACE2024__LGRAPH_HPP
 
 #include "abstract_graph.h"
-
+#include <stdexcept>
 #include <memory>
 #include <vector>
 
@@ -25,27 +25,27 @@ namespace banana {
 namespace graph {
 
 /**
- * Basic graph class.
+ * Basic graph class with adjacency list representation.
  */
-class Graph : public TGraph<int, int>
+class LGraph : public TGraph<int, int>
 {
 protected:
-  std::vector<std::vector<bool>> m_adjacencyMatrix;
+  std::vector<std::vector<Edge>> m_adjacencyList;
   std::vector<unsigned> m_vertexDegrees;
   std::vector<int> m_vertexLabels;
   unsigned m_edgeCount;
 
 public:
-  Graph(int n);
-  Graph(const Graph &H); // Copy constructor
-  ~Graph() = default;
+  LGraph(int n);
+  LGraph(const LGraph &H); // Copy constructor
+  ~LGraph() = default;
 
-  /** Adds edge (u, v) to graph */
-  void addEdge(Vertex v, Edge u) override;
-  /** Removes edge (u, v) from graph */
-  void removeEdge(Vertex v, Edge u) override;
-  /** Checks if graph has edge (u, v) */
-  bool hasEdge(Vertex v, Edge u) const override;
+  /** Adds edge e to graph; assumes e does not exist in graph */
+  void addEdge(Vertex v, Edge e) override;
+  /** Removes edge e from graph */
+  void removeEdge(Vertex v, Edge e) override;
+  /** Checks if graph has edge e */
+  bool hasEdge(Vertex v, Edge e) const override;
   /** Get the number of edges in the graph */
   unsigned countEdges() const override;
   /** Edge set of the graph. */
@@ -111,4 +111,4 @@ public:
 } // namespace graph
 } // namespace banana
 
-#endif // __PACE2024__GRAPH_HPP
+#endif // __PACE2024__LGRAPH_HPP

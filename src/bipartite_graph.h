@@ -16,7 +16,7 @@
 #ifndef __PACE2024__BIPARTITE_GRAPH_H
 #define __PACE2024__BIPARTITE_GRAPH_H
 
-#include "graph.h"
+#include "lgraph.h"
 
 namespace banana {
 namespace graph {
@@ -28,7 +28,7 @@ namespace graph {
  * A and B, that is, every edge connects a vertex in A to one in B. Suitable
  * for defining methods that are exclusive to or useful on bipartite graphs.
  */
-class BipartiteGraph : public Graph
+class BipartiteGraph : public LGraph
 {
 public:
   BipartiteGraph(int n0, int n1);
