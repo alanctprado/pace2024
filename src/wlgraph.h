@@ -29,8 +29,9 @@ struct WL_Edge
   int to, weight;
   WL_Edge() {}
   WL_Edge(int _to, int _weight) : to(_to), weight(_weight) {}
-  bool operator == (const WL_Edge& other) const {
-      return (other.to == to && other.weight == weight);
+  bool operator==(const WL_Edge &other) const
+  {
+    return (other.to == to && other.weight == weight);
   }
 };
 
@@ -40,7 +41,8 @@ class WLGraph : public TGraph<int, WL_Edge>
    * Basic graph class with weighted edges and adjacency list representation.
    */
 protected:
-  std::vector<std::vector<Edge>> m_adjacencyList; // edges are stored as (to_vertex, edge_weight)
+  std::vector<std::vector<Edge>>
+      m_adjacencyList; // edges are stored as (to_vertex, edge_weight)
   std::vector<unsigned> m_vertexDegrees;
   std::vector<int> m_vertexLabels;
   unsigned m_edgeCount;
@@ -72,8 +74,7 @@ public:
    * The symmetric difference of two vertices is defined as the set of vertices
    * which are neighbors of either 'u' or 'v', but not both.
    */
-  std::vector<Edge> symmetricDifference(Vertex u,
-                                                       Vertex v) const override;
+  std::vector<Edge> symmetricDifference(Vertex u, Vertex v) const override;
   /** Get the degree of vertex 'u'. */
   unsigned degree(Vertex u) const override;
   /** Get the degree vector of the graph. */
@@ -97,8 +98,8 @@ public:
    */
   std::unique_ptr<TGraph> complement() const override;
   /** Divides a graph into disjoint subgraphs */
-  std::vector<std::unique_ptr<TGraph>> disjointSubgraphs(
-      std::vector<std::vector<Edge>> &subsets) const override;
+  std::vector<std::unique_ptr<TGraph>>
+  disjointSubgraphs(std::vector<std::vector<Edge>> &subsets) const override;
   /**
    * Creates the quotient graph from 'partition'.
    *
@@ -106,15 +107,14 @@ public:
    * adjacent to another if some vertex in it is adjacent to some vertex in the
    * other with respect to the edge set of the original graph.
    */
-  std::unique_ptr<TGraph> quotient(
-      std::vector<std::vector<Edge>> &partition) const override;
+  std::unique_ptr<TGraph>
+  quotient(std::vector<std::vector<Edge>> &partition) const override;
 
   /** TO-DO */
-  std::vector<std::vector<Edge>> modularPartition(
-      std::vector<std::vector<Edge>> &partition) const override;
-  /** TO-DO */
   std::vector<std::vector<Edge>>
-  primeDecomposition() const override;
+  modularPartition(std::vector<std::vector<Edge>> &partition) const override;
+  /** TO-DO */
+  std::vector<std::vector<Edge>> primeDecomposition() const override;
 
   /** Get the adjacency list representation of the graph. */
   std::vector<std::vector<Edge>> adjacencyList() const override;

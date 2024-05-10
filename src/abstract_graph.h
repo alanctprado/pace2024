@@ -30,9 +30,10 @@ namespace graph {
 template <class V, class E> // Define, someday, a Vertex class? Rita? 👀
 class TGraph
 {
-  protected:
-    typedef V Vertex;
-    typedef E Edge;
+protected:
+  typedef V Vertex;
+  typedef E Edge;
+
 public:
   TGraph() {}
   virtual ~TGraph() {}
