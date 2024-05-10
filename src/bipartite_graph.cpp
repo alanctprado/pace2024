@@ -19,7 +19,7 @@
 namespace banana {
 namespace graph {
 
-BipartiteGraph::BipartiteGraph(int n0, int n1) : Graph(n0 + n1)
+BipartiteGraph::BipartiteGraph(int n0, int n1) : LGraph(n0 + n1)
 {
   for (unsigned i = 0; i < (unsigned)n0; i++)
   {
@@ -31,7 +31,7 @@ BipartiteGraph::BipartiteGraph(int n0, int n1) : Graph(n0 + n1)
   }
 }
 
-BipartiteGraph::BipartiteGraph(const BipartiteGraph &H) : Graph(H)
+BipartiteGraph::BipartiteGraph(const BipartiteGraph &H) : LGraph(H)
 {
   for (int a : H.m_partA)
   {

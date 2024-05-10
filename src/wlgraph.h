@@ -1,6 +1,6 @@
 /******************************************************************************
  * Top contributors (to current version):
- *   Alan Prado, Kaio Vieira, Gabriel Lucas
+ *   Gabriel Lucas
  *
  * This file is part of Banana, a one-sided crossing minimization solver.
  *
@@ -10,42 +10,52 @@
  * licensing information.
  * ****************************************************************************
  *
- * Basic graph class.
+ * Basic graph class with weighted edges and adjacency list representation.
  */
 
-#ifndef __PACE2024__GRAPH_HPP
-#define __PACE2024__GRAPH_HPP
+#ifndef __PACE2024__WLGRAPH_HPP
+#define __PACE2024__WLGRAPH_HPP
 
 #include "abstract_graph.h"
-
+#include <stdexcept>
 #include <memory>
 #include <vector>
 
 namespace banana {
 namespace graph {
 
-/**
- * Basic graph class.
- */
-class Graph : public TGraph<int, int>
+struct WL_Edge
 {
+  int to, weight;
+  WL_Edge() {}
+  WL_Edge(int _to, int _weight) : to(_to), weight(_weight) {}
+  bool operator == (const WL_Edge& other) const {
+      return (other.to == to && other.weight == weight);
+  }
+};
+
+class WLGraph : public TGraph<int, WL_Edge>
+{
+  /**
+   * Basic graph class with weighted edges and adjacency list representation.
+   */
 protected:
-  std::vector<std::vector<bool>> m_adjacencyMatrix;
+  std::vector<std::vector<Edge>> m_adjacencyList; // edges are stored as (to_vertex, edge_weight)
   std::vector<unsigned> m_vertexDegrees;
   std::vector<int> m_vertexLabels;
   unsigned m_edgeCount;
 
 public:
-  Graph(int n);
-  Graph(const Graph &H); // Copy constructor
-  ~Graph() = default;
+  WLGraph(int n);
+  WLGraph(const WLGraph &H); // Copy constructor
+  ~WLGraph() = default;
 
-  /** Adds edge (u, v) to graph */
-  void addEdge(Vertex v, Edge u) override;
-  /** Removes edge (u, v) from graph */
-  void removeEdge(Vertex v, Edge u) override;
-  /** Checks if graph has edge (u, v) */
-  bool hasEdge(Vertex v, Edge u) const override;
+  /** Adds edge e to graph; assumes e does not exist in graph */
+  void addEdge(Vertex v, Edge e) override;
+  /** Removes edge e from graph */
+  void removeEdge(Vertex v, Edge e) override;
+  /** Checks if graph has edge e */
+  bool hasEdge(Vertex v, Edge e) const override;
   /** Get the number of edges in the graph */
   unsigned countEdges() const override;
   /** Edge set of the graph. */
@@ -62,7 +72,8 @@ public:
    * The symmetric difference of two vertices is defined as the set of vertices
    * which are neighbors of either 'u' or 'v', but not both.
    */
-  std::vector<Edge> symmetricDifference(Vertex u, Vertex v) const override;
+  std::vector<Edge> symmetricDifference(Vertex u,
+                                                       Vertex v) const override;
   /** Get the degree of vertex 'u'. */
   unsigned degree(Vertex u) const override;
   /** Get the degree vector of the graph. */
@@ -74,8 +85,6 @@ public:
   bool isConnected() const override;
   /** Checks if the graph is a tree */
   bool isTree() const override;
-  /**Checks if the graph is a forest*/
-  bool isForest() const override;
   /** Checks if the graph is bipartite */
   bool isBipartite() const override;
 
@@ -88,8 +97,8 @@ public:
    */
   std::unique_ptr<TGraph> complement() const override;
   /** Divides a graph into disjoint subgraphs */
-  std::vector<std::unique_ptr<TGraph>>
-  disjointSubgraphs(std::vector<std::vector<Edge>> &subsets) const override;
+  std::vector<std::unique_ptr<TGraph>> disjointSubgraphs(
+      std::vector<std::vector<Edge>> &subsets) const override;
   /**
    * Creates the quotient graph from 'partition'.
    *
@@ -97,14 +106,15 @@ public:
    * adjacent to another if some vertex in it is adjacent to some vertex in the
    * other with respect to the edge set of the original graph.
    */
-  std::unique_ptr<TGraph>
-  quotient(std::vector<std::vector<Edge>> &partition) const override;
+  std::unique_ptr<TGraph> quotient(
+      std::vector<std::vector<Edge>> &partition) const override;
 
   /** TO-DO */
-  std::vector<std::vector<Edge>>
-  modularPartition(std::vector<std::vector<Edge>> &partition) const override;
+  std::vector<std::vector<Edge>> modularPartition(
+      std::vector<std::vector<Edge>> &partition) const override;
   /** TO-DO */
-  std::vector<std::vector<Edge>> primeDecomposition() const override;
+  std::vector<std::vector<Edge>>
+  primeDecomposition() const override;
 
   /** Get the adjacency list representation of the graph. */
   std::vector<std::vector<Edge>> adjacencyList() const override;
@@ -113,4 +123,4 @@ public:
 } // namespace graph
 } // namespace banana
 
-#endif // __PACE2024__GRAPH_HPP
+#endif // __PACE2024__WLGRAPH_HPP
