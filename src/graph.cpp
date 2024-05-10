@@ -157,6 +157,40 @@ bool Graph::isTree() const
   return isConnected() && (countEdges() == countVertices() - 1);
 }
 
+bool Graph::isForest() const
+{
+  std::vector<bool> visited(countVertices(), false);
+  std::vector<int> stack;
+
+  int conected_comp = 0;
+  for (unsigned i = 0; i < countVertices(); i++)
+  {
+    if (!visited[i])
+    {
+      stack.push_back(i);
+      conected_comp++;
+      while (!stack.empty())
+      {
+        int u = stack.back();
+        stack.pop_back();
+        if (!visited[u])
+        {
+          visited[u] = true;
+          for (int v : neighborhood(u))
+          {
+            if (!visited[v])
+            {
+              stack.push_back(v);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  return countVertices() - countEdges() == conected_comp;
+}
+
 bool Graph::isBipartite() const
 {
   int n = countVertices();

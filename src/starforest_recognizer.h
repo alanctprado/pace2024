@@ -1,7 +1,6 @@
 /******************************************************************************
  * Top contributors (to current version):
- *   Alan Prado
- *
+ *   Laila Melo
  * This file is part of Banana, a one-sided crossing minimization solver.
  *
  * Copyright (c) 2024 by the authors listed in the file AUTHORS in the
@@ -10,32 +9,28 @@
  * licensing information.
  * ****************************************************************************
  *
- * Abstract class for graph recognizers
+ * Star Forest Recognizer
  */
 
-#ifndef __PACE2024__RECOGNIZER_HPP
-#define __PACE2024__RECOGNIZER_HPP
+#ifndef __PACE2024__STARFOREST_RECOGNIZER
+#define __PACE2024__STARFOREST_RECOGNIZER
 
-#include "abstract_graph.h"
+#include "graph.h"
+#include "recognizer.h"
 
 namespace banana {
 namespace recognizer {
 
-/**
- * TO-DO
- */
-template <class T> class Recognizer
+class StarForestRecognizer : public Recognizer<graph::Graph>
 {
 public:
-  Recognizer(T &graph) : m_graph(graph) {}
-  virtual ~Recognizer() {}
-  virtual bool check() = 0;
+  StarForestRecognizer(graph::Graph &graph);
+  ~StarForestRecognizer() override = default;
 
-protected:
-  const T m_graph;
+  bool check() override;
 };
 
 } // namespace recognizer
 } // namespace banana
 
-#endif // __PACE2024__RECOGNIZER_HPP
+#endif // __PACE2024__STARFOREST_RECOGNIZER
