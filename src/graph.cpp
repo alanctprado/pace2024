@@ -40,7 +40,6 @@ Graph::Graph(const Graph &H)
 
 void Graph::addEdge(Vertex v, Edge u)
 {
-
   assert(u != v);
   if (m_adjacencyMatrix[u][v])
     return;

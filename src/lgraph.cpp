@@ -143,8 +143,8 @@ LGraph::quotient(std::vector<std::vector<LGraph::Edge>> &partition) const
   throw std::runtime_error("Not implemented :(");
 }
 
-std::vector<std::vector<LGraph::Edge>> LGraph::modularPartition(
-    std::vector<std::vector<LGraph::Edge>> &partition) const
+std::vector<std::vector<LGraph::Edge>>
+LGraph::modularPartition(std::vector<std::vector<LGraph::Edge>> &partition) const
 {
   throw std::runtime_error("Not implemented :(");
 }

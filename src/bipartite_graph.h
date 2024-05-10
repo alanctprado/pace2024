@@ -16,7 +16,7 @@
 #ifndef __PACE2024__BIPARTITE_GRAPH_H
 #define __PACE2024__BIPARTITE_GRAPH_H
 
-#include "graph.h"
+#include "lgraph.h"
 
 namespace banana {
 namespace graph {

@@ -33,7 +33,9 @@ set(SRC_FILES
   "${PROJECT_SOURCE_DIR}/src/lgraph.cpp"
   "${PROJECT_SOURCE_DIR}/src/interval_system.cpp"
   "${PROJECT_SOURCE_DIR}/src/crossing_matrix.cpp"
-  )
+  "${PROJECT_SOURCE_DIR}/src/wlgraph.cpp"
+  "${PROJECT_SOURCE_DIR}/src/lgraph.cpp"
+)
 
 ## Objetos comuns a todos os targets
 add_library(common OBJECT ${SRC_FILES})

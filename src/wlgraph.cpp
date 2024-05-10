@@ -50,8 +50,7 @@ void WLGraph::addEdge(Vertex v, Edge e)
 void WLGraph::removeEdge(Vertex v, Edge e)
 {
   assert(v != e.to);
-  auto it1 =
-      std::find(begin(m_adjacencyList[v]), end(m_adjacencyList[e.to]), e);
+  auto it1 = std::find(begin(m_adjacencyList[v]), end(m_adjacencyList[e.to]), e);
 
   if (it1 != end(m_adjacencyList[v]))
   {
