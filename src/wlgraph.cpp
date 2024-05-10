@@ -50,14 +50,16 @@ void WLGraph::addEdge(Vertex v, Edge e)
 void WLGraph::removeEdge(Vertex v, Edge e)
 {
   assert(v != e.to);
-  auto it1 = std::find(begin(m_adjacencyList[v]), end(m_adjacencyList[e.to]), e);
+  auto it1 =
+      std::find(begin(m_adjacencyList[v]), end(m_adjacencyList[e.to]), e);
 
   if (it1 != end(m_adjacencyList[v]))
   {
     m_adjacencyList[v].erase(it1);
   }
 
-  auto it2 = std::find(begin(m_adjacencyList[e.to]), end(m_adjacencyList[e.to]), WLGraph::Edge(v, e.weight));
+  auto it2 = std::find(begin(m_adjacencyList[e.to]), end(m_adjacencyList[e.to]),
+                       WLGraph::Edge(v, e.weight));
 
   if (it2 != end(m_adjacencyList[e.to]))
   {
@@ -71,7 +73,8 @@ void WLGraph::removeEdge(Vertex v, Edge e)
 bool WLGraph::hasEdge(Vertex v, Edge e) const
 {
   assert(v != e.to);
-  return std::find(begin(m_adjacencyList[v]), end(m_adjacencyList[v]), e) != end(m_adjacencyList[v]);
+  return std::find(begin(m_adjacencyList[v]), end(m_adjacencyList[v]), e) !=
+         end(m_adjacencyList[v]);
 }
 
 unsigned WLGraph::countEdges() const { return m_edgeCount; }
@@ -85,7 +88,8 @@ std::vector<WLGraph::Edge> WLGraph::neighborhood(Vertex v) const
 {
   return m_adjacencyList[v];
 }
-std::vector<WLGraph::Edge> WLGraph::symmetricDifference(Vertex v, Vertex u) const
+std::vector<WLGraph::Edge> WLGraph::symmetricDifference(Vertex v,
+                                                        Vertex u) const
 {
   throw std::runtime_error("Not implemented :(");
 }
@@ -124,7 +128,8 @@ bool WLGraph::isBipartite() const
   throw std::runtime_error("Not implemented :(");
 }
 
-std::unique_ptr<TGraph<WLGraph::Vertex, WLGraph::Edge>> WLGraph::complement() const
+std::unique_ptr<TGraph<WLGraph::Vertex, WLGraph::Edge>>
+WLGraph::complement() const
 {
   throw std::runtime_error("Not implemented :(");
 }

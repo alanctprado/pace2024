@@ -71,7 +71,8 @@ void LGraph::removeEdge(Vertex v, Edge e)
 bool LGraph::hasEdge(Vertex v, Edge e) const
 {
   assert(v != e);
-  return std::find(begin(m_adjacencyList[v]), end(m_adjacencyList[v]), e) != end(m_adjacencyList[v]);
+  return std::find(begin(m_adjacencyList[v]), end(m_adjacencyList[v]), e) !=
+         end(m_adjacencyList[v]);
 }
 
 unsigned LGraph::countEdges() const { return m_edgeCount; }
@@ -142,8 +143,8 @@ LGraph::quotient(std::vector<std::vector<LGraph::Edge>> &partition) const
   throw std::runtime_error("Not implemented :(");
 }
 
-std::vector<std::vector<LGraph::Edge>>
-LGraph::modularPartition(std::vector<std::vector<LGraph::Edge>> &partition) const
+std::vector<std::vector<LGraph::Edge>> LGraph::modularPartition(
+    std::vector<std::vector<LGraph::Edge>> &partition) const
 {
   throw std::runtime_error("Not implemented :(");
 }
