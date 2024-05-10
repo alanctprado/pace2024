@@ -71,6 +71,8 @@ public:
   virtual bool isConnected() const = 0;
   /** Checks if the graph is a tree */
   virtual bool isTree() const = 0;
+  /** Checks if the graph is a forest */
+  virtual bool isForest() const = 0;
   /** Checks if the graph is bipartite */
   virtual bool isBipartite() const = 0;
 
