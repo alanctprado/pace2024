@@ -16,7 +16,6 @@ message("Building LP Solve")
 execute_process(
   COMMAND sh compile_lpsolve.sh
   WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
-
 )
 
 set(SRC_FILES
@@ -29,6 +28,8 @@ set(SRC_FILES
   "${PROJECT_SOURCE_DIR}/src/graph.cpp"
   "${PROJECT_SOURCE_DIR}/src/ip_solver.cpp"
   "${PROJECT_SOURCE_DIR}/src/options.cpp"
+  "${PROJECT_SOURCE_DIR}/src/wlgraph.cpp"
+  "${PROJECT_SOURCE_DIR}/src/lgraph.cpp"
   "${PROJECT_SOURCE_DIR}/src/caterpillar_recognizer.cpp"
   "${PROJECT_SOURCE_DIR}/src/subdivided_wheel_recognizer.cpp"
   "${PROJECT_SOURCE_DIR}/src/starforest_recognizer.cpp"

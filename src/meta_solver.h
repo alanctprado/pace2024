@@ -69,7 +69,7 @@ int MetaSolver<T>::numberOfCrossings(const std::vector<T> &order) const
   }
 
   auto edges = m_graph.edges();
-  sort(edges.begin(), edges.end(), [&](auto edge1, auto edge2) {
+  std::sort(edges.begin(), edges.end(), [&](auto edge1, auto edge2) {
     auto [a1, b1] = edge1;
     auto [a2, b2] = edge2;
     if (a1 > b1)
