@@ -123,6 +123,40 @@ bool WLGraph::isConnected() const
 
 bool WLGraph::isTree() const { throw std::runtime_error("Not implemented :("); }
 
+bool WLGraph::isForest() const
+{
+  std::vector<bool> visited(countVertices(), false);
+  std::vector<int> stack;
+
+  int conected_comp = 0;
+  for (unsigned i = 0; i < countVertices(); i++)
+  {
+    if (!visited[i])
+    {
+      stack.push_back(i);
+      conected_comp++;
+      while (!stack.empty())
+      {
+        int u = stack.back();
+        stack.pop_back();
+        if (!visited[u])
+        {
+          visited[u] = true;
+          for (WL_Edge e : neighborhood(u))
+          {
+            if (!visited[e.to])
+            {
+              stack.push_back(e.to);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  return countVertices() - countEdges() == conected_comp;
+}
+
 bool WLGraph::isBipartite() const
 {
   throw std::runtime_error("Not implemented :(");

@@ -86,6 +86,8 @@ public:
   bool isConnected() const override;
   /** Checks if the graph is a tree */
   bool isTree() const override;
+  /**Checks if the graph is a forest*/
+  bool isForest() const override;
   /** Checks if the graph is bipartite */
   bool isBipartite() const override;
 

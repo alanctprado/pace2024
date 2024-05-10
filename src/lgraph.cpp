@@ -121,6 +121,40 @@ bool LGraph::isConnected() const
 
 bool LGraph::isTree() const { throw std::runtime_error("Not implemented :("); }
 
+bool LGraph::isForest() const
+{
+  std::vector<bool> visited(countVertices(), false);
+  std::vector<int> stack;
+
+  int conected_comp = 0;
+  for (unsigned i = 0; i < countVertices(); i++)
+  {
+    if (!visited[i])
+    {
+      stack.push_back(i);
+      conected_comp++;
+      while (!stack.empty())
+      {
+        int u = stack.back();
+        stack.pop_back();
+        if (!visited[u])
+        {
+          visited[u] = true;
+          for (int v : neighborhood(u))
+          {
+            if (!visited[v])
+            {
+              stack.push_back(v);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  return countVertices() - countEdges() == conected_comp;
+}
+
 bool LGraph::isBipartite() const
 {
   throw std::runtime_error("Not implemented :(");
