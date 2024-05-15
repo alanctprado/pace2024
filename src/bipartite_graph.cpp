@@ -15,6 +15,7 @@
 
 #include "bipartite_graph.h"
 #include "graph.h"
+#include <algorithm>
 
 namespace banana {
 namespace graph {
@@ -82,5 +83,44 @@ std::vector<std::vector<int>> BipartiteGraph::buildCrossingMatrix() const
   return crossing_matrix;
 }
 
+std::vector<std::pair<int, int>>  BipartiteGraph :: intervalPairs() const {
+ std::vector<std::tuple<int,bool, int>> endpoints;
+
+ for(int v : m_partB)
+ {
+   if(degree(v)==0) continue;
+   int mn = neighborhood(v)[0];
+   int mx = neighborhood(v)[0];
+   for(int u: neighborhood(v))
+   {
+     if(u<mn) { mn = u; }
+     if(u>mx) { mx = u; }
+   }
+   endpoints.push_back({mn, 1, v});
+   endpoints.push_back({mx, 0, v});
+} 
+ std::sort(endpoints.begin(), endpoints.end());
+ std:: reverse(endpoints.begin(), endpoints.end());
+
+ std::vector<int> prefix;
+ std::vector<std::pair<int, int>> pairs;
+
+ while(!endpoints.empty())
+ {
+   auto [v, b, i] = endpoints.back(); endpoints.pop_back();
+   if(!b)
+   {
+     prefix.push_back(i);
+   }
+   else
+   {
+     for(int u: prefix)
+     {
+       pairs.push_back({u,i});
+     }
+   }
+ }
+  return pairs;
+}
 } // namespace graph
 } // namespace banana

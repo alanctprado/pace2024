@@ -44,6 +44,10 @@ public:
    * indexed by the vertices in part B.
    * */
   std::vector<std::vector<int>> buildCrossingMatrix() const;
+  /**
+   * Return all pairs of vertices u,v such that the u's neighbohood is in the leftside of v's.
+  */
+ std::vector<std::pair<int, int>> intervalPairs() const;
 
 protected:
   std::vector<int> m_partA, m_partB;
