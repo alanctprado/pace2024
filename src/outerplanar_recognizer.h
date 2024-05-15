@@ -9,7 +9,8 @@
  * licensing information.
  * ****************************************************************************
  *
- * Outerplanar Recognizer
+ * Outerplanar Recognizer for biconected components
+ * It assumes that every edge uv in m_graph.edges, u<v
  */
 
 #ifndef __PACE2024__OUTERPLANAR_RECOGNIZER
