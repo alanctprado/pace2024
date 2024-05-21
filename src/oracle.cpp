@@ -42,10 +42,8 @@ std::vector<std::pair<int, int>> Oracle::getIntervals(std::vector<int> b_vertice
 }
 
 int Oracle::getCrossings(int i, int j, int w_i, int w_j) const {
-    // Implementation of the getCrossings function
     throw std::runtime_error("Not yet implemented.");
 }
-
 
 } // Namespace solver
 } // namespace banana
