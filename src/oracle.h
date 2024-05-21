@@ -40,12 +40,13 @@ public:
      */
     int getLabel(int b_vertex) const;
 
-    /** Gets all neighbors of b */
+    /** Returns all neighbors of b */
     std::vector<int> neighborhood(int b_vertex) const;
-    /** Gets [min, max] neighbors of b */
+    /** Returns [min, max] neighbors of b */
     std::pair<int, int> getInterval(int b_vertex) const;
-    /** Gets [min, max] neighbors of the given vertices */
-    std::vector<std::pair<int, int>> getIntervals(std::vector<int> b_vertices) const;
+    /** Returns [min, max] neighbors of the given vertices */
+    std::vector<std::pair<int, int>>
+    getIntervals(std::vector<int> b_vertices) const;
 
     /**
      * Number of crossings between i and j.
