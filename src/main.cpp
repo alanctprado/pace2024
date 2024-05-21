@@ -28,6 +28,7 @@ int main(int argc, char *argv[])
   env.setOptions(argc, argv);
   std::unique_ptr<banana::graph::BipartiteGraph> input_graph;
   banana::utils::readBipartiteGraph(input_graph);
+  env.initOracle(*input_graph);
   banana::solver::BaseSolver bananao(*input_graph.get());
   bananao.runBanana();
   exit(0);

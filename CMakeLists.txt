@@ -27,6 +27,7 @@ set(SRC_FILES
   "${PROJECT_SOURCE_DIR}/src/graph.cpp"
   "${PROJECT_SOURCE_DIR}/src/ip_solver.cpp"
   "${PROJECT_SOURCE_DIR}/src/options.cpp"
+  "${PROJECT_SOURCE_DIR}/src/oracle.cpp"
   "${PROJECT_SOURCE_DIR}/src/crossing_matrix.cpp"
   "${PROJECT_SOURCE_DIR}/src/wlgraph.cpp"
   "${PROJECT_SOURCE_DIR}/src/lgraph.cpp"

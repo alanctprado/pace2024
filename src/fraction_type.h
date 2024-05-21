@@ -16,6 +16,9 @@
 #ifndef __PACE2024__FRACTION_HPP
 #define __PACE2024__FRACTION_HPP
 
+#include <cassert>
+#include <numeric>
+
 namespace banana {
 namespace library {
 
@@ -24,9 +27,8 @@ namespace library {
  *
  * Handles arithmetic operations on fractions.
  *
- * The type T should have arithmetic operations implemented, and
- * a function `gcd` to find the greatest common divisor between
- * two numbers.
+ * The type T should have arithmetic operations implemented,
+ * and the std::gcd function.
  *
  * Be careful with overflow! the product of two values shouldn't
  * exceed the limit of T.
@@ -46,7 +48,7 @@ public:
 };
 
 template <class T>
-Fraction<T>::Fraction(const T &_num, const T &_den) : _num(_num), _den(_den)
+Fraction<T>::Fraction(const T &n, const T &d) : _num(n), _den(d)
 {
   assert(_den != 0);
   if (_den < 0)
@@ -54,7 +56,7 @@ Fraction<T>::Fraction(const T &_num, const T &_den) : _num(_num), _den(_den)
     _num *= -1;
     _den *= -1;
   }
-  T g = gcd(_num, _den);
+  T g = std::gcd(_num, _den);
   _num /= g;
   _den /= g;
 }
@@ -72,31 +74,31 @@ const T& Fraction<T>::den() const {
 template <class T>
 inline bool operator <(const Fraction<T> &lhs, const Fraction<T> &rhs)
 {
-  return (lhs._num * rhs._den < lhs._den * rhs._num);
+  return (lhs.num() * rhs.den() < lhs.den() * rhs.num());
 }
 
 template <class T>
 inline Fraction<T> operator +(const Fraction<T> &lhs, const Fraction<T> &rhs)
 {
-  return {lhs._num * rhs._den + lhs._den * rhs._num, lhs._den * rhs._den};
+  return {lhs.num() * rhs.den() + lhs.den() * rhs.num(), lhs.den() * rhs.den()};
 }
 
 template <class T>
 inline Fraction<T> operator -(const Fraction<T> &lhs, const Fraction<T> &rhs)
 {
-  return {lhs._num * rhs._den - lhs._den * rhs._num, lhs._den * rhs._den};
+  return {lhs.num() * rhs.den() - lhs.den() * rhs.num(), lhs.den() * rhs.den()};
 }
 
 template <class T>
 inline Fraction<T> operator *(const Fraction<T> &lhs, const Fraction<T> &rhs)
 {
-  return {lhs._num * rhs._num, lhs._den * rhs._den};
+  return {lhs.num() * rhs.num(), lhs.den() * rhs.den()};
 }
 
 template <class T>
 inline Fraction<T> operator /(const Fraction<T> &lhs, const Fraction<T> &rhs)
 {
-  return {rhs._num * rhs._den, lhs._den * rhs._num};
+  return {rhs.num() * rhs.den(), lhs.den() * rhs.num()};
 }
 
 } // namespace library

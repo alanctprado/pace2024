@@ -19,6 +19,8 @@
 namespace banana {
 namespace solver {
 
+Oracle::Oracle() : m_graph(0, 0), m_crossing_matrix(m_graph) {}
+
 Oracle::Oracle(const graph::BipartiteGraph G) : m_graph(G), m_crossing_matrix(G)
 {
     m_graph.sortAdjacencyList();
@@ -42,9 +44,12 @@ std::vector<std::pair<int, int>> Oracle::getIntervals(std::vector<int> b_vertice
 
 /** TODO: Verify how to use crossing_matrix */
 int Oracle::getCrossings(int i, int j, F w_i, F w_j) const {
-    assert((w_i * w_j).den() == 1);
-    return (w_i * w_j).num() * m_crossing_matrix(i, j);
+    F answer = w_i * w_j * F(m_crossing_matrix(i, j));
+    assert(answer.den() == 1);
+    return answer.num();
 }
 
 } // Namespace solver
 } // namespace banana
+
+// Explain what this code does
