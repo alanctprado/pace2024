@@ -17,6 +17,7 @@
 #define __PACE2024__ENVIRONMENT_HPP
 
 #include "options.h"
+#include "oracle.h"
 
 #include <memory>
 
@@ -28,10 +29,13 @@ public:
   Environment() = default;
   ~Environment() = default;
   static void setOptions(int argc, char *argv[]);
+  static void initOracle(graph::BipartiteGraph G);
   static options::Options options();
+  static const solver::Oracle& oracle();
 
 protected:
   static inline options::Options m_options = options::Options();
+  static inline solver::Oracle m_oracle = solver::Oracle();
 };
 
 } // namespace banana

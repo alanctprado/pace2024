@@ -31,6 +31,7 @@ namespace solver {
 class Oracle
 {
 public:
+    Oracle();
     Oracle(const graph::BipartiteGraph);
 
     typedef library::Fraction<long long> F;

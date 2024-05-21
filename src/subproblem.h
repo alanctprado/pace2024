@@ -1,6 +1,6 @@
 /******************************************************************************
  * Top contributors (to current version):
- *   Alan Prado
+ *   Kaio Vieira, Gabriel Ubiratan
  *
  * This file is part of Banana, a one-sided crossing minimization solver.
  *
@@ -10,25 +10,25 @@
  * licensing information.
  * ****************************************************************************
  *
- * Global environment
+ * Data Structure to store and index information about the instance being solved
  */
+#ifndef __PACE_2024_SUBPROBLEM_HPP
+#define __PACE_2024_SUBPROBLEM_HPP
 
+#include "bipartite_graph.h"
 #include "environment.h"
-#include "options.h"
+#include "oracle.h"
+
 
 namespace banana {
+namespace solver {
 
-void Environment::setOptions(int argc, char *argv[])
-{
-  m_options.parseArguments(argc, argv);
-}
+/**
+ * TODO: Explain how we're representing instances (subproblems) of the graph.
+ */
+typedef std::vector<std::pair<int, Oracle::F>> SubProblem;
 
-void Environment::initOracle(graph::BipartiteGraph G)
-{
-  m_oracle = solver::Oracle(G);
-}
-
-options::Options Environment::options() { return m_options; }
-const solver::Oracle& Environment::oracle() { return m_oracle; }
-
+} // namespace solver
 } // namespace banana
+
+#endif // __PACE_2024_SUBPROBLEM_HPP

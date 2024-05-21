@@ -62,6 +62,7 @@ set(SRC_FILES
   "${PROJECT_SOURCE_DIR}/src/ip_solver_gurobi.cpp"
   "${PROJECT_SOURCE_DIR}/src/ip_solver_or.cpp"
   "${PROJECT_SOURCE_DIR}/src/options.cpp"
+  "${PROJECT_SOURCE_DIR}/src/oracle.cpp"
   "${PROJECT_SOURCE_DIR}/src/wlgraph.cpp"
   "${PROJECT_SOURCE_DIR}/src/lgraph.cpp"
   "${PROJECT_SOURCE_DIR}/src/caterpillar_recognizer.cpp"
