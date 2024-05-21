@@ -159,5 +159,13 @@ std::vector<std::vector<LGraph::Edge>> LGraph::adjacencyList() const
   return m_adjacencyList;
 }
 
+void LGraph::sortAdjacencyList()
+{
+  for (unsigned u = 0; u < countVertices(); u++)
+  {
+    std::sort(m_adjacencyList[u].begin(), m_adjacencyList[u].end());
+  }
+}
+
 } // namespace graph
 } // namespace banana

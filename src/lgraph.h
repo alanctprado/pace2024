@@ -104,8 +104,11 @@ public:
   /** TO-DO */
   std::vector<std::vector<Edge>> primeDecomposition() const override;
 
-  /** Get the adjacency list representation of the graph. */
+  /** Gets the adjacency list representation of the graph. */
   std::vector<std::vector<Edge>> adjacencyList() const override;
+
+  /** Sorts the adjacency list of each vertex */
+  void sortAdjacencyList();
 };
 
 } // namespace graph
