@@ -15,9 +15,11 @@
 
 #include "crossing_matrix.h"
 #include "bipartite_graph.h"
+#include <stdexcept>
 #include <vector>
 #include <unordered_set>
 #include <unordered_map>
+#include <iostream>
 
 namespace banana {
 namespace crossing {
@@ -26,22 +28,29 @@ CrossingMatrix::CrossingMatrix(graph::BipartiteGraph graph) {
   /* Computes the naive interval system */
   std::vector<std::vector<int>> open(graph.countVerticesA()+1);
   std::vector<std::vector<int>> close(graph.countVerticesA()+1);
-  std::unordered_map<int, int> right;
+  std::vector<std::vector<int>> openclose(graph.countVerticesA()+1);
+
+  std::unordered_map<int, int> l, r;
 
   for (int v : graph.getB())
   {
-    int l = -1, r = -1;
+    l[v] = -1, r[v] = -1;
     for (int u : graph.neighborhood(v))
     {
-      if (l == -1 || u < l) l = u;
-      if (r == -1 || u > r) r = u;
+      if (l[v] == -1 || u < l[v]) l[v] = u;
+      if (r[v] == -1 || u > r[v]) r[v] = u;
     }
-    right[v] = r;
+    
+    if (l[v] == -1) continue;
 
-    if (l == -1) continue;
-    open[l].push_back(v);
-    close[r].push_back(v);
+    if (l[v] == r[v]) openclose[l[v]].push_back(v);
+    else {
+      open[l[v]].push_back(v);
+      close[r[v]].push_back(v);
+    }
   }
+
+  std::cout << std::endl;
 
   /* NOTE: The paper users a doubly linked list, maybe we should consider that?
    *
@@ -51,56 +60,59 @@ CrossingMatrix::CrossingMatrix(graph::BipartiteGraph graph) {
    * for some non-orientable pairs too. Further research is needed. */
   std::unordered_set<int> active;
 
-  /* First scan trough A: initializes counters for all orientable pairs
-   *
-   * We can probably only do one scan for now, this first one is used only to
-   * limit computation in the decision version of the problem (if a counter is
-   * initialized more than 2k times, the instance is infeasible)
-   */
-  for (int a : graph.getA())
-  {
-    for (int b : open[a]) active.insert(b);
-
-    for (int u : graph.neighborhood(a))
-      for (int v : active)
-        if (u != v) m_map[u][v] = 0;
-    
-    for (int b : close[a]) active.erase(b);
-  }
-
+  /* TODO: use vectors */
   std::unordered_map<int, int> d_less, d_leq;
 
-  /* Second scan: computes crossing numbers for orientable pairs */
   for (int a : graph.getA())
   {
     for (int b : graph.neighborhood(a)) d_leq[b]++;
-    for (int b : open[a]) active.insert(b);
 
+    /* This can possibly be quadratic, we probably want to drop the second if
+     * condition */
     for (int u : graph.neighborhood(a))
       for (int v : active)
-        if (u != v) m_map[u][v] += d_less[v];
-
-    for (int u : active)
-      for (int v : graph.neighborhood(a))
-      {
-        if (u == v || right[v] != a) continue;
-        m_map[u][v] += graph.degree(v) * (graph.degree(u) - d_leq[u]);
-      }
-
+        if (u != v && r[v] != l[u]) m_map[{u, v}] += d_less[v];
+     
+    for (int b : open[a]) active.insert(b);
     for (int b : close[a]) active.erase(b);
     for (int b : graph.neighborhood(a)) d_less[b]++;
   }
+  
+  if (!active.empty()) throw std::runtime_error("active is not empty");
+  active.clear(), d_leq.clear(), d_less.clear();
+
+  for (int a : graph.getA())
+  {
+    for (int b : graph.neighborhood(a)) d_leq[b]++; 
+    for (int b : close[a]) active.erase(b);
+
+    for (int u : active) {
+      for (int v : close[a])
+        m_map[{u, v}] += graph.degree(v) * (graph.degree(u) - d_leq[u]);
+
+      for (int v : openclose[a])
+        m_map[{u, v}] += graph.degree(v) * (graph.degree(u) - d_leq[u]);
+    }
+    
+    for (int b : open[a]) active.insert(b);
+    for (int b : graph.neighborhood(a)) d_less[b]++;
+  }   
 }
 
 /* TODO: decide how to handle forced and free pairs */
 int CrossingMatrix::CrossingMatrix::operator()(int u, int v) const
 {
   /* NOTE: we want .at() here because of const */
-  if (m_map.find(u) == m_map.end()) return -1;
-  auto x = m_map.at(u);
-  if (x.find(v) == x.end()) return -1;
-  return x.at(v);
+  if (m_map.find({u, v}) == m_map.end()) return -1;
+  return m_map.at({u, v});
 };
+
+std::vector<std::pair<int, int>> CrossingMatrix::getOrientablePairs() {
+  std::vector<std::pair<int, int>> res;
+  for (auto[p, c] : m_map)
+    res.push_back(p);
+  return res;
+}
 
 } // namespace crossing
 } // namespace banana

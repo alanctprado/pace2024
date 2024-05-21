@@ -1,6 +1,6 @@
 /******************************************************************************
  * Top contributors (to current version):
- *   Alan Prado
+ *   Alan Prado, Heitor Leite
  *
  * This file is part of Banana, a one-sided crossing minimization solver.
  *
