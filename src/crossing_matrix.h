@@ -23,6 +23,8 @@
 namespace banana {
 namespace crossing {
 
+/** TODO: Document this class
+  */
 class CrossingMatrix
 {
 public:
