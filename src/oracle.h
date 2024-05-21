@@ -17,6 +17,7 @@
 
 #include "bipartite_graph.h"
 #include "crossing_matrix.h"
+#include "fraction_type.h"
 
 namespace banana {
 namespace solver {
@@ -31,6 +32,8 @@ class Oracle
 {
 public:
     Oracle(const graph::BipartiteGraph);
+
+    typedef library::Fraction<long long> F;
 
     /**
      * Returns the real label name of the i-th vertex of the partition B.
@@ -50,11 +53,8 @@ public:
 
     /**
      * Number of crossings between i and j.
-     *
-     * TODO: change w_i and w_j to a fraction type.
-     * TODO: assert that this number is an integer.
      **/
-    int getCrossings(int i, int j, int w_i = 1, int w_j = 1) const;
+    int getCrossings(int i, int j, F w_i = 1, F w_j = 1) const;
 
 protected:
     graph::BipartiteGraph m_graph;

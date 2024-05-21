@@ -14,8 +14,7 @@
  */
 #include "oracle.h"
 #include "bipartite_graph.h"
-
-#include <stdexcept>
+#include <cassert>
 
 namespace banana {
 namespace solver {
@@ -41,8 +40,10 @@ std::vector<std::pair<int, int>> Oracle::getIntervals(std::vector<int> b_vertice
     return intervals;
 }
 
-int Oracle::getCrossings(int i, int j, int w_i, int w_j) const {
-    throw std::runtime_error("Not yet implemented.");
+/** TODO: Verify how to use crossing_matrix */
+int Oracle::getCrossings(int i, int j, F w_i, F w_j) const {
+    assert((w_i * w_j).den() == 1);
+    return (w_i * w_j).num() * m_crossing_matrix(i, j);
 }
 
 } // Namespace solver
