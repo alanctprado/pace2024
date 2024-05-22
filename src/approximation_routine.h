@@ -17,6 +17,7 @@
 #define __PACE2024__APPROXIMATION_ROUTINE_H
 
 #include "meta_solver.h"
+#include "subproblem.h"
 
 namespace banana {
 namespace solver {
@@ -28,7 +29,7 @@ namespace heuristic {
 class ApproximationRoutine : public MetaSolver<int>
 {
 public:
-  ApproximationRoutine(graph::BipartiteGraph graph);
+  ApproximationRoutine(SubProblem graph);
   virtual ~ApproximationRoutine() = default;
 };
 

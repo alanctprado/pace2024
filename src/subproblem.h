@@ -26,7 +26,7 @@ namespace solver {
 /**
  * TODO: Explain how we're representing instances (subproblems) of the graph.
  */
-typedef std::vector<std::pair<int, Oracle::F>> SubProblem;
+typedef std::vector<Oracle::Vertex> SubProblem;
 
 } // namespace solver
 } // namespace banana

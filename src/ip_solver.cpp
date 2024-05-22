@@ -18,6 +18,7 @@
 #include "meta_solver.h"
 #include "options.h"
 #include "../lp_solve_5.5/lp_lib.h"
+#include "subproblem.h"
 
 #include <algorithm>
 #include <cassert>
@@ -28,8 +29,8 @@ namespace banana {
 namespace solver {
 namespace ip {
 
-IntegerProgrammingSolver::IntegerProgrammingSolver(graph::BipartiteGraph graph)
-    : MetaSolver<int>(graph)
+IntegerProgrammingSolver::IntegerProgrammingSolver(SubProblem G)
+    : MetaSolver<int>(G)
 {}
 
 int IntegerProgrammingSolver::solve()
@@ -74,10 +75,9 @@ int IntegerProgrammingSolver::solve()
  */
 int IntegerProgrammingSolver::solveWithLPSolve1()
 {
-  std::vector<std::vector<int>> cm = m_graph.buildCrossingMatrix();
+  const auto& m_oracle = Environment::oracle();
 
-  int n = m_graph.countVerticesB();
-  int offset = m_graph.countVerticesA();
+  int n = m_instance.size();
 
   lprec *lp;
   lp = make_lp(0, n * n); // (#rows, #columns = #variables)
@@ -97,7 +97,7 @@ int IntegerProgrammingSolver::solveWithLPSolve1()
   {
     for (int j = 0; j < n; j++)
     {
-      c[i * n + j + 1] = cm[i][j];
+      c[i * n + j + 1] = m_oracle.getCrossings(m_instance[i].first, m_instance[j].first, m_instance[i].second, m_instance[j].second);
     }
   }
   set_obj_fn(lp, c);
@@ -166,7 +166,7 @@ int IntegerProgrammingSolver::solveWithLPSolve1()
   std::sort(sol.begin(), sol.end());
   for (int i = n - 1; i >= 0; i--)
   {
-    m_order.push_back(sol[i].second + offset);
+    m_order.push_back(sol[i].second);
   }
 
   double z = get_objective(lp);
@@ -206,11 +206,10 @@ std::pair<int, bool> IntegerProgrammingSolver::index2(int i, int j)
 
 int IntegerProgrammingSolver::solveWithLPSolve2()
 {
-  std::vector<std::vector<int>> cm = m_graph.buildCrossingMatrix();
+  const auto& m_oracle = Environment::oracle();
 
-  int n = m_graph.countVerticesB();
+  int n = m_instance.size();
   int index, b;
-  int offset = m_graph.countVerticesA();
   int columns = n * (n - 1) / 2;
 
   lprec *lp;
@@ -232,8 +231,10 @@ int IntegerProgrammingSolver::solveWithLPSolve2()
   {
     for (int j = 0; j < i; j++)
     {
-      c[index2(i, j).first] = cm[i][j] - cm[j][i];
-      objective_offset += cm[j][i];
+      int cm_ij = m_oracle.getCrossings(m_instance[i].first, m_instance[j].first, m_instance[i].second, m_instance[j].second);
+      int cm_ji = m_oracle.getCrossings(m_instance[j].first, m_instance[i].first, m_instance[j].second, m_instance[i].second);
+      c[index2(i, j).first] = cm_ij - cm_ji;
+      objective_offset += cm_ji;
     }
   }
   set_obj_fn(lp, c);
@@ -327,7 +328,7 @@ int IntegerProgrammingSolver::solveWithLPSolve2()
   std::sort(sol.begin(), sol.end());
   for (int i = n - 1; i >= 0; i--)
   {
-    m_order.push_back(sol[i].second + offset);
+    m_order.push_back(sol[i].second);
   }
 
   double z = get_objective(lp);

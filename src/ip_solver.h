@@ -18,6 +18,7 @@
 
 #include "bipartite_graph.h"
 #include "meta_solver.h"
+#include "subproblem.h"
 
 #include <string>
 
@@ -35,7 +36,7 @@ namespace ip {
 class IntegerProgrammingSolver : public MetaSolver<int>
 {
 public:
-  IntegerProgrammingSolver(graph::BipartiteGraph G);
+  IntegerProgrammingSolver(SubProblem G);
   ~IntegerProgrammingSolver() = default;
   int solve() override;
 

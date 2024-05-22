@@ -18,6 +18,7 @@
 #include "bipartite_graph.h"
 #include "crossing_matrix.h"
 #include "fraction_type.h"
+#include <utility>
 
 namespace banana {
 namespace solver {
@@ -35,6 +36,7 @@ public:
     Oracle(const graph::BipartiteGraph);
 
     typedef library::Fraction<long long> F;
+    typedef std::pair<int, F> Vertex;
 
     /**
      * Returns the real label name of the i-th vertex of the partition B.
@@ -52,10 +54,14 @@ public:
     std::vector<std::pair<int, int>>
     getIntervals(std::vector<int> b_vertices) const;
 
-    /**
-     * Number of crossings between i and j.
-     **/
-    int getCrossings(int i, int j, F w_i = 1, F w_j = 1) const;
+    /** Returns the number of crossings of a permutation of vertices from the partition B */
+    int numberOfCrossings(const std::vector<Vertex> &order) const;
+
+    /** Checks if the order has the expected number of crossings */
+    bool verify(const std::vector<Vertex> &order, int expected_crossings) const;
+
+    /** Number of crossings between i and j */
+    int getCrossings(Vertex v_i, Vertex v_j) const;
 
 protected:
     graph::BipartiteGraph m_graph;
