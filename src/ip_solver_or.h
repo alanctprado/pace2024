@@ -18,7 +18,7 @@
 
 #include "bipartite_graph.h"
 #include "ip_solver.h"
-#include "../or-tools/ortools/linear_solver/linear_solver.h"
+#include "ortools/linear_solver/linear_solver.h"
 
 #include <vector>
 

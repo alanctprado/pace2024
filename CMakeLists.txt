@@ -49,7 +49,7 @@ set(ORTOOLS_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/deps/or-tools")
 
 # Add the external project for OR-Tools
 ExternalProject_Add(
-    or-tools
+    or-tools-ep
     PREFIX ${ORTOOLS_INSTALL_PREFIX}
     GIT_REPOSITORY ${ORTOOLS_REPO}
     GIT_TAG v${ORTOOLS_VERSION}
@@ -92,11 +92,12 @@ add_library(common OBJECT ${SRC_FILES})
 set(CMAKE_CXX_FLAGS "-Ofast")
 SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 add_executable(pace $<TARGET_OBJECTS:common> "${PROJECT_SOURCE_DIR}/src/main.cpp")
-target_link_libraries(pace "${PROJECT_SOURCE_DIR}/lp_solve_5.5/lpsolve55/bin/ux64/liblpsolve55.a" dl)
+add_dependencies(pace or-tools-ep)
+target_link_libraries(pace "${PROJECT_SOURCE_DIR}/lp_solve_5.5/lpsolve55/bin/liblpsolve55.a" dl)
 target_link_libraries(pace "${PROJECT_SOURCE_DIR}/gurobi/src/build/libgurobi_c++.a" dl)
 target_link_libraries(pace "${PROJECT_SOURCE_DIR}/gurobi/lib/libgurobi110.so" dl)
-#target_link_libraries(pace "${PROJECT_SOURCE_DIR}/or-tools/ortools/linear_solver/linear_solver.h/gurobi/lib/libgurobi110.so" dl)
-# target_link_libraries(pace ortools::ortools)
+target_link_libraries(pace "${PROJECT_SOURCE_DIR}/build/deps/or-tools/lib/libortools.so.9" dl)
+
 
 add_custom_target(run_tiny
   COMMAND make -C build

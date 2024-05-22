@@ -44,7 +44,7 @@ int OrToolsSolver::shorter()
   unsigned n = m_graph.countVerticesB();
   unsigned columns = n * (n - 1) / 2;
 
-  std::unique_ptr<MPSolver> model(MPSolver::CreateSolver("HIGHS_LINEAR_PROGRAMMING"));
+  std::unique_ptr<MPSolver> model(MPSolver::CreateSolver("CBC"));
 
   if (!model) {
     std::cerr << "SCIP solver unavailable.\n";
