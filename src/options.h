@@ -34,6 +34,7 @@ enum class IPSolverMode
 {
   LPSOLVE,
   GUROBI,
+  OR_TOOLS,
 //  HIGHS,
 //  COINOR,
 //  GLPK,

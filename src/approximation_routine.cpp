@@ -20,7 +20,7 @@ namespace solver {
 namespace heuristic {
 
 ApproximationRoutine::ApproximationRoutine(graph::BipartiteGraph graph)
-    : MetaSolver<int>(graph)
+  : MetaSolver<graph::BipartiteGraph, int>(graph)
 {}
 
 } // namespace heuristic

@@ -15,6 +15,7 @@
 
 #include "base_solver.h"
 #include "environment.h"
+#include "ip_solver_or.h"
 #include "ip_solver_gurobi.h"
 #include "ip_solver_lpsolve.h"
 #include "options.h"
@@ -35,6 +36,9 @@ BaseSolver::BaseSolver(graph::BipartiteGraph graph) :  m_graph(graph)
       break;
     case options::IPSolverMode::GUROBI:
       m_ipSolver = std::make_unique<ip::GurobiSolver>(graph);
+      break;
+    case options::IPSolverMode::OR_TOOLS:
+      m_ipSolver = std::make_unique<ip::OrToolsSolver>(graph);
       break;
   }
 }

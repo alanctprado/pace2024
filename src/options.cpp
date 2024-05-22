@@ -57,6 +57,10 @@ void Options::parseArguments(int argc, char *argv[])
         {
           ip.solverMode = IPSolverMode::GUROBI;
         }
+        else if (!strcmp(optarg, "or-tools"))
+        {
+          ip.solverMode = IPSolverMode::OR_TOOLS;
+        }
         else
         {
           throw std::invalid_argument("Invalid IP Solver: " +
