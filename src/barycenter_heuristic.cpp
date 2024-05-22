@@ -14,6 +14,8 @@
  */
 
 #include "barycenter_heuristic.h"
+#include "environment.h"
+#include "subproblem.h"
 #include <algorithm>
 
 namespace banana {
@@ -21,7 +23,7 @@ namespace solver {
 namespace heuristic {
 namespace barycenter {
 
-BarycenterHeuristic::BarycenterHeuristic(graph::BipartiteGraph graph)
+BarycenterHeuristic::BarycenterHeuristic(SubProblem graph)
     : ApproximationRoutine(graph)
 {
   int n = graph.countVerticesB();
@@ -64,7 +66,7 @@ int BarycenterHeuristic::solve()
     b_layer[i] += offset;
   }
 
-  return numberOfCrossings(b_layer);
+  return Environment::oracle()::numberOfCrossings(b_layer);
 }
 
 /**

@@ -19,6 +19,7 @@
 #include "environment.h"
 #include "bipartite_graph.h"
 #include "meta_solver.h"
+#include "subproblem.h"
 
 #include <stdexcept>
 
@@ -44,7 +45,7 @@ template <class T, class U>
 class IntegerProgrammingSolver : public IntegerProgrammingSolverBase
 {
 public:
-  IntegerProgrammingSolver(graph::BipartiteGraph G);
+  IntegerProgrammingSolver(SubProblem G);
   ~IntegerProgrammingSolver() = default;
   int solve() override;
 
