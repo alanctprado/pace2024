@@ -33,7 +33,7 @@ namespace ip {
  * Currently, the integer programming solvers available are:
  *   - LP Solve
  */
-class IntegerProgrammingSolver : public MetaSolver<int>
+class IntegerProgrammingSolver : public MetaSolver
 {
 public:
   IntegerProgrammingSolver(SubProblem G);
@@ -47,6 +47,7 @@ protected:
   std::pair<int, bool> index2(int i, int j);
   int solveWithLPSolve2();
   std::string m_solver;
+  std::unordered_map<int, Oracle::F> m_weight;
 };
 
 } // namespace ip

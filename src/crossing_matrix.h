@@ -35,6 +35,7 @@ public:
 
 protected:
   std::unordered_map<int, std::unordered_map<int, int>> m_map;
+  std::vector<std::vector<int>> m_crossing_matrix;
 };
 
 } // namespace crossing

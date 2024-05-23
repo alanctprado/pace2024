@@ -49,7 +49,7 @@ namespace barycenter {
 class BarycenterHeuristic : public ApproximationRoutine
 {
 public:
-  BarycenterHeuristic(graph::BipartiteGraph graph);
+  BarycenterHeuristic(SubProblem instance);
   ~BarycenterHeuristic() override = default;
   int solve() override;
 

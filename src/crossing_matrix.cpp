@@ -23,6 +23,7 @@ namespace banana {
 namespace crossing {
 
 CrossingMatrix::CrossingMatrix(graph::BipartiteGraph graph) {
+  m_crossing_matrix = graph.buildCrossingMatrix();
   /* Computes the naive interval system */
   std::vector<std::vector<int>> open(graph.countVerticesA()+1);
   std::vector<std::vector<int>> close(graph.countVerticesA()+1);
@@ -95,6 +96,7 @@ CrossingMatrix::CrossingMatrix(graph::BipartiteGraph graph) {
 /* TODO: decide how to handle forced and free pairs */
 int CrossingMatrix::CrossingMatrix::operator()(int u, int v) const
 {
+  return m_crossing_matrix[u][v];
   /* NOTE: we want .at() here because of const */
   if (m_map.find(u) == m_map.end()) return -1;
   auto x = m_map.at(u);

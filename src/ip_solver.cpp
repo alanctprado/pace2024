@@ -30,8 +30,13 @@ namespace solver {
 namespace ip {
 
 IntegerProgrammingSolver::IntegerProgrammingSolver(SubProblem G)
-    : MetaSolver<int>(G)
-{}
+    : MetaSolver(G)
+{
+  for (int i = 0; i < m_instance.size(); i++)
+  {
+    m_weight[m_instance[i].first] = m_instance[i].second;
+  }
+}
 
 int IntegerProgrammingSolver::solve()
 {
@@ -97,7 +102,7 @@ int IntegerProgrammingSolver::solveWithLPSolve1()
   {
     for (int j = 0; j < n; j++)
     {
-      c[i * n + j + 1] = m_oracle.getCrossings(m_instance[i].first, m_instance[j].first, m_instance[i].second, m_instance[j].second);
+      c[i * n + j + 1] = m_oracle.getCrossings(m_instance[i], m_instance[j]);
     }
   }
   set_obj_fn(lp, c);
@@ -166,7 +171,7 @@ int IntegerProgrammingSolver::solveWithLPSolve1()
   std::sort(sol.begin(), sol.end());
   for (int i = n - 1; i >= 0; i--)
   {
-    m_order.push_back(sol[i].second);
+    m_order.emplace_back(sol[i].second, m_weight[sol[i].second]);
   }
 
   double z = get_objective(lp);
@@ -231,8 +236,8 @@ int IntegerProgrammingSolver::solveWithLPSolve2()
   {
     for (int j = 0; j < i; j++)
     {
-      int cm_ij = m_oracle.getCrossings(m_instance[i].first, m_instance[j].first, m_instance[i].second, m_instance[j].second);
-      int cm_ji = m_oracle.getCrossings(m_instance[j].first, m_instance[i].first, m_instance[j].second, m_instance[i].second);
+      int cm_ij = m_oracle.getCrossings(m_instance[i], m_instance[j]);
+      int cm_ji = m_oracle.getCrossings(m_instance[j], m_instance[i]);
       c[index2(i, j).first] = cm_ij - cm_ji;
       objective_offset += cm_ji;
     }
@@ -328,7 +333,7 @@ int IntegerProgrammingSolver::solveWithLPSolve2()
   std::sort(sol.begin(), sol.end());
   for (int i = n - 1; i >= 0; i--)
   {
-    m_order.push_back(sol[i].second);
+    m_order.emplace_back(sol[i].second, m_weight[sol[i].second]);
   }
 
   double z = get_objective(lp);

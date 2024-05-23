@@ -19,8 +19,8 @@ namespace banana {
 namespace solver {
 namespace heuristic {
 
-ApproximationRoutine::ApproximationRoutine(graph::BipartiteGraph graph)
-    : MetaSolver<int>(graph)
+ApproximationRoutine::ApproximationRoutine(SubProblem instance)
+    : MetaSolver(instance)
 {}
 
 } // namespace heuristic

@@ -21,35 +21,50 @@
 #include <cassert>
 #include <iostream>
 #include <string>
+#include <stdexcept>
 
 namespace banana {
 namespace solver {
 
 BaseSolver::BaseSolver(graph::BipartiteGraph graph)
-    : m_ipSolver(new ip::IntegerProgrammingSolver(graph)), m_graph(graph)
-{}
+    : m_graph(graph)
+{
+  SubProblem subProblem;
+  for (int i = 0; i < m_graph.countVerticesB(); i++)
+  {
+    subProblem.emplace_back(i, 1);
+  }
+  m_ipSolver = std::make_unique<ip::IntegerProgrammingSolver>(subProblem);
+}
 
 void BaseSolver::verifySolution(int expected_crossings)
 {
   std::string path = Environment::options().verify.verifyPath;
   std::vector<int> order = utils::readSolution<int>(path);
-  assert(m_ipSolver->verify(order, expected_crossings));
+  // TODO: Reimplement the old verify function
+  std::vector<Oracle::Vertex> order_oracle;
+  for (auto vertex : order)
+  {
+    order_oracle.emplace_back(vertex - m_graph.countVerticesA(), 1);
+  }
+  assert(Environment::oracle().verify(order_oracle, expected_crossings));
 }
 
 void BaseSolver::runBanana()
 {
   int crossings = m_ipSolver->solve();
-  std::vector<int> order;
+  std::vector<Oracle::Vertex> order;
   m_ipSolver->explain(order);
-  assert(m_ipSolver->verify(order, crossings));
+  assert(Environment::oracle().verify(order, crossings));
+  
   if (Environment::options().verify.verifyMode ==
       banana::options::VerifyMode::FULL)
   {
     verifySolution(crossings);
   }
-  for (int vertex : order)
+  for (auto [vertex, _] : order)
   {
-    std::cout << vertex + 1 << "\n";
+    std::cout << vertex + m_graph.countVerticesA() + 1 << "\n";
   }
 }
 

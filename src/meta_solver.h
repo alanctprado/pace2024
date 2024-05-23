@@ -20,6 +20,7 @@
 #include "bipartite_graph.h"
 #include "fenwick_tree.h"
 #include "subproblem.h"
+#include "oracle.h"
 
 #include <algorithm>
 #include <cassert>
@@ -31,28 +32,19 @@ namespace solver {
 /**
  * Abstract solver class
  */
-template <class T> class MetaSolver
+class MetaSolver
 {
 public:
   MetaSolver(SubProblem G) : m_instance(G) {}
   virtual ~MetaSolver() {}
 
   virtual int solve() = 0;
-  void explain(std::vector<T> &order);
+  void explain(std::vector<Oracle::Vertex> &order);
 
 protected:
   SubProblem const m_instance;
-  std::vector<T> m_order;
+  std::vector<Oracle::Vertex> m_order;
 };
-
-template <class T> void MetaSolver<T>::explain(std::vector<T> &order)
-{
-  assert(order.size() == 0);
-  for (T vertex : m_order)
-  {
-    order.push_back(vertex);
-  }
-}
 
 } // namespace solver
 } // namespace banana
