@@ -30,38 +30,57 @@ enum class Flags
   VerifyMode
 };
 
+enum class IPSubSolverMode
+{
+  NONE,
+  HIGHS,
+  CBC,
+  CP_MIP,
+  CP_SAT,
+  GLPK,
+};
+
 enum class IPSolverMode
 {
   LPSOLVE,
   GUROBI,
   OR_TOOLS,
-//  HIGHS,
-//  COINOR,
-//  GLPK,
+
+  //  HIGHS,
+  //  COINOR,
+  //  GLPK,
   __MAX_VALUE = LPSOLVE
 };
 
 enum class IPFormulation
 {
-  SIMPLE, SHORTER, QUADRATIC, VINI,
+  SIMPLE,
+  SHORTER,
+  QUADRATIC,
+  VINI,
   __MAX_VALUE = SHORTER
 };
 
 enum class IPPrefixConstraints
 {
-  NONE, X, Y, BOTH,
+  NONE,
+  X,
+  Y,
+  BOTH,
   __MAX_VALUE = NONE
 };
 
 enum class VerifyMode
 {
-  LIGHT, COMPLETE,
+  LIGHT,
+  COMPLETE,
   __MAX_VALUE = LIGHT
 };
 
 struct HolderIP
 {
   IPSolverMode solverMode = IPSolverMode::LPSOLVE;
+  IPSubSolverMode subSolverMode = IPSubSolverMode::NONE;
   IPFormulation formulation = IPFormulation::SHORTER;
   IPPrefixConstraints prefixConstraints = IPPrefixConstraints::NONE;
 };

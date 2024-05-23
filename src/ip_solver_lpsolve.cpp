@@ -47,7 +47,7 @@ int LPSolveSolver::simple()
   /** Configure objective function */
   set_minim(lp);
   std::vector<double> c(n * n + 1);
-  c[0] = 0;    // Element 0 is ignored by LP Solve
+  c[0] = 0; // Element 0 is ignored by LP Solve
   for (int i = 0; i < n; i++)
   {
     for (int j = 0; j < n; j++)
@@ -125,7 +125,7 @@ int LPSolveSolver::simple()
 
   double z = get_objective(lp);
   delete_lp(lp);
-  return round(z);    // Return optimal value
+  return round(z); // Return optimal value
 }
 
 int LPSolveSolver::shorter()
@@ -150,7 +150,7 @@ int LPSolveSolver::shorter()
   /** Configure objective function */
   set_minim(lp);
   std::vector<double> c(columns + 1);
-  c[0] = 0;    // Element 0 is ignored by LP Solve
+  c[0] = 0; // Element 0 is ignored by LP Solve
   int objective_offset = 0;
   for (int i = 0; i < n; i++)
   {
@@ -176,19 +176,40 @@ int LPSolveSolver::shorter()
 
         std::tie(index, b) = triangularIndex(i, j);
         index++;
-        if (!b) { c[index] = 1; }
-        else { c[index] = -1; rhs -= 1; }
+        if (!b)
+        {
+          c[index] = 1;
+        }
+        else
+        {
+          c[index] = -1;
+          rhs -= 1;
+        }
 
         std::tie(index, b) = triangularIndex(j, k);
         index++;
-        if (!b) { c[index] = 1; }
-        else { c[index] = -1; rhs -= 1; }
+        if (!b)
+        {
+          c[index] = 1;
+        }
+        else
+        {
+          c[index] = -1;
+          rhs -= 1;
+        }
 
         std::tie(index, b) = triangularIndex(i, k);
         index++;
-        if (!b) { c[index] = -1; }
-        else { c[index] = 1; rhs += 1; }
-        
+        if (!b)
+        {
+          c[index] = -1;
+        }
+        else
+        {
+          c[index] = 1;
+          rhs += 1;
+        }
+
         add_constraint(lp, c.data(), LE, rhs);
         c[triangularIndex(i, j).first + 1] = 0;
         c[triangularIndex(j, k).first + 1] = 0;
@@ -198,7 +219,7 @@ int LPSolveSolver::shorter()
   }
 
   /** Prefix constraints */
-  const auto& opt = Environment::options().ip.prefixConstraints;
+  const auto &opt = Environment::options().ip.prefixConstraints;
   if (opt == options::IPPrefixConstraints::X)
   {
     xPrefix(lp, c);
@@ -219,10 +240,10 @@ int LPSolveSolver::shorter()
   }
 
   /**
-    * Create vector with how many successors each vertex in B has.
-    * Sort this vector and return the vertices in reverse order.
-    */
-  double* vars = (double*) malloc((columns) * sizeof(double));
+   * Create vector with how many successors each vertex in B has.
+   * Sort this vector and return the vertices in reverse order.
+   */
+  double *vars = (double *)malloc((columns) * sizeof(double));
   get_variables(lp, vars);
   std::vector<std::pair<int, int>> sol;
   for (int i = 0; i < n; i++)
@@ -230,7 +251,10 @@ int LPSolveSolver::shorter()
     int count_successors = 0;
     for (int j = 0; j < n; j++)
     {
-      if (i == j) { continue; }
+      if (i == j)
+      {
+        continue;
+      }
       std::tie(index, b) = triangularIndex(i, j);
       count_successors += !b ? vars[index] : 1 - vars[index];
     }
@@ -245,7 +269,7 @@ int LPSolveSolver::shorter()
   double z = get_objective(lp);
   delete_lp(lp);
 
-  return round(z) + objective_offset;    // Return optimal value
+  return round(z) + objective_offset; // Return optimal value
 }
 
 int LPSolveSolver::quadratic()
@@ -256,14 +280,14 @@ int LPSolveSolver::quadratic()
   int columns = n * (n - 1) / 2 + n * n;
   int offset = n * (n - 1) / 2;
 
-  lprec* lp;
-  lp = make_lp(0, columns);    // (#rows, #columns = #variables)
+  lprec *lp;
+  lp = make_lp(0, columns); // (#rows, #columns = #variables)
   /**
-    * SEVERE:   Only severe messages are reported. Errors.
-    * CRITICAL: Only critical messages are reported. Hard errors like
-    *           instability, out of memory, ...
-    * Change to critical before submitting.
-    */
+   * SEVERE:   Only severe messages are reported. Errors.
+   * CRITICAL: Only critical messages are reported. Hard errors like
+   *           instability, out of memory, ...
+   * Change to critical before submitting.
+   */
   set_verbose(lp, SEVERE);
 
   /** Configure objective function */
@@ -283,14 +307,20 @@ int LPSolveSolver::quadratic()
   std::fill(c.begin(), c.end(), 0);
   for (int k = 0; k < n; k++)
   {
-    for (int i = 0; i < n; i++) { c[yIndex(i, k, n, offset)] = 1; }
+    for (int i = 0; i < n; i++)
+    {
+      c[yIndex(i, k, n, offset)] = 1;
+    }
     add_constraint(lp, c.data(), EQ, k + 1);
-    for (int i = 0; i < n; i++) { c[yIndex(i, k, n, offset)] = 0; }
+    for (int i = 0; i < n; i++)
+    {
+      c[yIndex(i, k, n, offset)] = 0;
+    }
   }
 
   for (int k = 0; k < n - 1; k++)
   {
-    for (int i = 0; i < n; i++) 
+    for (int i = 0; i < n; i++)
     {
       c[yIndex(i, k, n, offset)] = 1;
       c[yIndex(i, k + 1, n, offset)] = -1;
@@ -302,9 +332,10 @@ int LPSolveSolver::quadratic()
 
   for (int i = 0; i < n; i++)
   {
-    for (int j = 0; j < n; j++) 
+    for (int j = 0; j < n; j++)
     {
-      if (i == j) continue;
+      if (i == j)
+        continue;
       int rhs = 0;
       for (int k = 0; k < n; k++)
       {
@@ -312,8 +343,15 @@ int LPSolveSolver::quadratic()
         c[yIndex(j, k, n, offset)] = -1;
         auto [index, b] = triangularIndex(j, i);
         index++;
-        if (!b) { c[index] = -(n - 1); }
-        else { c[index] = n - 1; rhs += n - 1; }
+        if (!b)
+        {
+          c[index] = -(n - 1);
+        }
+        else
+        {
+          c[index] = n - 1;
+          rhs += n - 1;
+        }
       }
       add_constraint(lp, c.data(), LE, rhs);
       for (int k = 0; k < n; k++)
@@ -326,7 +364,7 @@ int LPSolveSolver::quadratic()
   }
 
   /** Prefix constraints */
-  const auto& opt = Environment::options().ip.prefixConstraints;
+  const auto &opt = Environment::options().ip.prefixConstraints;
   if (opt == options::IPPrefixConstraints::X ||
       opt == options::IPPrefixConstraints::BOTH)
   {
@@ -340,7 +378,10 @@ int LPSolveSolver::quadratic()
   }
 
   /** 0-1 variables constraint */
-  for (int i = 1; i <= columns; i++) { set_binary(lp, i, TRUE); }
+  for (int i = 1; i <= columns; i++)
+  {
+    set_binary(lp, i, TRUE);
+  }
 
   if (::solve(lp))
   {
@@ -348,10 +389,10 @@ int LPSolveSolver::quadratic()
   }
 
   /**
-    * Create vector with how many successors each vertex in B has.
-    * Sort this vector and return the vertices in reverse order.
-    */
-  double* vars = (double*) malloc((columns) * sizeof(double));
+   * Create vector with how many successors each vertex in B has.
+   * Sort this vector and return the vertices in reverse order.
+   */
+  double *vars = (double *)malloc((columns) * sizeof(double));
   get_variables(lp, vars);
 
   std::vector<std::pair<int, int>> sol;
@@ -360,7 +401,10 @@ int LPSolveSolver::quadratic()
     int count_successors = 0;
     for (int j = 0; j < n; j++)
     {
-      if (i == j) { continue; }
+      if (i == j)
+      {
+        continue;
+      }
       auto [index, b] = triangularIndex(i, j);
       count_successors += !b ? vars[index] : 1 - vars[index];
     }
@@ -376,10 +420,10 @@ int LPSolveSolver::quadratic()
 
   double z = get_objective(lp);
   delete_lp(lp);
-  return round(z) + objective_offset;    // Return optimal value
+  return round(z) + objective_offset; // Return optimal value
 }
 
-void LPSolveSolver::xPrefix(lprec* lp, std::vector<double>& c)
+void LPSolveSolver::xPrefix(lprec *lp, std::vector<double> &c)
 {
   std::vector<std::vector<int>> cm = m_graph.buildCrossingMatrix();
   int n = m_graph.countVerticesB();
@@ -399,31 +443,32 @@ void LPSolveSolver::xPrefix(lprec* lp, std::vector<double>& c)
     std::vector<int> order(n - 1);
     std::iota(order.begin(), order.begin() + p, 0);
     std::iota(order.begin() + p, order.end(), p + 1);
-    std::sort(order.begin(), order.end(), [&] (int i, int j)
-        {
-          return deltas[i] < deltas[j];
-        });
+    std::sort(order.begin(), order.end(),
+              [&](int i, int j) { return deltas[i] < deltas[j]; });
 
-    /** 
-      * The position of 'p' is at most max_prefix, being the first moment 
-      * when it's certainly better to put 'p' at the beginning,
-      * this is given by the first prefix such that \sum_j delta_j > 0
-      */
+    /**
+     * The position of 'p' is at most max_prefix, being the first moment
+     * when it's certainly better to put 'p' at the beginning,
+     * this is given by the first prefix such that \sum_j delta_j > 0
+     */
     int cum_sum = 0, max_prefix = 0;
-    for (int j = 0; j < n - 1; j++) {
+    for (int j = 0; j < n - 1; j++)
+    {
       cum_sum += deltas[order[j]];
-      if (cum_sum > 0) { break; }
+      if (cum_sum > 0)
+      {
+        break;
+      }
       max_prefix++;
     }
 
-    /** 
-      * Populates the constraint vector 'c' with the sum of 'x_{jp}' for 
-      * every other vertex 'j', when 'p' is fixed.
-      *
-      * It is used to restrict the position of 'p' to a prefix or a suffix.
-      */
-    auto _create_constraint = [&] ()
-    {
+    /**
+     * Populates the constraint vector 'c' with the sum of 'x_{jp}' for
+     * every other vertex 'j', when 'p' is fixed.
+     *
+     * It is used to restrict the position of 'p' to a prefix or a suffix.
+     */
+    auto _create_constraint = [&]() {
       for (int j = 0; j < p; j++)
       {
         c[triangularIndex(j, p).first + 1] = 1;
@@ -434,11 +479,10 @@ void LPSolveSolver::xPrefix(lprec* lp, std::vector<double>& c)
       }
     };
 
-    /** 
-      * Resets the constraint vector 'c' to be used by the next constraint.
-      */
-    auto _undo_constraint = [&] ()
-    {
+    /**
+     * Resets the constraint vector 'c' to be used by the next constraint.
+     */
+    auto _undo_constraint = [&]() {
       for (int j = 0; j < p; j++)
       {
         c[triangularIndex(j, p).first + 1] = 0;
@@ -458,17 +502,20 @@ void LPSolveSolver::xPrefix(lprec* lp, std::vector<double>& c)
       _undo_constraint();
     }
 
-    /** 
-      * The position of 'p' is at least min_suffix, being the first moment 
-      * when it's certainly better to put 'p' at the end,
-      * this is given by the first suffix such that \sum_j delta_j < 0
-      */
+    /**
+     * The position of 'p' is at least min_suffix, being the first moment
+     * when it's certainly better to put 'p' at the end,
+     * this is given by the first suffix such that \sum_j delta_j < 0
+     */
     cum_sum = 0;
     int min_suffix = n - 1;
     for (int j = n - 2; j >= 0; --j)
     {
       cum_sum += deltas[order[j]];
-      if (cum_sum < 0) { break; }
+      if (cum_sum < 0)
+      {
+        break;
+      }
       min_suffix--;
     }
 
@@ -483,7 +530,7 @@ void LPSolveSolver::xPrefix(lprec* lp, std::vector<double>& c)
   }
 }
 
-void LPSolveSolver::yPrefix(lprec* lp, std::vector<double>& c)
+void LPSolveSolver::yPrefix(lprec *lp, std::vector<double> &c)
 {
   throw std::runtime_error("Not implemented.\n");
 }
@@ -496,14 +543,14 @@ int LPSolveSolver::vini()
   int columns = n * (n - 1) / 2 + n * n;
   int offset = n * (n - 1) / 2;
 
-  lprec* lp;
-  lp = make_lp(0, columns);    // (#rows, #columns = #variables)
+  lprec *lp;
+  lp = make_lp(0, columns); // (#rows, #columns = #variables)
   /**
-    * SEVERE:   Only severe messages are reported. Errors.
-    * CRITICAL: Only critical messages are reported. Hard errors like
-    *           instability, out of memory, ...
-    * Change to critical before submitting.
-    */
+   * SEVERE:   Only severe messages are reported. Errors.
+   * CRITICAL: Only critical messages are reported. Hard errors like
+   *           instability, out of memory, ...
+   * Change to critical before submitting.
+   */
   set_verbose(lp, SEVERE);
 
   /** Configure objective function */
@@ -523,14 +570,20 @@ int LPSolveSolver::vini()
   std::fill(c.begin(), c.end(), 0);
   for (int k = 0; k < n; k++)
   {
-    for (int i = 0; i < n; i++) { c[yIndex(i, k, n, offset)] = 1; }
+    for (int i = 0; i < n; i++)
+    {
+      c[yIndex(i, k, n, offset)] = 1;
+    }
     add_constraint(lp, c.data(), EQ, k + 1);
-    for (int i = 0; i < n; i++) { c[yIndex(i, k, n, offset)] = 0; }
+    for (int i = 0; i < n; i++)
+    {
+      c[yIndex(i, k, n, offset)] = 0;
+    }
   }
 
   for (int k = 0; k < n - 1; k++)
   {
-    for (int i = 0; i < n; i++) 
+    for (int i = 0; i < n; i++)
     {
       c[yIndex(i, k, n, offset)] = 1;
       c[yIndex(i, k + 1, n, offset)] = -1;
@@ -542,9 +595,10 @@ int LPSolveSolver::vini()
 
   for (int i = 0; i < n; i++)
   {
-    for (int j = 0; j < n; j++) 
+    for (int j = 0; j < n; j++)
     {
-      if (i == j) continue;
+      if (i == j)
+        continue;
       for (int k = 0; k < n; k++)
       {
         int rhs = 0;
@@ -552,8 +606,15 @@ int LPSolveSolver::vini()
         c[yIndex(j, k, n, offset)] = -1;
         auto [index, b] = triangularIndex(j, i);
         index++;
-        if (!b) { c[index] = -1; }
-        else { c[index] = 1; rhs += 1; }
+        if (!b)
+        {
+          c[index] = -1;
+        }
+        else
+        {
+          c[index] = 1;
+          rhs += 1;
+        }
         add_constraint(lp, c.data(), LE, rhs);
         c[yIndex(i, k, n, offset)] = 0;
         c[yIndex(j, k, n, offset)] = 0;
@@ -563,7 +624,7 @@ int LPSolveSolver::vini()
   }
 
   /** Prefix constraints */
-  const auto& opt = Environment::options().ip.prefixConstraints;
+  const auto &opt = Environment::options().ip.prefixConstraints;
   if (opt == options::IPPrefixConstraints::X ||
       opt == options::IPPrefixConstraints::BOTH)
   {
@@ -577,7 +638,10 @@ int LPSolveSolver::vini()
   }
 
   /** 0-1 variables constraint */
-  for (int i = 1; i <= columns; i++) { set_binary(lp, i, TRUE); }
+  for (int i = 1; i <= columns; i++)
+  {
+    set_binary(lp, i, TRUE);
+  }
 
   if (::solve(lp))
   {
@@ -585,10 +649,10 @@ int LPSolveSolver::vini()
   }
 
   /**
-    * Create vector with how many successors each vertex in B has.
-    * Sort this vector and return the vertices in reverse order.
-    */
-  double* vars = (double*) malloc((columns) * sizeof(double));
+   * Create vector with how many successors each vertex in B has.
+   * Sort this vector and return the vertices in reverse order.
+   */
+  double *vars = (double *)malloc((columns) * sizeof(double));
   get_variables(lp, vars);
 
   std::vector<std::pair<int, int>> sol;
@@ -597,7 +661,10 @@ int LPSolveSolver::vini()
     int count_successors = 0;
     for (int j = 0; j < n; j++)
     {
-      if (i == j) { continue; }
+      if (i == j)
+      {
+        continue;
+      }
       auto [index, b] = triangularIndex(i, j);
       count_successors += !b ? vars[index] : 1 - vars[index];
     }
@@ -613,7 +680,7 @@ int LPSolveSolver::vini()
 
   double z = get_objective(lp);
   delete_lp(lp);
-  return round(z) + objective_offset;    // Return optimal value
+  return round(z) + objective_offset; // Return optimal value
 }
 
 } // namespace ip

@@ -100,7 +100,6 @@ target_link_libraries(pace "${PROJECT_SOURCE_DIR}/build/deps/or-tools/lib/libort
 
 
 add_custom_target(run_tiny
-  COMMAND make -C build
   COMMAND sh run_set.sh tiny-set "$(ARGS)"
   WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
 )

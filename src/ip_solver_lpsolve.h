@@ -27,7 +27,8 @@ namespace solver {
 namespace ip {
 
 /** TODO: document */
-class LPSolveSolver : public IntegerProgrammingSolver<lprec, std::vector<double>>
+class LPSolveSolver
+    : public IntegerProgrammingSolver<lprec, std::vector<double>>
 {
 public:
   LPSolveSolver(graph::BipartiteGraph G);
@@ -38,8 +39,8 @@ public:
   int quadratic() override;
   int vini() override;
 
-  void xPrefix(lprec* program, std::vector<double>& vars) override;
-  void yPrefix(lprec* program, std::vector<double>& vars) override;
+  void xPrefix(lprec *program, std::vector<double> &vars) override;
+  void yPrefix(lprec *program, std::vector<double> &vars) override;
 };
 
 } // namespace ip

@@ -24,7 +24,6 @@
 
 #include <iostream>
 
-
 namespace banana {
 namespace solver {
 namespace ip {
@@ -33,10 +32,7 @@ GurobiSolver::GurobiSolver(graph::BipartiteGraph graph)
     : IntegerProgrammingSolver<GRBModel, GRBVar>(graph)
 {}
 
-int GurobiSolver::simple()
-{
-  throw std::runtime_error("Not implemented.\n");
-}
+int GurobiSolver::simple() { throw std::runtime_error("Not implemented.\n"); }
 
 int GurobiSolver::shorter()
 {
@@ -53,13 +49,14 @@ int GurobiSolver::shorter()
   GRBModel model = GRBModel(env);
   model.set(GRB_IntAttr_ModelSense, GRB_MINIMIZE);
 
-  double* ub = (double*)malloc(columns * sizeof(double));  // Is this necessary, though?
+  double *ub =
+      (double *)malloc(columns * sizeof(double)); // Is this necessary, though?
   for (unsigned i = 0; i < columns; i++)
   {
     ub[i] = 1;
   }
 
-  double* obj = (double*)malloc(columns * sizeof(double));
+  double *obj = (double *)malloc(columns * sizeof(double));
   int objective_offset = 0;
   for (int i = 0; i < n; i++)
   {
@@ -70,43 +67,67 @@ int GurobiSolver::shorter()
     }
   }
 
-  char* type = (char*)malloc(columns * sizeof(char));
+  char *type = (char *)malloc(columns * sizeof(char));
   for (unsigned i = 0; i < columns; i++)
   {
     type[i] = GRB_BINARY;
   }
 
-  GRBVar* variables = model.addVars(NULL, ub, obj, type, NULL, columns);
+  GRBVar *variables = model.addVars(NULL, ub, obj, type, NULL, columns);
 
-  free(ub); free(obj); free(type);
+  free(ub);
+  free(obj);
+  free(type);
 
   /** Transitivity constraints */
   int index, b;
-  double* coeffs = (double*)malloc(3 * sizeof(double));
-  GRBVar* vars = (GRBVar*)malloc(3 * sizeof(GRBVar));
+  double *coeffs = (double *)malloc(3 * sizeof(double));
+  GRBVar *vars = (GRBVar *)malloc(3 * sizeof(GRBVar));
   for (int i = 0; i < n; i++)
   {
     for (int j = 0; j < n; j++)
     {
       for (int k = 0; k < n; k++)
       {
-        if (i == j or i == k or j == k) continue;
+        if (i == j or i == k or j == k)
+          continue;
         double rhs = 1;
 
         std::tie(index, b) = triangularIndex(i, j);
         vars[0] = variables[index];
-        if (!b) { coeffs[0] = 1; }
-        else { coeffs[0] = -1; rhs -= 1; }
+        if (!b)
+        {
+          coeffs[0] = 1;
+        }
+        else
+        {
+          coeffs[0] = -1;
+          rhs -= 1;
+        }
 
         std::tie(index, b) = triangularIndex(j, k);
         vars[1] = variables[index];
-        if (!b) { coeffs[1] = 1; }
-        else { coeffs[1] = -1; rhs -= 1; }
+        if (!b)
+        {
+          coeffs[1] = 1;
+        }
+        else
+        {
+          coeffs[1] = -1;
+          rhs -= 1;
+        }
 
         std::tie(index, b) = triangularIndex(i, k);
         vars[2] = variables[index];
-        if (!b) { coeffs[2] = -1; }
-        else { coeffs[2] = 1; rhs += 1; }
+        if (!b)
+        {
+          coeffs[2] = -1;
+        }
+        else
+        {
+          coeffs[2] = 1;
+          rhs += 1;
+        }
 
         GRBLinExpr constraint;
         constraint.addTerms(coeffs, vars, 3);
@@ -116,7 +137,7 @@ int GurobiSolver::shorter()
   }
 
   /** Prefix constraints */
-  const auto& opt = Environment::options().ip.prefixConstraints;
+  const auto &opt = Environment::options().ip.prefixConstraints;
   if (opt == options::IPPrefixConstraints::X ||
       opt == options::IPPrefixConstraints::BOTH)
   {
@@ -132,16 +153,19 @@ int GurobiSolver::shorter()
   model.optimize();
 
   /**
-    * Create vector with how many successors each vertex in B has.
-    * Sort this vector and return the vertices in reverse order.
-    */
+   * Create vector with how many successors each vertex in B has.
+   * Sort this vector and return the vertices in reverse order.
+   */
   std::vector<std::pair<int, int>> sol;
   for (int i = 0; i < n; i++)
   {
     int count_successors = 0;
     for (int j = 0; j < n; j++)
     {
-      if (i == j) { continue; }
+      if (i == j)
+      {
+        continue;
+      }
       std::tie(index, b) = triangularIndex(i, j);
       double value = variables[index].get(GRB_DoubleAttr_X);
       count_successors += !b ? value : 1 - value;
@@ -158,7 +182,7 @@ int GurobiSolver::shorter()
 
   double z = model.get(GRB_DoubleAttr_ObjVal);
 
-  return round(z) + objective_offset;    // Return optimal value
+  return round(z) + objective_offset; // Return optimal value
 }
 
 int GurobiSolver::quadratic()
@@ -166,20 +190,17 @@ int GurobiSolver::quadratic()
   throw std::runtime_error("Not implemented.\n");
 }
 
-void GurobiSolver::xPrefix(GRBModel* model, GRBVar& vars)
+void GurobiSolver::xPrefix(GRBModel *model, GRBVar &vars)
 {
   throw std::runtime_error("Not implemented.\n");
 }
 
-void GurobiSolver::yPrefix(GRBModel* model, GRBVar& vars)
+void GurobiSolver::yPrefix(GRBModel *model, GRBVar &vars)
 {
   throw std::runtime_error("Not implemented.\n");
 }
 
-int GurobiSolver::vini()
-{
-  throw std::runtime_error("Not implemented.\n");
-}
+int GurobiSolver::vini() { throw std::runtime_error("Not implemented.\n"); }
 
 } // namespace ip
 } // namespace solver

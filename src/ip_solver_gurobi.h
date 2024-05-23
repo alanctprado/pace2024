@@ -38,8 +38,8 @@ public:
   int quadratic() override;
   int vini() override;
 
-  void xPrefix(GRBModel* model, GRBVar& vars) override;
-  void yPrefix(GRBModel* model, GRBVar& vars) override;
+  void xPrefix(GRBModel *model, GRBVar &vars) override;
+  void yPrefix(GRBModel *model, GRBVar &vars) override;
 };
 
 } // namespace ip

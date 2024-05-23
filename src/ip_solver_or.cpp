@@ -15,6 +15,8 @@
 
 #include "ip_solver_or.h"
 
+#include "options.h"
+
 #include <cstdlib>
 #include <math.h>
 #include <numeric>
@@ -23,19 +25,16 @@
 
 #include <iostream>
 
-
 namespace banana {
 namespace solver {
 namespace ip {
 
-OrToolsSolver::OrToolsSolver(graph::BipartiteGraph graph)
-  : IntegerProgrammingSolver<MPSolver, std::vector<MPVariable>>(graph)
-{}
+  OrToolsSolver::OrToolsSolver(graph::BipartiteGraph graph, const options::IPSubSolverMode& subSolver)
+    : IntegerProgrammingSolver<MPSolver, std::vector<MPVariable>>(graph), sub_solver(subSolver)
+  {
+  }
 
-int OrToolsSolver::simple()
-{
-  throw std::runtime_error("Not implemented.\n");
-}
+int OrToolsSolver::simple() { throw std::runtime_error("Not implemented.\n"); }
 
 int OrToolsSolver::shorter()
 {
@@ -44,24 +43,50 @@ int OrToolsSolver::shorter()
   unsigned n = m_graph.countVerticesB();
   unsigned columns = n * (n - 1) / 2;
 
-  std::unique_ptr<MPSolver> model(MPSolver::CreateSolver("CBC"));
+  std::unique_ptr<MPSolver> model;
 
-  if (!model) {
-    std::cerr << "SCIP solver unavailable.\n";
+  switch (sub_solver)
+    {
+    case options::IPSubSolverMode::NONE:
+      throw std::runtime_error("OR-TOOLS needs to use a sub solver!.\n");
+    case options::IPSubSolverMode::CBC:
+      model = std::unique_ptr<MPSolver>(MPSolver::CreateSolver("CBC"));
+      break;
+
+    case options::IPSubSolverMode::HIGHS:
+      model = std::unique_ptr<MPSolver>(MPSolver::CreateSolver("HIGHS_LINEAR_PROGRAMMING"));
+      break;
+    case options::IPSubSolverMode::CP_MIP:
+      model = std::unique_ptr<MPSolver>(MPSolver::CreateSolver("CPLEX_MIP"));
+      break;
+
+    case options::IPSubSolverMode::CP_SAT:
+      model = std::unique_ptr<MPSolver>(MPSolver::CreateSolver("CP_SAT"));
+      break;
+
+    case options::IPSubSolverMode::GLPK:
+      model = std::unique_ptr<MPSolver>(MPSolver::CreateSolver("GLPK_MIP"));
+      break;
+    }
+
+  if (!model)
+  {
+    std::cerr << "Sub solver unavailable.\n";
     exit(1);
   }
 
-  std::vector<MPVariable*> variables;
-  model->MakeBoolVarArray((int) columns, std::string{"x"}, &variables);
+  std::vector<MPVariable *> variables;
+  model->MakeBoolVarArray((int)columns, std::string{"x"}, &variables);
 
-  MPObjective* const objective = model->MutableObjective();
+  MPObjective *const objective = model->MutableObjective();
 
   int objective_offset = 0;
   for (int i = 0; i < n; i++)
   {
     for (int j = 0; j < i; j++)
     {
-      objective->SetCoefficient(variables[triangularIndex(i, j).first], cm[i][j] - cm[j][i]);
+      objective->SetCoefficient(variables[triangularIndex(i, j).first],
+                                cm[i][j] - cm[j][i]);
       objective_offset += cm[j][i];
     }
   }
@@ -71,7 +96,7 @@ int OrToolsSolver::shorter()
 
   /** Transitivity constraints */
   int index, b;
-  double* coeffs = (double*)malloc(3 * sizeof(double));
+  double *coeffs = (double *)malloc(3 * sizeof(double));
   for (int i = 0; i < n; i++)
   {
     for (int j = 0; j < n; j++)
@@ -79,23 +104,45 @@ int OrToolsSolver::shorter()
       for (int k = 0; k < n; k++)
       {
 
-        MPConstraint* constraint = model->MakeRowConstraint();
-        if (i == j or i == k or j == k) continue;
+        MPConstraint *constraint = model->MakeRowConstraint();
+        if (i == j or i == k or j == k)
+          continue;
         double rhs = 1;
 
         std::tie(index, b) = triangularIndex(i, j);
-        if (!b) {constraint->SetCoefficient(variables[index], 1);}
-        else { constraint->SetCoefficient(variables[index], -1); rhs -= 1; }
+        if (!b)
+        {
+          constraint->SetCoefficient(variables[index], 1);
+        }
+        else
+        {
+          constraint->SetCoefficient(variables[index], -1);
+          rhs -= 1;
+        }
 
         std::tie(index, b) = triangularIndex(j, k);
-        if (!b) { constraint->SetCoefficient(variables[index], 1); }
-        else { constraint->SetCoefficient(variables[index], -1); rhs -= 1; }
+        if (!b)
+        {
+          constraint->SetCoefficient(variables[index], 1);
+        }
+        else
+        {
+          constraint->SetCoefficient(variables[index], -1);
+          rhs -= 1;
+        }
 
         std::tie(index, b) = triangularIndex(i, k);
-        if (!b) { constraint->SetCoefficient(variables[index], -1); }
-        else {  constraint->SetCoefficient(variables[index], 1); rhs += 1; }
+        if (!b)
+        {
+          constraint->SetCoefficient(variables[index], -1);
+        }
+        else
+        {
+          constraint->SetCoefficient(variables[index], 1);
+          rhs += 1;
+        }
 
-        //constraint->SetLB(0);
+        // constraint->SetLB(0);
         constraint->SetUB(rhs);
       }
     }
@@ -124,16 +171,19 @@ int OrToolsSolver::shorter()
   }
 
   /**
-    * Create vector with how many successors each vertex in B has.
-    * Sort this vector and return the vertices in reverse order.
-    */
+   * Create vector with how many successors each vertex in B has.
+   * Sort this vector and return the vertices in reverse order.
+   */
   std::vector<std::pair<int, int>> sol;
   for (int i = 0; i < n; i++)
   {
     int count_successors = 0;
     for (int j = 0; j < n; j++)
     {
-      if (i == j) { continue; }
+      if (i == j)
+      {
+        continue;
+      }
       std::tie(index, b) = triangularIndex(i, j);
       double value = variables[index]->solution_value();
       count_successors += !b ? value : 1 - value;
@@ -150,7 +200,7 @@ int OrToolsSolver::shorter()
 
   double z = objective->Value();
 
-  return round(z);    // Return optimal value
+  return round(z); // Return optimal value
 }
 
 int OrToolsSolver::quadratic()
@@ -158,21 +208,17 @@ int OrToolsSolver::quadratic()
   throw std::runtime_error("Not implemented.\n");
 }
 
-int OrToolsSolver::vini()
+int OrToolsSolver::vini() { throw std::runtime_error("Not implemented.\n"); }
+
+void OrToolsSolver::xPrefix(MPSolver *model, std::vector<MPVariable> &vars)
 {
   throw std::runtime_error("Not implemented.\n");
 }
 
-void OrToolsSolver::xPrefix(MPSolver* model, std::vector<MPVariable>& vars)
+void OrToolsSolver::yPrefix(MPSolver *model, std::vector<MPVariable> &vars)
 {
   throw std::runtime_error("Not implemented.\n");
 }
-
-void OrToolsSolver::yPrefix(MPSolver* model, std::vector<MPVariable>& vars)
-{
-  throw std::runtime_error("Not implemented.\n");
-}
-
 
 } // namespace ip
 } // namespace solver

@@ -18,6 +18,7 @@
 
 #include "bipartite_graph.h"
 #include "ip_solver.h"
+#include "options.h"
 #include "ortools/linear_solver/linear_solver.h"
 
 #include <vector>
@@ -28,18 +29,11 @@ namespace ip {
 
 using namespace operations_research; // OR-Tools
 
-enum class OrSolver
-{
-  SCIP,
-  GLOP,
-  CBC,
-  HIGHS,
-};
-
-class OrToolsSolver : public IntegerProgrammingSolver<MPSolver, std::vector<MPVariable>>
+class OrToolsSolver
+    : public IntegerProgrammingSolver<MPSolver, std::vector<MPVariable>>
 {
 public:
-  OrToolsSolver(graph::BipartiteGraph G);
+  OrToolsSolver(graph::BipartiteGraph G, const options::IPSubSolverMode& subSolver);
   ~OrToolsSolver() = default;
 
   int simple() override;
@@ -47,8 +41,11 @@ public:
   int quadratic() override;
   int vini() override;
 
-  void xPrefix(MPSolver* model, std::vector<MPVariable>& vars) override;
-  void yPrefix(MPSolver* model, std::vector<MPVariable>& vars) override;
+  void xPrefix(MPSolver *model, std::vector<MPVariable> &vars) override;
+  void yPrefix(MPSolver *model, std::vector<MPVariable> &vars) override;
+
+protected:
+  options::IPSubSolverMode sub_solver;
 };
 
 } // namespace ip

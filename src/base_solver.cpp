@@ -26,20 +26,21 @@
 namespace banana {
 namespace solver {
 
-BaseSolver::BaseSolver(graph::BipartiteGraph graph) :  m_graph(graph)
+BaseSolver::BaseSolver(graph::BipartiteGraph graph) : m_graph(graph)
 {
-  const auto& ip_solver = Environment::options().ip.solverMode;
+  const auto &ip_solver = Environment::options().ip.solverMode;
+  const auto &ip_sub_solver = Environment::options().ip.subSolverMode;
   switch (ip_solver)
   {
-    case options::IPSolverMode::LPSOLVE:
-      m_ipSolver = std::make_unique<ip::LPSolveSolver>(graph);
-      break;
-    case options::IPSolverMode::GUROBI:
-      m_ipSolver = std::make_unique<ip::GurobiSolver>(graph);
-      break;
-    case options::IPSolverMode::OR_TOOLS:
-      m_ipSolver = std::make_unique<ip::OrToolsSolver>(graph);
-      break;
+  case options::IPSolverMode::LPSOLVE:
+    m_ipSolver = std::make_unique<ip::LPSolveSolver>(graph);
+    break;
+  case options::IPSolverMode::GUROBI:
+    m_ipSolver = std::make_unique<ip::GurobiSolver>(graph);
+    break;
+  case options::IPSolverMode::OR_TOOLS:
+    m_ipSolver = std::make_unique<ip::OrToolsSolver>(graph, ip_sub_solver);
+    break;
   }
 }
 
