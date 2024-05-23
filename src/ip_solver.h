@@ -41,8 +41,7 @@ public:
  * This class defines an integer programming solver for the OSCM problem. It is
  * an abstract class which will be extended by each solver.
  */
-template <class T, class U>
-class IntegerProgrammingSolver : public IntegerProgrammingSolverBase
+class IntegerProgrammingSolver : public MetaSolver
 {
 public:
   IntegerProgrammingSolver(SubProblem G);

@@ -26,10 +26,10 @@ namespace heuristic {
 /**
  * Abstract approximation routine class
  */
-class ApproximationRoutine : public MetaSolver<graph::BipartiteGraph, int>
+class ApproximationRoutine : public MetaSolver
 {
 public:
-  ApproximationRoutine(SubProblem graph);
+  ApproximationRoutine(SubProblem instance);
   virtual ~ApproximationRoutine() = default;
 };
 

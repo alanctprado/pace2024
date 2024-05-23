@@ -139,6 +139,7 @@ CrossingMatrix::CrossingMatrix(graph::BipartiteGraph graph)
 /* TODO: decide how to handle forced and free pairs */
 int CrossingMatrix::CrossingMatrix::operator()(int u, int v) const
 {
+  return m_crossing_matrix[u][v];
   /* NOTE: we want .at() here because of const */
   if (m_map.find({u, v}) == m_map.end())
     return -1;

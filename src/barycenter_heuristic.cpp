@@ -16,6 +16,7 @@
 #include "barycenter_heuristic.h"
 #include "environment.h"
 #include "subproblem.h"
+#include "oracle.h"
 #include <algorithm>
 
 namespace banana {
@@ -23,15 +24,11 @@ namespace solver {
 namespace heuristic {
 namespace barycenter {
 
-BarycenterHeuristic::BarycenterHeuristic(SubProblem graph)
-    : ApproximationRoutine(graph)
+BarycenterHeuristic::BarycenterHeuristic(SubProblem instance) : ApproximationRoutine(instance)
 {
-  int n = graph.countVerticesB();
-  int offset = graph.countVerticesA();
-
-  for (int i = 0; i < n; ++i)
+  for (auto [i, _] : instance)
   {
-    m_neighborhoodInfo.push_back(getNeighborhoodInfo(i + offset));
+    m_neighborhoodInfo.push_back(getNeighborhoodInfo(i));
   }
 }
 
@@ -44,29 +41,21 @@ BarycenterHeuristic::BarycenterHeuristic(SubProblem graph)
  */
 int BarycenterHeuristic::solve()
 {
-  int n = m_graph.countVerticesB();
-  int offset = m_graph.countVerticesA();
+  int n = m_neighborhoodInfo.size();
 
-  std::vector<int> b_layer;
-  for (int i = 0; i < n; ++i)
-  {
-    b_layer.push_back(i);
-  }
+  SubProblem b_layer = m_instance;
 
-  std::sort(b_layer.begin(), b_layer.end(), [&](int node1, int node2) {
-    long long v1 = (1ll * m_neighborhoodInfo[node1].first *
-                    m_neighborhoodInfo[node2].second);
-    long long v2 = (1ll * m_neighborhoodInfo[node2].first *
-                    m_neighborhoodInfo[node1].second);
+  std::sort(b_layer.begin(), b_layer.end(), [&](auto node1, auto node2) {
+    auto [i, _1] = node1;
+    auto [j, _2] = node2;
+    long long v1 = (1ll * m_neighborhoodInfo[i].first *
+                    m_neighborhoodInfo[j].second);
+    long long v2 = (1ll * m_neighborhoodInfo[j].first *
+                    m_neighborhoodInfo[i].second);
     return (v1 < v2);
   });
 
-  for (int i = 0; i < n; ++i)
-  {
-    b_layer[i] += offset;
-  }
-
-  return Environment::oracle()::numberOfCrossings(b_layer);
+  return Environment::oracle().numberOfCrossings(b_layer);
 }
 
 /**
@@ -75,7 +64,8 @@ int BarycenterHeuristic::solve()
  */
 std::pair<int, int> BarycenterHeuristic::getNeighborhoodInfo(int node)
 {
-  std::vector<int> neighbors = m_graph.neighborhood(node);
+  auto &_oracle = Environment::oracle();
+  std::vector<int> neighbors = _oracle.neighborhood(node);
 
   int neighborhood_sum = 0;
   for (auto v : neighbors)
