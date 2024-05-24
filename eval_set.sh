@@ -28,20 +28,37 @@ fi
 echo "# SET:$path TL:$tl ML:$ml ARGS:$args" >> "$out"
 echo "CASE, STATUS, TIME(s), MEMORY(KiB)" >> "$out"
 
+cnt=0
+last_solved=$(wc -l "$out" | awk '{print $1}')
+
 # Run each instance from the given set
 for file in "$path"/*.gr; do
-    cnt=$(ps | wc -l)
+    echo $cnt
+    solved_cnt=$(wc -l "$out" | awk '{print $1}')
+    if [[ "$cnt" -eq "$jobs" ]]; then
 
-    while [[ "$cnt" -gt  "$jobs" ]]; do
-        echo "Currently there are $cnt jobs running, waiting..."
-        sleep "10s"
-        cnt=$(ps | wc -l)
-    done
+        delta=$((jobs - solved_cnt + last_solved))
 
-    # Bash shenanigans for getting the file name without extensions
-    name_file=${file##*/}
-    name_file=${name_file%.*}
+        while [[ "$delta" -gt $((jobs - 1)) ]]; do
+            echo "Currently there are $delta jobs runnning, waiting..."
+            sleep 10s
+            solved_cnt=$(wc -l "$out" | awk '{print $1}')
+            delta=$((jobs - solved_cnt + last_solved))
+        done
 
-    echo "$name_file," "$(sh eval_case.sh "$file" "$tl" "$ml" "$args" | tail -n 1)," \
-         "$(/usr/bin/time -f'%e\n%M' sh eval_case.sh "$file" "$tl" "$ml" "$args" 2>&1 | sed -n '2,3 p' | tr '\n' ',')" >> "$out" &
+        last_solved=$solved_cnt
+
+        cnt=0
+    fi
+
+    if [[ "$cnt" -lt "$jobs" ]]; then
+        cnt=$((cnt + 1))
+
+        # Bash shenanigans for getting the file name without extensions
+        name_file=${file##*/}
+        name_file=${name_file%.*}
+
+        echo "$name_file," "$(sh eval_case.sh "$file" "$tl" "$ml" "$args" | tail -n 1)," \
+             "$(/usr/bin/time -f'%e\n%M' sh eval_case.sh "$file" "$tl" "$ml" "$args" 2>&1 | sed -n '2,3 p' | tr '\n' ',')" >> "$out" &
+    fi
 done
