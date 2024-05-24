@@ -19,7 +19,6 @@
 #include <vector>
 #include <unordered_set>
 #include <unordered_map>
-#include <iostream>
 
 namespace banana {
 namespace crossing {
@@ -55,8 +54,6 @@ CrossingMatrix::CrossingMatrix(graph::BipartiteGraph graph)
       close[r[v]].push_back(v);
     }
   }
-
-  std::cout << std::endl;
 
   /* NOTE: The paper users a doubly linked list, maybe we should consider that?
    *
