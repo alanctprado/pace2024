@@ -82,15 +82,9 @@ std::vector<std::vector<int>> BipartiteGraph::buildCrossingMatrix() const
   return crossing_matrix;
 }
 
-std::vector<int> BipartiteGraph::getA() const
-{
-  return m_partA;
-}
+std::vector<int> BipartiteGraph::getA() const { return m_partA; }
 
-std::vector<int> BipartiteGraph::getB() const
-{
-  return m_partB;
-}
+std::vector<int> BipartiteGraph::getB() const { return m_partB; }
 
 } // namespace graph
 } // namespace banana

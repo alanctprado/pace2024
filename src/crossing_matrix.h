@@ -35,8 +35,10 @@ public:
 protected:
   /* Is this the best way to hash pairs? It works fine assuming size_t is 8
    * bytes and int 4 bytes */
-  struct pair_hash {
-    size_t operator() (const std::pair<int, int>& p) const {
+  struct pair_hash
+  {
+    size_t operator()(const std::pair<int, int> &p) const
+    {
       return ((size_t)p.first << 32) | p.second;
     }
   };
@@ -47,4 +49,4 @@ protected:
 } // namespace crossing
 } // namespace banana
 
-#endif  // __PACE2024__CROSSING_MATRIX_H
+#endif // __PACE2024__CROSSING_MATRIX_H
