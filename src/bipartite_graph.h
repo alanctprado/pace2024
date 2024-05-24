@@ -1,6 +1,6 @@
 /******************************************************************************
  * Top contributors (to current version):
- *   Alan Prado
+ *   Alan Prado, Heitor Leite
  *
  * This file is part of Banana, a one-sided crossing minimization solver.
  *
@@ -45,6 +45,10 @@ public:
    * */
   std::vector<std::vector<int>> buildCrossingMatrix() const;
 
+  /* Get vertices in partitions A and B */
+  std::vector<int> getA() const;
+  std::vector<int> getB() const;
+
 protected:
   std::vector<int> m_partA, m_partB;
 };
@@ -52,4 +56,4 @@ protected:
 } // namespace graph
 } // namespace banana
 
-#endif // __PACE2024__BIPARTITE_GRAPH_HPP
+#endif // __PACE2024__BIPARTITE_GRAPH_H
