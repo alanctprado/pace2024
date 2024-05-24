@@ -57,7 +57,8 @@ CrossingMatrix::CrossingMatrix(graph::BipartiteGraph graph) {
    * NOTE: The paper only consider active vertices whose interval that
    * strictly contain (l < x < r) the current vertex, but that seemed to produce
    * wrong results. (l <= x <= r) works, but seems to compute crossing numbers
-   * for some non-orientable pairs too. Further research is needed. */
+   * for some non-orientable pairs too. Instead, we implemented an alternative
+   * similar algorithm. */
   std::unordered_set<int> active;
 
   /* TODO: use vectors */
@@ -67,14 +68,19 @@ CrossingMatrix::CrossingMatrix(graph::BipartiteGraph graph) {
   {
     for (int b : graph.neighborhood(a)) d_leq[b]++;
 
-    /* This can possibly be quadratic, we probably want to drop the second if
-     * condition */
+    for (int u : graph.neighborhood(a)) {
+      if (l[u] == a) continue;
+      for (int v : close[a])
+        if (u != v) m_map[{u, v}] += d_less[v];
+    }
+     
+    for (int b : close[a]) active.erase(b);
+    
     for (int u : graph.neighborhood(a))
       for (int v : active)
-        if (u != v && r[v] != l[u]) m_map[{u, v}] += d_less[v];
-     
+        if (u != v) m_map[{u, v}] += d_less[v];
+    
     for (int b : open[a]) active.insert(b);
-    for (int b : close[a]) active.erase(b);
     for (int b : graph.neighborhood(a)) d_less[b]++;
   }
   
