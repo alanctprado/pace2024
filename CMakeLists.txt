@@ -28,18 +28,6 @@ execute_process(
   WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
 )
 
-# include(FetchContent)
-# FetchContent_Declare(
-#   or-tools
-#   GIT_REPOSITORY https://github.com/google/or-tools.git
-#   GIT_TAG        v9.10)
-# set(BUILD_DEPS ON)
-# set(BUILD_DOC OFF)
-# set(BUILD_SAMPLES OFF)
-# set(BUILD_EXAMPLES OFF)
-# FetchContent_MakeAvailable(or-tools)
-# Include the ExternalProject module
-
 # Define the OR-Tools version and repository
 set(ORTOOLS_VERSION "9.10")
 set(ORTOOLS_REPO "https://github.com/google/or-tools.git")
@@ -96,7 +84,7 @@ add_dependencies(pace or-tools-ep)
 target_link_libraries(pace "${PROJECT_SOURCE_DIR}/lp_solve_5.5/lpsolve55/bin/liblpsolve55.a" dl)
 target_link_libraries(pace "${PROJECT_SOURCE_DIR}/gurobi/src/build/libgurobi_c++.a" dl)
 target_link_libraries(pace "${PROJECT_SOURCE_DIR}/gurobi/lib/libgurobi110.so" dl)
-target_link_libraries(pace "${PROJECT_SOURCE_DIR}/build/deps/or-tools/lib/libortools.so.9" dl)
+target_link_libraries(pace "${PROJECT_SOURCE_DIR}/build/deps/or-tools/lib64/libortools.so.9" dl)
 
 
 add_custom_target(run_tiny

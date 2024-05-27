@@ -37,22 +37,23 @@ for file in "$path"/*.gr; do
     solved_cnt=$(wc -l "$out" | awk '{print $1}')
     if [[ "$cnt" -eq "$jobs" ]]; then
 
-        delta=$((jobs - solved_cnt + last_solved))
+        delta=$((solved_cnt - last_solved))
 
-        while [[ "$delta" -gt $((jobs - 1)) ]]; do
+        while [[ "$delta" -eq 0 ]]; do
             echo "Currently there are $delta jobs runnning, waiting..."
             sleep 10s
             solved_cnt=$(wc -l "$out" | awk '{print $1}')
-            delta=$((jobs - solved_cnt + last_solved))
+            delta=$((solved_cnt - last_solved))
         done
 
-        last_solved=$solved_cnt
+        cnt=$((cnt - (solved_cnt - last_solved)))
 
-        cnt=0
+        last_solved=$solved_cnt
     fi
 
     if [[ "$cnt" -lt "$jobs" ]]; then
         cnt=$((cnt + 1))
+        echo "Counter: $cnt"
 
         # Bash shenanigans for getting the file name without extensions
         name_file=${file##*/}
