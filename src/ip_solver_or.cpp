@@ -29,10 +29,11 @@ namespace banana {
 namespace solver {
 namespace ip {
 
-  OrToolsSolver::OrToolsSolver(graph::BipartiteGraph graph, const options::IPSubSolverMode& subSolver)
-    : IntegerProgrammingSolver<MPSolver, std::vector<MPVariable>>(graph), sub_solver(subSolver)
-  {
-  }
+OrToolsSolver::OrToolsSolver(graph::BipartiteGraph graph,
+                             const options::IPSubSolverMode &subSolver)
+    : IntegerProgrammingSolver<MPSolver, std::vector<MPVariable>>(graph),
+      sub_solver(subSolver)
+{}
 
 int OrToolsSolver::simple() { throw std::runtime_error("Not implemented.\n"); }
 
@@ -46,33 +47,33 @@ int OrToolsSolver::shorter()
   std::unique_ptr<MPSolver> model;
 
   switch (sub_solver)
-    {
-    case options::IPSubSolverMode::NONE:
-      throw std::runtime_error("OR-TOOLS needs to use a sub solver!.\n");
-    case options::IPSubSolverMode::CBC:
-      model = std::unique_ptr<MPSolver>(MPSolver::CreateSolver("CBC"));
-      break;
+  {
+  case options::IPSubSolverMode::NONE:
+    throw std::runtime_error("OR-TOOLS needs to use a sub solver!.\n");
+  case options::IPSubSolverMode::CBC:
+    model = std::unique_ptr<MPSolver>(MPSolver::CreateSolver("CBC"));
+    break;
 
-    case options::IPSubSolverMode::HIGHS:
-      model = std::unique_ptr<MPSolver>(MPSolver::CreateSolver("HIGHS_LINEAR_PROGRAMMING"));
-      break;
-    case options::IPSubSolverMode::CP_MIP:
-      model = std::unique_ptr<MPSolver>(MPSolver::CreateSolver("CPLEX_MIP"));
-      break;
+  case options::IPSubSolverMode::HIGHS:
+    model = std::unique_ptr<MPSolver>(
+        MPSolver::CreateSolver("HIGHS_LINEAR_PROGRAMMING"));
+    break;
+  case options::IPSubSolverMode::CP_MIP:
+    model = std::unique_ptr<MPSolver>(MPSolver::CreateSolver("CPLEX_MIP"));
+    break;
 
-    case options::IPSubSolverMode::CP_SAT:
-      model = std::unique_ptr<MPSolver>(MPSolver::CreateSolver("CP_SAT"));
-      break;
+  case options::IPSubSolverMode::CP_SAT:
+    model = std::unique_ptr<MPSolver>(MPSolver::CreateSolver("CP_SAT"));
+    break;
 
-    case options::IPSubSolverMode::GLPK:
-      model = std::unique_ptr<MPSolver>(MPSolver::CreateSolver("GLPK_MIP"));
-      break;
-    }
+  case options::IPSubSolverMode::GLPK:
+    model = std::unique_ptr<MPSolver>(MPSolver::CreateSolver("GLPK_MIP"));
+    break;
+  }
 
   if (!model)
   {
-    std::cerr << "Sub solver unavailable.\n";
-    exit(1);
+    throw std::runtime_error("Sub solver unavailable!");
   }
 
   std::vector<MPVariable *> variables;
@@ -166,8 +167,7 @@ int OrToolsSolver::shorter()
 
   if (result_status != MPSolver::OPTIMAL)
   {
-    std::cerr << "Houston, we have a problem! :q\n";
-    exit(1);
+    throw std::runtime_error("Houston, we have a problem! :q\n");
   }
 
   /**

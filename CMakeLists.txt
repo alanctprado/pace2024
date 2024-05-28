@@ -72,21 +72,20 @@ set(SRC_FILES
   "${PROJECT_SOURCE_DIR}/src/starforest_recognizer.cpp"
   "${PROJECT_SOURCE_DIR}/src/outerplanar_recognizer.cpp"
   "${PROJECT_SOURCE_DIR}/src/lobster_recognizer.cpp"
-  "${PROJECT_SOURCE_DIR}/src/interval_system.cpp"
   "${PROJECT_SOURCE_DIR}/src/crossing_matrix.cpp")
 
 ## Objetos comuns a todos os targets
 add_library(common OBJECT ${SRC_FILES})
 
 ## Configuração para compilação do executável final
-set(CMAKE_CXX_FLAGS "-Ofast")
+set(CMAKE_CXX_FLAGS "-Ofast -g -fsanitize=address,undefined")
 SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 add_executable(pace $<TARGET_OBJECTS:common> "${PROJECT_SOURCE_DIR}/src/main.cpp")
 add_dependencies(pace or-tools-ep)
-target_link_libraries(pace "${PROJECT_SOURCE_DIR}/lp_solve_5.5/lpsolve55/bin/liblpsolve55.a" dl)
+target_link_libraries(pace "${PROJECT_SOURCE_DIR}/lp_solve_5.5/lpsolve55/bin/ux64/liblpsolve55.a" dl)
 target_link_libraries(pace "${PROJECT_SOURCE_DIR}/gurobi/src/build/libgurobi_c++.a" dl)
 target_link_libraries(pace "${PROJECT_SOURCE_DIR}/gurobi/lib/libgurobi110.so" dl)
-target_link_libraries(pace "${PROJECT_SOURCE_DIR}/build/deps/or-tools/lib64/libortools.so.9" dl)
+target_link_libraries(pace "${PROJECT_SOURCE_DIR}/build/deps/or-tools/lib/libortools.so.9" dl)
 
 
 add_custom_target(run_tiny

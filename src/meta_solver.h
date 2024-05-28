@@ -21,6 +21,7 @@
 #include "fenwick_tree.h"
 
 #include <algorithm>
+#include <iostream>
 #include <cassert>
 #include <vector>
 
@@ -118,7 +119,9 @@ bool MetaSolver<T, U>::verify(const std::vector<U> &order,
                               int expected_crossings) const
 {
   assert(order.size() == m_graph.countVerticesB());
-  return numberOfCrossings(order) == expected_crossings;
+  auto nc = numberOfCrossings(order);
+  std::cerr << "otimo: " << nc << " sol: " << expected_crossings << std::endl;
+  return nc == expected_crossings;
 }
 
 } // namespace solver

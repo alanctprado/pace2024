@@ -33,7 +33,8 @@ class OrToolsSolver
     : public IntegerProgrammingSolver<MPSolver, std::vector<MPVariable>>
 {
 public:
-  OrToolsSolver(graph::BipartiteGraph G, const options::IPSubSolverMode& subSolver);
+  OrToolsSolver(graph::BipartiteGraph G,
+                const options::IPSubSolverMode &subSolver);
   ~OrToolsSolver() = default;
 
   int simple() override;
