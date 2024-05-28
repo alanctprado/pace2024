@@ -5,10 +5,19 @@ if [ $# -lt 4 ]; then
     exit 1
 fi
 
-ARGS=$*
+file=$1
+tl=$2
+ml=$3
 
-ulimit -v "$3"
-timeout -s "SIGTERM" "$2" ./build/pace "$ARGS" < "$1" #>/dev/null 2>/dev/null
+shift 3
+ARGS=$@
+
+# echo "File: $file"
+# echo "Tl: $tl"
+# echo "ML: $ml"
+# echo "Args: $ARGS"
+
+(ulimit -v "$ml"; timeout -s "SIGTERM" "$tl" ./build/pace "$ARGS" < "$file" >/dev/null 2>/dev/null)
 exit_code=$?
 
 if [ $exit_code -eq 139 ]; then

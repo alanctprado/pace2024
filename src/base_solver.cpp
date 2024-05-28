@@ -56,6 +56,10 @@ void BaseSolver::runBanana()
   int crossings = m_ipSolver->solve();
   std::vector<int> order;
   m_ipSolver->explain(order);
+  for (int vertex : order)
+  {
+    std::cerr << vertex + 1 << "\n";
+  }
   assert(m_ipSolver->verify(order, crossings));
   if (Environment::options().verify.verifyMode ==
       banana::options::VerifyMode::COMPLETE)

@@ -25,7 +25,7 @@
 namespace banana {
 namespace options {
 
-  void resolve_sub_solver(HolderIP &ip, const std::string &name)
+void resolve_sub_solver(HolderIP &ip, const std::string &name)
 {
   assert(ip.solverMode == IPSolverMode::OR_TOOLS);
 
@@ -54,8 +54,6 @@ namespace options {
     throw std::invalid_argument("Invalid OR-Tools Sub Solver: " + name);
   }
 }
-
-
 
 void Options::parseArguments(int argc, char *argv[])
 {

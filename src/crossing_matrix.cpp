@@ -15,6 +15,7 @@
 
 #include "crossing_matrix.h"
 #include "bipartite_graph.h"
+#include <algorithm>
 #include <stdexcept>
 #include <vector>
 #include <unordered_set>
@@ -23,12 +24,9 @@
 namespace banana {
 namespace crossing {
 
-CrossingMatrix::CrossingMatrix(graph::BipartiteGraph graph)
+std::vector<std::unordered_map<int, int>>
+CrossingMatrix::getIntervals(const graph::BipartiteGraph &graph)
 {
-  /* Computes the naive interval system */
-  std::vector<std::vector<int>> open(graph.countVerticesA() + 1);
-  std::vector<std::vector<int>> close(graph.countVerticesA() + 1);
-  std::vector<std::vector<int>> openclose(graph.countVerticesA() + 1);
 
   std::unordered_map<int, int> l, r;
 
@@ -45,7 +43,25 @@ CrossingMatrix::CrossingMatrix(graph::BipartiteGraph graph)
 
     if (l[v] == -1)
       continue;
+  }
 
+  return {l, r};
+}
+
+CrossingMatrix::CrossingMatrix(graph::BipartiteGraph graph)
+{
+  /* Computes the naive interval system */
+  std::vector<std::vector<int>> open(graph.countVerticesA() + 1);
+  std::vector<std::vector<int>> close(graph.countVerticesA() + 1);
+  std::vector<std::vector<int>> openclose(graph.countVerticesA() + 1);
+
+  auto intervals = getIntervals(graph);
+  std::unordered_map<int, int> l, r;
+  l = intervals[0], r = intervals[1];
+
+  for (int v : graph.getB())
+  {
+    if (l[v] == -1) continue;
     if (l[v] == r[v])
       openclose[l[v]].push_back(v);
     else
@@ -136,6 +152,7 @@ std::vector<std::pair<int, int>> CrossingMatrix::getOrientablePairs()
   std::vector<std::pair<int, int>> res;
   for (auto [p, c] : m_map)
     res.push_back(p);
+  std::sort(res.begin(), res.end());
   return res;
 }
 
