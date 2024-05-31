@@ -16,6 +16,7 @@
 #include "bipartite_graph.h"
 #include "fenwick_tree.h"
 #include <cassert>
+#include <set>
 #include <algorithm>
 #include <iostream>
 
@@ -42,6 +43,13 @@ std::vector<std::pair<int, int>> Oracle::getIntervals(std::vector<int> b_vertice
     std::vector<std::pair<int, int>> intervals;
     for (int b : b_vertices)
         intervals.push_back(getInterval(b));
+    return intervals;
+}
+
+std::vector<std::pair<int, int>> Oracle::getIntervals(SubProblem b_vertices) const {
+    std::vector<std::pair<int, int>> intervals;
+    for (auto b : b_vertices)
+        intervals.push_back(getInterval(b.first));
     return intervals;
 }
 
@@ -126,6 +134,72 @@ bool Oracle::verify(const std::vector<Vertex> &order,
   //std::cout << "Expected " << expected_crossings << " crossings" << std::endl;
   //std::cout << "Actual " << numberOfCrossings(order) << " crossings" << std::endl;
   return numberOfCrossings(order) == expected_crossings;
+}
+
+// get all orientable pairs of some subinstance P
+// works in O(P log P)
+std::vector<std::pair<int, int>> Oracle::getOrientablePairs(const std::vector<int> &p) const {
+  enum State { FINISH, START };
+  std::vector<std::tuple<int, State, int>> events; // coordinate, (termino/inicio), vertice
+  for (auto vertex : p) {
+    auto [l, r] = getInterval(vertex);
+    events.emplace_back(l, START, vertex);
+    events.emplace_back(r, FINISH, vertex);
+  }
+  std::sort(begin(events), end(events));
+  std::vector<std::pair<int, int>> answer;
+  std::set<int> alive;
+  for (auto [coord, type, vertex] : events) {
+      if (type == FINISH) {
+          alive.erase(vertex);
+      } else {
+        for (auto v : alive) answer.emplace_back(vertex, v);
+        alive.insert(vertex);
+      }
+  }
+  return answer;
+}
+
+std::vector<std::pair<int, int>> Oracle::getOrientablePairs(const SubProblem &p) const {
+  enum State { FINISH, START };
+  std::vector<std::tuple<int, State, int>> events; // coordinate, (termino/inicio), vertice
+  for (int i = 0; i < p.size(); ++i) {
+    auto [l, r] = getInterval(p[i].first);
+    events.emplace_back(l, START, i);
+    events.emplace_back(r, FINISH, i);
+  }
+  std::sort(begin(events), end(events));
+  std::vector<std::pair<int, int>> answer;
+  std::set<int> alive;
+  for (auto [coord, type, vertex] : events) {
+      if (type == FINISH) {
+          alive.erase(vertex);
+      } else {
+        for (auto v : alive) answer.emplace_back(vertex, v);
+        alive.insert(vertex);
+      }
+  }
+  return answer;
+}
+
+std::vector<std::pair<int, int>> Oracle::getCompressedIntervals(const SubProblem& instance) const {
+
+  std::vector<int> c;
+
+  std::vector<std::pair<int, int>> intervals = getIntervals(instance);
+
+  for (auto [l, r] : intervals) c.push_back(l), c.push_back(r);
+
+  std::sort(begin(c), end(c));
+  
+  c.erase(unique(begin(c), end(c)), end(c)); 
+
+  for (auto& [l, r] : intervals) {
+      l = std::lower_bound(begin(c), end(c), l) - begin(c);
+      r = std::lower_bound(begin(c), end(c), r) - begin(c);
+  }
+
+  return intervals;
 }
 
 } // Namespace solver

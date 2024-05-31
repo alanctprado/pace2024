@@ -19,7 +19,7 @@ namespace banana {
 namespace solver {
 namespace heuristic {
 
-ApproximationRoutine::ApproximationRoutine(SubProblem instance)
+ApproximationRoutine::ApproximationRoutine(Oracle::SubProblem instance)
     : MetaSolver(instance)
 {}
 

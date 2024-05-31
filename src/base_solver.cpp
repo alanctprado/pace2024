@@ -87,5 +87,9 @@ void BaseSolver::runBanana()
   }
 }
 
+Oracle::SubProblem BaseSolver::recursiveSolver(Oracle::SubProblem &instance) {
+  
+}
+
 } // namespace solver
 } // namespace banana
