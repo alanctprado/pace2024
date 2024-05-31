@@ -18,7 +18,6 @@
 #include <cassert>
 #include <set>
 #include <algorithm>
-#include <iostream>
 
 namespace banana {
 namespace solver {
