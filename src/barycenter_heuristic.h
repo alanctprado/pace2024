@@ -49,7 +49,7 @@ namespace barycenter {
 class BarycenterHeuristic : public ApproximationRoutine
 {
 public:
-  BarycenterHeuristic(SubProblem instance);
+  BarycenterHeuristic(Oracle::SubProblem instance);
   ~BarycenterHeuristic() override = default;
   int solve() override;
 

@@ -29,7 +29,7 @@ namespace solver {
 BaseSolver::BaseSolver(graph::BipartiteGraph graph)
     : m_graph(graph)
 {
-  SubProblem subProblem;
+  Oracle::SubProblem subProblem;
   for (int i = 0; i < m_graph.countVerticesB(); i++)
   {
     subProblem.emplace_back(i, 1);
@@ -66,6 +66,10 @@ void BaseSolver::runBanana()
   {
     std::cout << vertex + m_graph.countVerticesA() + 1 << "\n";
   }
+}
+
+Oracle::SubProblem BaseSolver::recursiveSolver(Oracle::SubProblem &instance) {
+  
 }
 
 } // namespace solver

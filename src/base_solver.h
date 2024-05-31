@@ -18,6 +18,7 @@
 
 #include "bipartite_graph.h"
 #include "ip_solver.h"
+#include "oracle.h"
 
 #include <memory>
 
@@ -31,8 +32,11 @@ class BaseSolver
 {
 public:
   BaseSolver(graph::BipartiteGraph graph);
+  
   ~BaseSolver() = default;
   void runBanana();
+
+  static Oracle::SubProblem recursiveSolver(Oracle::SubProblem &instance);
 
 protected:
   /** Integer programming solver. */

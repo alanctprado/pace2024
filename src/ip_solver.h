@@ -18,7 +18,7 @@
 
 #include "bipartite_graph.h"
 #include "meta_solver.h"
-#include "subproblem.h"
+#include "oracle.h"
 
 #include <string>
 
@@ -36,7 +36,7 @@ namespace ip {
 class IntegerProgrammingSolver : public MetaSolver
 {
 public:
-  IntegerProgrammingSolver(SubProblem G);
+  IntegerProgrammingSolver(Oracle::SubProblem G);
   ~IntegerProgrammingSolver() = default;
   int solve() override;
 

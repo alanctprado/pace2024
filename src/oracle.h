@@ -37,6 +37,7 @@ public:
 
     typedef library::Fraction<long long> F;
     typedef std::pair<int, F> Vertex;
+    typedef std::vector<Oracle::Vertex> SubProblem;
 
     /**
      * Returns the real label name of the i-th vertex of the partition B.
@@ -54,6 +55,8 @@ public:
     std::vector<std::pair<int, int>>
     getIntervals(std::vector<int> b_vertices) const;
 
+    std::vector<std::pair<int, int>> Oracle::getIntervals(SubProblem b_vertices) const;
+
     /** Returns the number of crossings of a permutation of vertices from the partition B */
     int numberOfCrossings(const std::vector<Vertex> &order) const;
 
@@ -62,6 +65,14 @@ public:
 
     /** Number of crossings between i and j */
     int getCrossings(Vertex v_i, Vertex v_j) const;
+
+    std::vector<std::pair<int, int>> getCompressedIntervals(const SubProblem& instance) const;
+
+    /** get all orientable pairs of some subinstance P */
+    std::vector<std::pair<int, int>> getOrientablePairs(const std::vector<int> &p) const;
+
+    /** get all orientable pairs of some subinstance P */
+    std::vector<std::pair<int, int>> getOrientablePairs(const SubProblem& instance) const;
 
 protected:
     graph::BipartiteGraph m_graph;

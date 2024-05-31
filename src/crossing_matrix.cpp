@@ -106,3 +106,4 @@ int CrossingMatrix::CrossingMatrix::operator()(int u, int v) const
 
 } // namespace crossing
 } // namespace banana
+

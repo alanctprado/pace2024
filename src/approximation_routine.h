@@ -17,7 +17,7 @@
 #define __PACE2024__APPROXIMATION_ROUTINE_H
 
 #include "meta_solver.h"
-#include "subproblem.h"
+#include "oracle.h"
 
 namespace banana {
 namespace solver {
@@ -29,7 +29,7 @@ namespace heuristic {
 class ApproximationRoutine : public MetaSolver
 {
 public:
-  ApproximationRoutine(SubProblem instance);
+  ApproximationRoutine(Oracle::SubProblem instance);
   virtual ~ApproximationRoutine() = default;
 };
 

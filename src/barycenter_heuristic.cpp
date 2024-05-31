@@ -15,7 +15,6 @@
 
 #include "barycenter_heuristic.h"
 #include "environment.h"
-#include "subproblem.h"
 #include "oracle.h"
 #include <algorithm>
 
@@ -24,7 +23,7 @@ namespace solver {
 namespace heuristic {
 namespace barycenter {
 
-BarycenterHeuristic::BarycenterHeuristic(SubProblem instance) : ApproximationRoutine(instance)
+BarycenterHeuristic::BarycenterHeuristic(Oracle::SubProblem instance) : ApproximationRoutine(instance)
 {
   for (auto [i, _] : instance)
   {
