@@ -33,20 +33,17 @@ namespace solver {
 class Preprocessing
 {
 public:
-  Preprocessing(Oracle::SubProblem G) : m_instance(G) {}
+  Preprocessing() {}
   virtual ~Preprocessing() {}
 
-  bool lmr_reduction(Oracle::SubProblem &instance);
-  bool twins(Oracle::SubProblem &instance);
-  bool cut_by_pieces(Oracle::SubProblem &instance);
-  bool generalized_twins(Oracle::SubProblem &instance);
+  static bool lmr_reduction(Oracle::SubProblem &instance);
+  static bool twins(Oracle::SubProblem &instance);
+  static bool cut_by_pieces(Oracle::SubProblem &instance);
+  static bool generalized_twins(Oracle::SubProblem &instance);
+  static void kill_isolated(Oracle::SubProblem &instance);
 
   virtual int solve() = 0;
   void explain(std::vector<Oracle::Vertex> &order);
-
-protected:
-  Oracle::SubProblem const m_instance;
-  std::vector<Oracle::Vertex> m_order;
 };
 
 } // namespace solver

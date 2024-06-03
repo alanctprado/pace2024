@@ -36,7 +36,7 @@ public:
   ~BaseSolver() = default;
   void runBanana();
 
-  static Oracle::SubProblem recursiveSolver(Oracle::SubProblem &instance);
+  static void recursiveSolver(Oracle::SubProblem &instance);
 
 protected:
   /** Integer programming solver. */

@@ -17,8 +17,8 @@
 #include "environment.h"
 #include "meta_solver.h"
 #include "options.h"
+#include "oracle.h"
 #include "../lp_solve_5.5/lp_lib.h"
-#include "subproblem.h"
 
 #include <algorithm>
 #include <cassert>
@@ -29,7 +29,7 @@ namespace banana {
 namespace solver {
 namespace ip {
 
-IntegerProgrammingSolver::IntegerProgrammingSolver(SubProblem G)
+IntegerProgrammingSolver::IntegerProgrammingSolver(Oracle::SubProblem G)
     : MetaSolver(G)
 {
   for (int i = 0; i < m_instance.size(); i++)

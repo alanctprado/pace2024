@@ -41,7 +41,7 @@ public:
   void explain(std::vector<Oracle::Vertex> &order);
 
 protected:
-  SubProblem const m_instance;
+  Oracle::SubProblem const m_instance;
   std::vector<Oracle::Vertex> m_order;
 };
 
