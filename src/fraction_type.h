@@ -78,6 +78,12 @@ inline bool operator <(const Fraction<T> &lhs, const Fraction<T> &rhs)
 }
 
 template <class T>
+inline bool operator ==(const Fraction<T> &lhs, const Fraction<T> &rhs)
+{
+  return (lhs.num() == rhs.num() && lhs.den() == rhs.den());
+}
+
+template <class T>
 inline Fraction<T> operator +(const Fraction<T> &lhs, const Fraction<T> &rhs)
 {
   return {lhs.num() * rhs.den() + lhs.den() * rhs.num(), lhs.den() * rhs.den()};

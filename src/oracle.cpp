@@ -36,6 +36,7 @@ std::vector<int> Oracle::neighborhood(int b_vertex) const {
 
 std::pair<int, int> Oracle::getInterval(int b_vertex) const {
     const auto &neighbors = neighborhood(b_vertex);
+    if (neighbors.empty()) return {1, 1};
     return {neighbors.front(), neighbors.back()};
 }
 
@@ -200,6 +201,19 @@ std::vector<std::pair<int, int>> Oracle::getCompressedIntervals(const SubProblem
   }
 
   return intervals;
+}
+
+// TODO: REMOVE or PUT IN A APPROPIATE PLACE
+// write the << operator for Oracle::SubProblem
+std::ostream &operator<<(std::ostream &os, const Oracle::SubProblem &instance)
+{
+  os << "SubProblem: ";
+  for (auto [vertex, weight] : instance)
+  {
+    os << vertex << " ";
+  }
+  os << "\n";
+  return os;
 }
 
 } // Namespace solver

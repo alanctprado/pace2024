@@ -19,6 +19,7 @@
 #include "ip_solver_gurobi.h"
 #include "ip_solver_lpsolve.h"
 #include "options.h"
+#include "preprocessing.h"
 #include "utils.h"
 
 #include <cassert>
@@ -71,24 +72,36 @@ void BaseSolver::verifySolution(int expected_crossings)
 
 void BaseSolver::runBanana()
 {
-  int crossings = m_ipSolver->solve();
-  std::vector<Oracle::Vertex> order;
-  m_ipSolver->explain(order);
-  assert(Environment::oracle().verify(order, crossings));
+  Oracle::SubProblem subProblem;
+  for (int i = 0; i < m_graph.countVerticesB(); i++)
+  {
+    subProblem.emplace_back(i, 1);
+  }
+
+  // this solves the instance! :D
+  Preprocessing::kill_isolated(subProblem);
   
   if (Environment::options().verify.verifyMode ==
       banana::options::VerifyMode::COMPLETE)
   {
-    verifySolution(crossings);
+    verifySolution(Environment::oracle().numberOfCrossings(subProblem));
   }
-  for (auto [vertex, _] : order)
+  for (auto [vertex, _] : subProblem)
   {
     std::cout << vertex + m_graph.countVerticesA() + 1 << "\n";
   }
 }
 
-Oracle::SubProblem BaseSolver::recursiveSolver(Oracle::SubProblem &instance) {
-  
+void BaseSolver::recursiveSolver(Oracle::SubProblem &instance) {
+  if (instance.size() == 1) return;
+  if (Preprocessing::lmr_reduction(instance)) return;
+  if (Preprocessing::twins(instance)) return;
+  if (Preprocessing::cut_by_pieces(instance)) return;
+  std::sort(instance.begin(), instance.end());
+  auto ip_solver = ip::IntegerProgrammingSolver(instance);
+  ip_solver.solve();
+  instance.clear();
+  ip_solver.explain(instance);
 }
 
 } // namespace solver

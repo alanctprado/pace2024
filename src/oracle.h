@@ -19,6 +19,7 @@
 #include "crossing_matrix.h"
 #include "fraction_type.h"
 #include <utility>
+#include <iostream>
 
 namespace banana {
 namespace solver {
@@ -55,7 +56,7 @@ public:
     std::vector<std::pair<int, int>>
     getIntervals(std::vector<int> b_vertices) const;
 
-    std::vector<std::pair<int, int>> Oracle::getIntervals(SubProblem b_vertices) const;
+    std::vector<std::pair<int, int>> getIntervals(SubProblem b_vertices) const;
 
     /** Returns the number of crossings of a permutation of vertices from the partition B */
     int numberOfCrossings(const std::vector<Vertex> &order) const;
@@ -78,6 +79,7 @@ protected:
     graph::BipartiteGraph m_graph;
     crossing::CrossingMatrix m_crossing_matrix;
 };
+
 
 } // namespace solver
 } // namespace banana

@@ -42,7 +42,7 @@ int BarycenterHeuristic::solve()
 {
   int n = m_neighborhoodInfo.size();
 
-  SubProblem b_layer = m_instance;
+  Oracle::SubProblem b_layer = m_instance;
 
   std::sort(b_layer.begin(), b_layer.end(), [&](auto node1, auto node2) {
     auto [i, _1] = node1;
