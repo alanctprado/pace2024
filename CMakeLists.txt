@@ -78,7 +78,7 @@ set(SRC_FILES
 add_library(common OBJECT ${SRC_FILES})
 
 ## Configuração para compilação do executável final
-set(CMAKE_CXX_FLAGS "-Ofast -g -fsanitize=address,undefined")
+set(CMAKE_CXX_FLAGS "-Ofast")
 SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 add_executable(pace $<TARGET_OBJECTS:common> "${PROJECT_SOURCE_DIR}/src/main.cpp")
 add_dependencies(pace or-tools-ep)
