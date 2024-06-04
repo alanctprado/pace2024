@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/bash
 
 if [ ! $# -eq 1 ]; then
     echo "Usage: $0 <file>"
@@ -40,7 +40,7 @@ for file in "$path"/*.gr; do
         delta=$((solved_cnt - last_solved))
 
         while [[ "$delta" -eq 0 ]]; do
-            echo "Currently there are $delta jobs runnning, waiting..."
+	    echo "Currently there are $((cnt - delta)) jobs runnning, waiting..."
             sleep 10s
             solved_cnt=$(wc -l "$out" | awk '{print $1}')
             delta=$((solved_cnt - last_solved))

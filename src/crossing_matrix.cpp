@@ -40,9 +40,6 @@ CrossingMatrix::getIntervals(const graph::BipartiteGraph &graph)
       if (r[v] == -1 || u > r[v])
         r[v] = u;
     }
-
-    if (l[v] == -1)
-      continue;
   }
 
   return {l, r};

@@ -47,29 +47,26 @@ enum class PAIR_STATE
 
 PAIR_STATE pair_state(std::unordered_map<int, int> &l,
                       std::unordered_map<int, int> &r,
-                      std::vector<std::pair<int, int>> &orientable_pairs,
                       std::pair<int, int> key)
 {
-  int idx = search_pair(orientable_pairs, key);
-  if (idx != -1)
-    return PAIR_STATE::OR;
-
   auto [i, j] = key;
 
-  if (l[i] == l[j] and r[i] == r[j])
+  if (l[i] == l[j] and r[i] == r[j] and l[i] == r[i])
   {
     return PAIR_STATE::FREE;
   }
   else if (r[i] <= l[j])
   {
-    return PAIR_STATE::PRE;
+    return PAIR_STATE::PRE; // forced ij
   }
   else if (r[j] <= l[i])
   {
-    return PAIR_STATE::POS;
+    return PAIR_STATE::POS; // forced ji
   }
   else
-    assert(false);
+  {
+    return PAIR_STATE::OR;
+  }
 }
 
 LPSolveSolver::LPSolveSolver(graph::BipartiteGraph graph)
@@ -85,16 +82,9 @@ int LPSolveSolver::simple()
   std::unordered_map<int, int> l, r;
   l = intervals[0], r = intervals[1];
 
-  // std::cerr << "OPs:\n";
-  for (auto [i, j] : orientable_pairs)
-  {
-    // std::cerr << std::to_string(i) +  " " + std::to_string(j) << std::endl;
-  }
-
   const int number_vars = orientable_pairs.size();
 
   int n = m_graph.countVerticesB();
-  int offset = m_graph.countVerticesA();
 
   lprec *lp;
   lp = make_lp(0, number_vars); // (#rows, #columns = #variables)
@@ -108,7 +98,6 @@ int LPSolveSolver::simple()
 
   /** Configure objective function */
   set_minim(lp);
-  // std::cerr << "Variables: " << number_vars << std::endl;
   std::vector<double> c(number_vars + 1);
   c[0] = 0; // Element 0 is ignored by LP Solve
   for (int k = 1; k <= number_vars; k++)
@@ -129,6 +118,16 @@ int LPSolveSolver::simple()
     auto [i, j] = orientable_pairs[idx];
     for (int k : m_graph.getB())
     {
+
+      if (i == j or i == k or j == k)
+        continue;
+
+      PAIR_STATE st_ij = pair_state(l, r, {i, j});
+      PAIR_STATE st_jk = pair_state(l, r, {j, k});
+      PAIR_STATE st_ik = pair_state(l, r, {i, k});
+
+      assert(st_ij == PAIR_STATE::OR);
+
       // search indexes
       int idx_ij = idx + 1;
       int idx_jk = search_pair(orientable_pairs, {j, k});
@@ -138,15 +137,15 @@ int LPSolveSolver::simple()
       idx_ik++, idx_jk++;
 
       // check if jk or ik are orientable
-      if (idx_jk == 0 and idx_ik == 0)
+      if (st_jk != PAIR_STATE::OR and st_ik != PAIR_STATE::OR)
       {
         continue;
       }
 
-      if (idx_jk == 0)
+      if (st_jk != PAIR_STATE::OR)
       {
         int forced_jk = -1;
-        PAIR_STATE st = pair_state(l, r, orientable_pairs, {j, k});
+        PAIR_STATE st = pair_state(l, r, {j, k});
         switch (st)
         {
         case PAIR_STATE::OR:
@@ -168,13 +167,13 @@ int LPSolveSolver::simple()
           c[idx_ij] = 1;
           c[idx_ik] = -1;
           add_constraint(lp, c.data(), LE, 0);
-          c[idx_ik] = c[idx_jk] = c[idx_ik] = 0;
+          c[idx_ij] = c[idx_jk] = c[idx_ik] = 0;
         }
       }
-      else if (idx_ik == 0)
+      else if (st_ik != PAIR_STATE::OR)
       {
         int forced_ik = -1;
-        PAIR_STATE st = pair_state(l, r, orientable_pairs, {i, k});
+        PAIR_STATE st = pair_state(l, r, {i, k});
         switch (st)
         {
         case PAIR_STATE::OR:
@@ -194,17 +193,17 @@ int LPSolveSolver::simple()
         {
           // set constraint x_ij + x_jk - 0 <= 1 => x_ij + x_jk <= 1
           c[idx_ij] = c[idx_jk] = 1;
-          //std::cerr << "Add constraint" << std::endl;
           add_constraint(lp, c.data(), LE, 1);
           c[idx_ij] = c[idx_jk] = c[idx_ik] = 0;
         }
       }
       else
       {
+        assert(st_ij == PAIR_STATE::OR and st_jk == PAIR_STATE::OR and st_ik == PAIR_STATE::OR);
+
         // set constraint x_ij + x_jk - x_ik <= 1
         c[idx_ij] = c[idx_jk] = 1;
         c[idx_ik] = -1;
-        //std::cerr << "Add constraint" << std::endl;
         add_constraint(lp, c.data(), LE, 1);
         c[idx_ij] = c[idx_jk] = c[idx_ik] = 0;
       }
@@ -263,38 +262,36 @@ int LPSolveSolver::simple()
         continue;
       }
 
-      int idx_ij = search_pair(orientable_pairs, {i, j});
+      PAIR_STATE st_ij = pair_state(l, r, {i, j});
 
-      // std::cerr << i << " " << j << " ";
-      // std::cerr << l[i] << " " << r[i] << " " << l[j] << " " << r[j] << ": ";
-
-      if (idx_ij != -1)
+      if (st_ij == PAIR_STATE::OR)
       {
         // pair is orientable, check IP solution
+        int idx_ij = search_pair(orientable_pairs, {i, j});
+
         count_successors += vars[idx_ij];
       }
       else
       {
-        PAIR_STATE st = pair_state(l, r, orientable_pairs, {i, j});
-        if (st == PAIR_STATE::FREE)
+        if (st_ij == PAIR_STATE::FREE)
         {
           //  {i, j} is free, we suppose it is decided on the order of the
           //  vertices
           count_successors += i < j ? 1 : 0;
         }
-        else if (st == PAIR_STATE::PRE)
+        else if (st_ij == PAIR_STATE::PRE)
         {
           // {i, j} is forced to ij
           count_successors++;
         }
-        else if (st == PAIR_STATE::POS)
+        else if (st_ij == PAIR_STATE::POS)
         {
           // {i, j} is forced to ji
           continue;
         }
         else
         {
-          assert(st == PAIR_STATE::OR);
+          assert(st_ij == PAIR_STATE::OR);
           throw std::runtime_error("An orientable pair was not decided by the PI!\n");
         }
       }
@@ -332,12 +329,8 @@ int LPSolveSolver::shorter()
 
   const int number_vars = pairs.size();
 
-  int index, b;
-  int offset = m_graph.countVerticesA();
-  int columns = number_vars + 1;
-
   lprec *lp;
-  lp = make_lp(0, columns); // (#rows, #columns = #variables)
+  lp = make_lp(0, number_vars); // (#rows, #columns = #variables)
   /**
    * SEVERE:   Only severe messages are reported. Errors.
    * CRITICAL: Only critical messages are reported. Hard errors like
@@ -348,30 +341,45 @@ int LPSolveSolver::shorter()
 
   /** Configure objective function */
   set_minim(lp);
-  std::vector<double> c(columns + 1);
-  //std::cerr << "NumVars: " << columns + 1 << std::endl;
+  std::vector<double> c(number_vars + 1);
   c[0] = 0; // Element 0 is ignored by LP Solve
   int objective_offset = 0;
-  for (int idx = 0; idx < number_vars; idx++)
+  for (int idx = 1; idx <= number_vars; idx++)
     {
-      auto [i, j] = pairs[idx];
-      c[idx + 1] = cm(i, j) - cm(j, i);
+      auto [i, j] = pairs[idx - 1];
+      assert(i < j);
+      c[idx] = cm(i, j) - cm(j, i);
       objective_offset += cm(j, i);
     }
   set_obj_fn(lp, c.data());
 
   /** Transitivity constraints */
   std::fill(c.begin(), c.end(), 0);
-  for (int idx = 0; idx < number_vars; idx++)
+  // NOTE: This iterates over orientable_pairs, not pairs, because it needs to
+  // check both {i, j} and {j,i}
+  for (auto [i, j] : orientable_pairs)
   {
-    auto [i, j] = pairs[idx];
+    PAIR_STATE st_ij = pair_state(l, r, {i, j});
+    assert (st_ij == PAIR_STATE::OR);
+
     for (int k : m_graph.getB())
     {
       if (i == j or i == k or j == k)
         continue;
       int rhs = 1;
 
-      int idx_ij = idx;
+      PAIR_STATE st_jk = pair_state(l, r, {j, k});
+      PAIR_STATE st_ik = pair_state(l, r, {i, k});
+
+      // check if jk or ik are orientable
+      if (st_jk != PAIR_STATE::OR and st_ik != PAIR_STATE::OR)
+      {
+        continue;
+      }
+
+      int idx_ij;
+      if (i < j) idx_ij = search_pair(pairs, {i, j});
+      else idx_ij = search_pair(pairs, {j, i});
 
       int idx_jk;
       if (j < k) idx_jk = search_pair(pairs, {j, k});
@@ -383,49 +391,37 @@ int LPSolveSolver::shorter()
 
       idx_ij++, idx_jk++, idx_ik++;
 
-      if (idx_jk == 0 and idx_ik == 0) continue;
-
-      PAIR_STATE st_jk =
-          pair_state(l, r, orientable_pairs, {j, k});
-
       switch (st_jk)
       {
-      case PAIR_STATE::FREE:
-        if (j < k) rhs -= 1;
-        break;
-      case PAIR_STATE::PRE:
-        rhs -= 1;
-        break;
-      case PAIR_STATE::POS:
-        break;
-      case PAIR_STATE::OR:
-        if (j < k) c[idx_jk] = 1;
-        else c[idx_jk] = -1, rhs -= 1;
-        break;
+        case PAIR_STATE::FREE:
+          if (j < k) rhs -= 1;
+          break;
+        case PAIR_STATE::PRE:
+          rhs -= 1;
+          break;
+        case PAIR_STATE::POS:
+          break;
+        case PAIR_STATE::OR:
+          if (j < k) c[idx_jk] = 1;
+          else c[idx_jk] = -1, rhs -= 1;
+          break;
       }
-
-      PAIR_STATE st_ik =
-          pair_state(l, r, orientable_pairs, {i, k});
 
       switch (st_ik)
       {
-      case PAIR_STATE::FREE:
-        if (i < k) rhs += 1;
-        break;
-      case PAIR_STATE::PRE:
-        rhs += 1;
-        break;
-      case PAIR_STATE::POS:
-        break;
-      case PAIR_STATE::OR:
-        if (i < k) c[idx_ik] = -1;
-        else c[idx_ik] = 1, rhs += 1;
-        break;
+        case PAIR_STATE::FREE:
+          if (i < k) rhs += 1;
+          break;
+        case PAIR_STATE::PRE:
+          rhs += 1;
+          break;
+        case PAIR_STATE::POS:
+          break;
+        case PAIR_STATE::OR:
+          if (i < k) c[idx_ik] = -1;
+          else c[idx_ik] = 1, rhs += 1;
+          break;
       }
-
-      PAIR_STATE st_ij = pair_state(l, r, orientable_pairs, {j, i});
-
-      assert(st_ij == PAIR_STATE::OR);
 
       if (i < j)
       {
@@ -456,7 +452,7 @@ int LPSolveSolver::shorter()
   // assert(opt != options::IPPrefixConstraints::BOTH);
 
   /** 0-1 variables constraint */
-  for (int i = 1; i <= columns; i++)
+  for (int i = 1; i <= number_vars; i++)
   {
     set_binary(lp, i, TRUE);
   }
@@ -470,9 +466,12 @@ int LPSolveSolver::shorter()
    * Create vector with how many successors each vertex in B has.
    * Sort this vector and return the vertices in reverse order.
    */
-  std::vector<double> vars(columns);
-  get_variables(lp, vars.data());
+  std::vector<double> vars(number_vars);
+  if (number_vars > 0)
+    get_variables(lp, vars.data());
   std::vector<std::pair<int, int>> sol;
+  int pre, pos, ors, frees;
+  pre = pos = ors = frees = 0;
   for (int i : m_graph.getB())
   {
     int count_successors = 0;
@@ -483,49 +482,68 @@ int LPSolveSolver::shorter()
         continue;
       }
 
-      PAIR_STATE st = pair_state(l, r, orientable_pairs, {i, j});
-
-      if (st == PAIR_STATE::PRE)
+      PAIR_STATE st_ij = pair_state(l, r, {i, j});
+      if (st_ij == PAIR_STATE::OR)
       {
-        count_successors++;
-        continue;
-      } 
+        ors++;
+        // pair is orientable, check IP solution
 
-      if (st == PAIR_STATE::FREE)
-      {
-        if (i < j) count_successors++;
-        continue;
-      } 
 
-      if (st == PAIR_STATE::POS)
-      {
-        continue;
-      } 
+        int idx_ij =  search_pair(pairs, {i, j});
+        int idx_ji = search_pair(pairs, {j, i});
 
-      int idx_ij;
-      if (i < j) idx_ij = search_pair(pairs, {i, j});
-      else idx_ij = search_pair(pairs, {j, i});
-
-      if (i < j)
-      {
-        count_successors += vars[idx_ij];
+        if (i < j)
+        {
+          assert(idx_ij != -1);
+          assert(idx_ji == -1);
+          count_successors += vars[idx_ij];
+        }
+        else
+        {
+          assert(idx_ji != -1);
+          assert(idx_ij == -1);
+          count_successors += 1 - vars[idx_ji];
+        }
       }
       else
       {
-        count_successors += 1 - vars[idx_ij];
+        if (st_ij == PAIR_STATE::FREE)
+        {
+          frees++;
+          //  {i, j} is free, we suppose it is decided on the order of the
+          //  vertices
+          count_successors += i < j ? 1 : 0;
+        }
+        else if (st_ij == PAIR_STATE::PRE)
+        {
+          pre++;
+          // {i, j} is forced to ij
+          count_successors++;
+        }
+        else if (st_ij == PAIR_STATE::POS)
+        {
+          pos++;
+          // {i, j} is forced to ji
+          continue;
+        }
+        else
+        {
+          assert(st_ij == PAIR_STATE::OR);
+          throw std::runtime_error("An orientable pair was not decided by the PI!\n");
+        }
       }
     }
     sol.push_back({count_successors, i});
   }
+  //std::cerr << "N: " << n << " Pre: " << pre << " Pos: " << pos << " Free: " << frees << " Ors: " << ors << std::endl;
   std::sort(sol.begin(), sol.end());
   for (auto it = sol.rbegin(); it != sol.rend(); it++)
   {
     m_order.push_back(it->second);
   }
 
-  double z = get_objective(lp);
+  double z = number_vars > 0 ? get_objective(lp) : 0;
   delete_lp(lp);
-
   return round(z) + objective_offset; // Return optimal value
 }
 
@@ -701,7 +719,7 @@ void LPSolveSolver::xPrefix(lprec *lp, std::vector<double> &c)
     std::iota(order.begin(), order.begin() + p, 0);
     std::iota(order.begin() + p, order.end(), p + 1);
     std::sort(order.begin(), order.end(),
-              [&](int i, int j) { return deltas[i] < deltas[j]; });
+        [&](int i, int j) { return deltas[i] < deltas[j]; });
 
     /**
      * The position of 'p' is at most max_prefix, being the first moment
