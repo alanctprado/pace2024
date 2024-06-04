@@ -31,7 +31,7 @@ class IntegerProgrammingSolverBase
 {
 public:
   IntegerProgrammingSolverBase(graph::BipartiteGraph G)
-      : MetaSolver<graph::BipartiteGraph, int>(G) {};
+      : MetaSolver<graph::BipartiteGraph, int>(G){};
   ~IntegerProgrammingSolverBase() = default;
   virtual int solve() = 0;
 };

@@ -46,8 +46,7 @@ enum class PAIR_STATE
 };
 
 PAIR_STATE pair_state(std::unordered_map<int, int> &l,
-                      std::unordered_map<int, int> &r,
-                      std::pair<int, int> key)
+                      std::unordered_map<int, int> &r, std::pair<int, int> key)
 {
   auto [i, j] = key;
 
@@ -199,7 +198,8 @@ int LPSolveSolver::simple()
       }
       else
       {
-        assert(st_ij == PAIR_STATE::OR and st_jk == PAIR_STATE::OR and st_ik == PAIR_STATE::OR);
+        assert(st_ij == PAIR_STATE::OR and st_jk == PAIR_STATE::OR and
+               st_ik == PAIR_STATE::OR);
 
         // set constraint x_ij + x_jk - x_ik <= 1
         c[idx_ij] = c[idx_jk] = 1;
@@ -215,7 +215,8 @@ int LPSolveSolver::simple()
   {
     auto [i, j] = orientable_pairs[idx];
 
-    if (j < i) continue;
+    if (j < i)
+      continue;
 
     int idx_r = search_pair(orientable_pairs, {j, i});
 
@@ -292,7 +293,8 @@ int LPSolveSolver::simple()
         else
         {
           assert(st_ij == PAIR_STATE::OR);
-          throw std::runtime_error("An orientable pair was not decided by the PI!\n");
+          throw std::runtime_error(
+              "An orientable pair was not decided by the PI!\n");
         }
       }
     }
@@ -317,9 +319,10 @@ int LPSolveSolver::shorter()
   // Extract ordered list of indexes where i < j
   std::vector<std::pair<int, int>> pairs;
   for (auto [i, j] : orientable_pairs)
-    {
-      if (i < j) pairs.push_back({i, j});
-    }
+  {
+    if (i < j)
+      pairs.push_back({i, j});
+  }
 
   auto intervals = crossing::CrossingMatrix::getIntervals(m_graph);
   std::unordered_map<int, int> l, r;
@@ -345,12 +348,12 @@ int LPSolveSolver::shorter()
   c[0] = 0; // Element 0 is ignored by LP Solve
   int objective_offset = 0;
   for (int idx = 1; idx <= number_vars; idx++)
-    {
-      auto [i, j] = pairs[idx - 1];
-      assert(i < j);
-      c[idx] = cm(i, j) - cm(j, i);
-      objective_offset += cm(j, i);
-    }
+  {
+    auto [i, j] = pairs[idx - 1];
+    assert(i < j);
+    c[idx] = cm(i, j) - cm(j, i);
+    objective_offset += cm(j, i);
+  }
   set_obj_fn(lp, c.data());
 
   /** Transitivity constraints */
@@ -360,7 +363,7 @@ int LPSolveSolver::shorter()
   for (auto [i, j] : orientable_pairs)
   {
     PAIR_STATE st_ij = pair_state(l, r, {i, j});
-    assert (st_ij == PAIR_STATE::OR);
+    assert(st_ij == PAIR_STATE::OR);
 
     for (int k : m_graph.getB())
     {
@@ -378,49 +381,61 @@ int LPSolveSolver::shorter()
       }
 
       int idx_ij;
-      if (i < j) idx_ij = search_pair(pairs, {i, j});
-      else idx_ij = search_pair(pairs, {j, i});
+      if (i < j)
+        idx_ij = search_pair(pairs, {i, j});
+      else
+        idx_ij = search_pair(pairs, {j, i});
 
       int idx_jk;
-      if (j < k) idx_jk = search_pair(pairs, {j, k});
-      else idx_jk = search_pair(pairs, {k, j});
+      if (j < k)
+        idx_jk = search_pair(pairs, {j, k});
+      else
+        idx_jk = search_pair(pairs, {k, j});
 
       int idx_ik;
-      if (i < k) idx_ik = search_pair(pairs, {i, k});
-      else idx_ik = search_pair(pairs, {k, i});
+      if (i < k)
+        idx_ik = search_pair(pairs, {i, k});
+      else
+        idx_ik = search_pair(pairs, {k, i});
 
       idx_ij++, idx_jk++, idx_ik++;
 
       switch (st_jk)
       {
-        case PAIR_STATE::FREE:
-          if (j < k) rhs -= 1;
-          break;
-        case PAIR_STATE::PRE:
+      case PAIR_STATE::FREE:
+        if (j < k)
           rhs -= 1;
-          break;
-        case PAIR_STATE::POS:
-          break;
-        case PAIR_STATE::OR:
-          if (j < k) c[idx_jk] = 1;
-          else c[idx_jk] = -1, rhs -= 1;
-          break;
+        break;
+      case PAIR_STATE::PRE:
+        rhs -= 1;
+        break;
+      case PAIR_STATE::POS:
+        break;
+      case PAIR_STATE::OR:
+        if (j < k)
+          c[idx_jk] = 1;
+        else
+          c[idx_jk] = -1, rhs -= 1;
+        break;
       }
 
       switch (st_ik)
       {
-        case PAIR_STATE::FREE:
-          if (i < k) rhs += 1;
-          break;
-        case PAIR_STATE::PRE:
+      case PAIR_STATE::FREE:
+        if (i < k)
           rhs += 1;
-          break;
-        case PAIR_STATE::POS:
-          break;
-        case PAIR_STATE::OR:
-          if (i < k) c[idx_ik] = -1;
-          else c[idx_ik] = 1, rhs += 1;
-          break;
+        break;
+      case PAIR_STATE::PRE:
+        rhs += 1;
+        break;
+      case PAIR_STATE::POS:
+        break;
+      case PAIR_STATE::OR:
+        if (i < k)
+          c[idx_ik] = -1;
+        else
+          c[idx_ik] = 1, rhs += 1;
+        break;
       }
 
       if (i < j)
@@ -433,7 +448,7 @@ int LPSolveSolver::shorter()
         rhs -= 1;
       }
 
-      //std::cerr << "Add constraint" << std::endl;
+      // std::cerr << "Add constraint" << std::endl;
       add_constraint(lp, c.data(), LE, rhs);
       c[idx_ij] = 0;
       c[idx_jk] = 0;
@@ -488,8 +503,7 @@ int LPSolveSolver::shorter()
         ors++;
         // pair is orientable, check IP solution
 
-
-        int idx_ij =  search_pair(pairs, {i, j});
+        int idx_ij = search_pair(pairs, {i, j});
         int idx_ji = search_pair(pairs, {j, i});
 
         if (i < j)
@@ -529,13 +543,15 @@ int LPSolveSolver::shorter()
         else
         {
           assert(st_ij == PAIR_STATE::OR);
-          throw std::runtime_error("An orientable pair was not decided by the PI!\n");
+          throw std::runtime_error(
+              "An orientable pair was not decided by the PI!\n");
         }
       }
     }
     sol.push_back({count_successors, i});
   }
-  //std::cerr << "N: " << n << " Pre: " << pre << " Pos: " << pos << " Free: " << frees << " Ors: " << ors << std::endl;
+  // std::cerr << "N: " << n << " Pre: " << pre << " Pos: " << pos << " Free: "
+  // << frees << " Ors: " << ors << std::endl;
   std::sort(sol.begin(), sol.end());
   for (auto it = sol.rbegin(); it != sol.rend(); it++)
   {
@@ -719,7 +735,7 @@ void LPSolveSolver::xPrefix(lprec *lp, std::vector<double> &c)
     std::iota(order.begin(), order.begin() + p, 0);
     std::iota(order.begin() + p, order.end(), p + 1);
     std::sort(order.begin(), order.end(),
-        [&](int i, int j) { return deltas[i] < deltas[j]; });
+              [&](int i, int j) { return deltas[i] < deltas[j]; });
 
     /**
      * The position of 'p' is at most max_prefix, being the first moment

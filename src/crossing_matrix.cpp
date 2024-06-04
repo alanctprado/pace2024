@@ -58,7 +58,8 @@ CrossingMatrix::CrossingMatrix(graph::BipartiteGraph graph)
 
   for (int v : graph.getB())
   {
-    if (l[v] == -1) continue;
+    if (l[v] == -1)
+      continue;
     if (l[v] == r[v])
       openclose[l[v]].push_back(v);
     else

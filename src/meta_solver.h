@@ -120,7 +120,8 @@ bool MetaSolver<T, U>::verify(const std::vector<U> &order,
 {
   assert(order.size() == m_graph.countVerticesB());
   auto nc = numberOfCrossings(order);
-  std::cerr << "crossings ordem : " << nc << " crossings PI: " << expected_crossings << std::endl;
+  std::cerr << "crossings ordem : " << nc
+            << " crossings PI: " << expected_crossings << std::endl;
   return nc == expected_crossings;
 }
 
