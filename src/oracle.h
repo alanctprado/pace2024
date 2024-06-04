@@ -48,6 +48,7 @@ public:
      */
     int getLabel(int b_vertex) const;
 
+    unsigned countVerticesA() const;
     /** Returns all neighbors of b */
     std::vector<int> neighborhood(int b_vertex) const;
     /** Returns [min, max] neighbors of b */

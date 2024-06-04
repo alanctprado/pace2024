@@ -171,7 +171,8 @@ int IntegerProgrammingSolver::solveWithLPSolve1()
   std::sort(sol.begin(), sol.end());
   for (int i = n - 1; i >= 0; i--)
   {
-    m_order.emplace_back(sol[i].second, m_weight[sol[i].second]);
+    int idx = sol[i].second;
+    m_order.emplace_back(m_instance[idx].first, m_weight[m_instance[idx].first]);
   }
 
   double z = get_objective(lp);
@@ -333,7 +334,8 @@ int IntegerProgrammingSolver::solveWithLPSolve2()
   std::sort(sol.begin(), sol.end());
   for (int i = n - 1; i >= 0; i--)
   {
-    m_order.emplace_back(sol[i].second, m_weight[sol[i].second]);
+    int idx = sol[i].second;
+    m_order.emplace_back(m_instance[idx].first, m_weight[m_instance[idx].first]);
   }
 
   double z = get_objective(lp);
