@@ -25,6 +25,10 @@ namespace solver {
 
 Oracle::Oracle() : m_graph(0, 0), m_crossing_matrix(m_graph) {}
 
+unsigned Oracle::countVerticesA() const {
+  return m_graph.countVerticesA();
+}
+
 Oracle::Oracle(const graph::BipartiteGraph G) : m_graph(G), m_crossing_matrix(G)
 {
     m_graph.sortAdjacencyList();

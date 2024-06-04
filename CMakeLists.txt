@@ -30,6 +30,7 @@ set(SRC_FILES
   "${PROJECT_SOURCE_DIR}/src/meta_solver.cpp"
   "${PROJECT_SOURCE_DIR}/src/oracle.cpp"
   "${PROJECT_SOURCE_DIR}/src/crossing_matrix.cpp"
+  "${PROJECT_SOURCE_DIR}/src/preprocessing.cpp"
   "${PROJECT_SOURCE_DIR}/src/wlgraph.cpp"
   "${PROJECT_SOURCE_DIR}/src/lgraph.cpp"
 )

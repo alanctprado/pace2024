@@ -37,7 +37,7 @@ public:
   virtual ~Preprocessing() {}
 
   static bool lmr_reduction(Oracle::SubProblem &instance);
-  static bool twins(Oracle::SubProblem &instance);
+  static void twins(Oracle::SubProblem &instance);
   static bool cut_by_pieces(Oracle::SubProblem &instance);
   static bool generalized_twins(Oracle::SubProblem &instance);
   static void kill_isolated(Oracle::SubProblem &instance);

@@ -61,6 +61,8 @@ void BaseSolver::runBanana()
 
   // this solves the instance! :D
   Preprocessing::kill_isolated(subProblem);
+  // Preprocessing::twins(subProblem);
+  // BaseSolver::recursiveSolver(subProblem);
   
   if (Environment::options().verify.verifyMode ==
       banana::options::VerifyMode::FULL)
@@ -74,9 +76,8 @@ void BaseSolver::runBanana()
 }
 
 void BaseSolver::recursiveSolver(Oracle::SubProblem &instance) {
-  if (instance.size() == 1) return;
+  if (instance.size() <= 1) return;
   if (Preprocessing::lmr_reduction(instance)) return;
-  if (Preprocessing::twins(instance)) return;
   if (Preprocessing::cut_by_pieces(instance)) return;
   std::sort(instance.begin(), instance.end());
   auto ip_solver = ip::IntegerProgrammingSolver(instance);
