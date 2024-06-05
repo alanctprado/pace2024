@@ -8,13 +8,23 @@ project(pace2024)
 set (pace2024_VERSION_MAJOR 1)
 set (pace2024_VERSION_MINOR 0)
 
-option(USE_OR_TOOLS "Use OR-Tools interface" OFF)
+option(USE_OR_TOOLS "Use OR-Tools interface" ON)
 option(USE_GUROBI "Use Gurobi IP Solver" OFF)
+option(USE_LPSOLVE "Use LPSolve IP Solver" OFF)
 
 # Headers
 include(ExternalProject)
 include_directories(src)
-include_directories(lp_solve_5.5)
+
+if(USE_LPSOLVE)
+  add_definitions(-DUSE_LPSOLVE)
+  include_directories(lp_solve_5.5)
+  message("Building LP Solve")
+  execute_process(
+    COMMAND sh compile_lpsolve.sh
+    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+  )
+endif()
 
 if(USE_GUROBI)
   include_directories(gurobi/include)
@@ -22,13 +32,8 @@ endif()
 
 file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/deps")
 
-message("Building LP Solve")
-execute_process(
-  COMMAND sh compile_lpsolve.sh
-  WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
-)
-
 if(USE_GUROBI)
+  add_definitions(-DUSE_GUROBI)
   message("Building Gurobi")
   execute_process(
     COMMAND sh compile_gurobi.sh
@@ -37,32 +42,12 @@ if(USE_GUROBI)
 endif()
 
 if(USE_OR_TOOLS)
-  add_definitions(-DUSER_OR_TOOLS)
+  add_definitions(-DUSE_OR_TOOLS)
   
-  # Define the OR-Tools version and repository
-  set(ORTOOLS_VERSION "9.10")
-  set(ORTOOLS_REPO "https://github.com/google/or-tools.git")
-  
-  # Define the installation prefix for OR-Tools
-  set(ORTOOLS_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/deps/or-tools")
-  
-  # Add the external project for OR-Tools
-  ExternalProject_Add(
-      or-tools-ep
-      PREFIX ${ORTOOLS_INSTALL_PREFIX}
-      GIT_REPOSITORY ${ORTOOLS_REPO}
-      GIT_TAG v${ORTOOLS_VERSION}
-      CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${ORTOOLS_INSTALL_PREFIX} -DBUILD_DEPS=ON
-      BUILD_IN_SOURCE 0
-      UPDATE_DISCONNECTED 1
-      INSTALL_DIR ${EXTERNAL_INSTALL_PREFIX}
-  )
-  
-  # Add the include directories
-  include_directories(${ORTOOLS_INSTALL_PREFIX}/include)
-  
-  # Find the OR-Tools library
-  find_library(ORTOOLS_LIB ortools PATHS ${ORTOOLS_INSTALL_PREFIX}/lib)
+  # Specify the path to the or-tools library and include directories
+  set(ORTOOLS_ROOT /or-tools)
+  include_directories(${ORTOOLS_ROOT}/include)
+  link_directories(${ORTOOLS_ROOT}/lib)
 endif()
 
 set(SRC_FILES
@@ -95,8 +80,7 @@ SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 add_executable(pace $<TARGET_OBJECTS:common> "${PROJECT_SOURCE_DIR}/src/main.cpp")
 
 if(USE_OR_TOOLS)
-  add_dependencies(pace or-tools-ep)
-  target_link_libraries(pace "${PROJECT_SOURCE_DIR}/build/deps/or-tools/lib/libortools.so.9" dl)
+  target_link_libraries(pace ortools)
 endif()
 
 if(USE_GUROBI)
@@ -104,7 +88,9 @@ if(USE_GUROBI)
   target_link_libraries(pace "${PROJECT_SOURCE_DIR}/gurobi/lib/libgurobi110.so" dl)
 endif()
 
-target_link_libraries(pace "${PROJECT_SOURCE_DIR}/lp_solve_5.5/lpsolve55/bin/ux64/liblpsolve55.a" dl)
+if(USE_LPSOLVE)
+  target_link_libraries(pace "${PROJECT_SOURCE_DIR}/lp_solve_5.5/lpsolve55/bin/ux64/liblpsolve55.a" dl)
+endif()
 
 add_custom_target(run_tiny
   COMMAND sh run_set.sh tiny-set "$(ARGS)"
