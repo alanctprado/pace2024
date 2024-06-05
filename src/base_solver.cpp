@@ -77,7 +77,7 @@ void BaseSolver::runBanana()
 
 void BaseSolver::recursiveSolver(Oracle::SubProblem &instance) {
   if (instance.size() <= 1) return;
-  if (Preprocessing::lmr_reduction(instance)) return;
+  if (Preprocessing::lmr_reduction2(instance)) return;
   if (Preprocessing::cut_by_pieces(instance)) return;
   if (Preprocessing::generalized_twins(instance)) return;
   std::sort(instance.begin(), instance.end());
