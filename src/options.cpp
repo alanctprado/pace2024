@@ -157,6 +157,10 @@ void Options::parseArguments(int argc, char *argv[])
                                     std::string{optarg});
       }
       break;
+    /** IP Heuristics Integration option */
+    case static_cast<uint32_t>(Flags::IPHeuristicMode):
+      ip.heuristicMode = IPHeuristicMode::ON;
+      break;
     default:
       throw std::invalid_argument("Invalid option");
     }
