@@ -22,6 +22,7 @@
 #include <cassert>
 #include <vector>
 #include <functional>
+#include <set>
 
 
 namespace banana {

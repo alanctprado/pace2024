@@ -68,6 +68,8 @@ public:
     /** Number of crossings between i and j */
     int getCrossings(Vertex v_i, Vertex v_j) const;
 
+    int degree(int b_vertex) const;
+
     std::vector<std::pair<int, int>> getCompressedIntervals(const SubProblem& instance) const;
 
     /** get all orientable pairs of some subinstance P */

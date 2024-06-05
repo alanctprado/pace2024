@@ -38,6 +38,10 @@ std::vector<int> Oracle::neighborhood(int b_vertex) const {
     return m_graph.neighborhood(m_graph.countVerticesA() + b_vertex);
 }
 
+int Oracle::degree(int b_vertex) const {
+  return m_graph.degree(m_graph.countVerticesA() + b_vertex);
+}
+
 std::pair<int, int> Oracle::getInterval(int b_vertex) const {
     const auto &neighbors = neighborhood(b_vertex);
     if (neighbors.empty()) return {1, 1};

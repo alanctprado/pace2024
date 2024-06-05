@@ -84,6 +84,7 @@ bool Preprocessing::lmr_reduction(Oracle::SubProblem &instance) {
       upd(upd, 0, m, 1, intervals[i].second, 1, -1);
       int l_max = get_right(get_right, 0, m, 1, 0, intervals[i].first);
       int r_min = get_left(get_left, 0, m, 1, intervals[i].second, m);
+      bool deu_certo = 1;
       for (auto vi : orient_adj[i]) {
             if (vivos[vi] == 0) continue;
             Oracle::Vertex v = instance[vi];
@@ -95,21 +96,20 @@ bool Preprocessing::lmr_reduction(Oracle::SubProblem &instance) {
                   // quero ficar na esquerda
                   l_max = std::max(l_max, intervals[vi].second);
             }
-            // if (r_min < l_max) {
-            //       deu_certo = 0;
-            //       break;
-            // }
+            if (r_min < l_max) {
+                  deu_certo = 0;
+                  break;
+            }
       }
-      int l_max2 = -1, r_min2 = m + 1;
-      for (int j = 0; j < n; ++j) {
-            if (i == j || vivos[j] == 0) continue;
-            Oracle::Vertex v = instance[j];
-            int uv = m_oracle.getCrossings(u, v), vu = m_oracle.getCrossings(v, u);
-            if (uv < vu) r_min2 = std::min(r_min2, intervals[j].first); 
-            if (vu < uv) l_max2 = std::max(l_max2, intervals[j].second);
-      }
-      assert(r_min2 == r_min && l_max2 == l_max);
-      bool deu_certo = (l_max <= r_min);
+      // int l_max2 = -1, r_min2 = m + 1;
+      // for (int j = 0; j < n; ++j) {
+      //       if (i == j || vivos[j] == 0) continue;
+      //       Oracle::Vertex v = instance[j];
+      //       int uv = m_oracle.getCrossings(u, v), vu = m_oracle.getCrossings(v, u);
+      //       if (uv < vu) r_min2 = std::min(r_min2, intervals[j].first); 
+      //       if (vu < uv) l_max2 = std::max(l_max2, intervals[j].second);
+      // }
+      // assert(r_min2 == r_min && l_max2 == l_max);
       if (deu_certo) {
             // tiramos o vertice u da instancia
             removidos.push_back(u);
@@ -120,7 +120,6 @@ bool Preprocessing::lmr_reduction(Oracle::SubProblem &instance) {
       }
       
   }     
-
 
   if (removidos.empty()) return false;
 
@@ -279,6 +278,144 @@ void Preprocessing::kill_isolated(Oracle::SubProblem &instance) {
       // BaseSolver::recursiveSolver(instance);
       Preprocessing::twins(instance);
       for (auto vertex : isolated) instance.push_back(vertex);
+}
+
+bool Preprocessing::generalized_twins(Oracle::SubProblem &instance) {
+      auto& m_oracle = Environment::oracle();
+      int n = instance.size();
+      std::vector<std::vector<int>> adj_a, adj_b(n);
+      std::vector<int> c;
+      for (int i = 0; i < n; ++i) {
+            auto adj = m_oracle.neighborhood(instance[i].first);
+            for (int j = 0; j < adj.size(); j += instance[i].second.den())  {
+                  auto v = adj[j];
+                  c.push_back(v), adj_b[i].push_back(v);
+            }
+      }
+      int m = c.size();
+      std::sort(begin(c), end(c));
+      c.erase(unique(begin(c), end(c)), end(c));
+      adj_a.resize(m);
+      for (int i = 0; i < n; ++i) {
+            for (auto& v : adj_b[i]) {
+                  v = lower_bound(begin(c), end(c), v) - begin(c);
+                  adj_a[v].push_back(i);
+            }
+      }
+      std::vector<int> prdg(m+1);
+      std::set<int> s;
+      for (int i = 1; i <= m; ++i) prdg[i] = prdg[i-1] + adj_a[i-1].size();
+      for (int i = 0; i < m; ++i) {
+            std::vector<std::pair<int, int>> inter;
+            int num_inter = 0, sum_deg = 0, ok = 0;
+            for (int j = i; j < m; ++j) {
+                  for (auto v : adj_a[j]) {
+                        if (s.find(v) != end(s)) continue;
+                        s.insert(v);
+                        sum_deg += adj_b[v].size();
+                        int g = std::gcd(num_inter, (int)adj_b[v].size());
+                        if (g != num_inter) {
+                              if (num_inter == 0) {
+                                    inter = std::vector<std::pair<int, int>>(g, {m+1, -1});
+                              } else {
+                                    // mergear intervalos
+                                    int k = num_inter / g;
+                                    std::vector<std::pair<int, int>> new_inter(g, {m+1, -1});
+                                    for (int w = 0; w < num_inter; w++) {// new_inter[j/k]
+                                          new_inter[w/k].first = std::min(new_inter[w/k].first, inter[w].first);
+                                          new_inter[w/k].second = std::max(new_inter[w/k].second, inter[w].second);
+                                    }
+                                    swap(inter, new_inter);
+                                    new_inter.clear();
+                              }
+                              num_inter = g;
+                        } 
+                        int k = adj_b[v].size() / num_inter;
+                        for (int w = 0; w < adj_b[v].size(); ++w) {
+                              inter[w/k].first = std::min(inter[w/k].first, adj_b[v][w]);
+                              inter[w/k].second = std::max(inter[w/k].second, adj_b[v][w]);
+                        }
+                  }
+                  if (s.size() == 1) continue;
+                  int cur_l = -1, cur_r = -1, qnt = 0;
+                  ok = 1;
+                  inter.push_back({m + 1, m + 1});
+                  for (auto [l, r] : inter) {
+                        assert(cur_r <= r && cur_l <= l);
+                        if (cur_l == -1) {
+                              qnt = 1, cur_l = l, cur_r = r;
+                              continue;
+                        }
+                        if (l > cur_r) {
+                              int tot = prdg[cur_r+1] - prdg[cur_l];
+                              if (cur_l != cur_r && tot != sum_deg / num_inter * qnt) {
+                                    ok = 0;
+                                    break;
+                              }
+                              cur_l = l, cur_r = r, qnt = 1;
+                        } else {
+                              cur_r = r;
+                              qnt++;
+                        }
+                  }
+                  if (ok) {
+                        // std::cout << i << ' ' << j << ' ' << num_inter << std::endl;
+                        break;     
+                  }
+                  inter.pop_back();
+            }
+            if (ok && s.size() != instance.size()) break;
+            s.clear();
+      }
+
+      if (s.empty()) return false;
+
+      Oracle::SubProblem s_instance, new_instance;
+
+      Oracle::Vertex repr = instance[(*begin(s))];
+
+      int s_deg = 0, best_deg = m_oracle.degree(repr.first);
+
+      for (int i = 0; i < n; ++i) {
+            if (s.find(i) == end(s)) { new_instance.push_back(instance[i]); continue; }
+            s_instance.push_back(instance[i]);
+            int cur_deg = m_oracle.degree(instance[i].first);
+            Oracle::F frac = instance[i].second * (Oracle::F) cur_deg;
+            assert(frac.den() == 1);
+            if (cur_deg < best_deg) best_deg = cur_deg, repr = instance[i];
+            s_deg += cur_deg;
+      }
+
+      repr.second = Oracle::F(s_deg, best_deg);
+      new_instance.push_back(repr);
+
+      swap(new_instance, instance);
+      new_instance.clear();
+
+      // std::cout << "Conjunto S: ";
+
+      // for (auto x : s_instance) std::cout << x.first + 11 << ' '; std::cout<<std::endl;
+
+      // std::cout << "Representante: " << repr.first + 11 << std::endl; 
+      
+      // std::cout << "resto da instancia: ";
+      // for (auto x : instance) std::cout << x.first + 11 << ' '; std::cout<<std::endl;
+
+      BaseSolver::recursiveSolver(s_instance);
+      BaseSolver::recursiveSolver(instance);
+      
+      for (auto u : instance) {
+            if (u == repr) {
+                  for (auto v : s_instance) new_instance.push_back(v);
+            } else new_instance.push_back(u);
+      }
+
+      swap(new_instance, instance);
+
+      new_instance.clear();
+
+      std::cout << "FIZ O W!!! TANKEI TUDO" << std::endl;
+      return true;
 }
 
 } // namespace solver
