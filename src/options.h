@@ -24,6 +24,7 @@ enum class Flags
 {
   /** IP options */
   IPSolverMode,
+  IPHeuristicMode,
   IPFormulation,
   IPPrefixConstraints,
   /** Verify options */
@@ -77,12 +78,20 @@ enum class VerifyMode
   __MAX_VALUE = LIGHT
 };
 
+enum class IPHeuristicMode
+{
+  OFF,
+  ON,
+  __MAX_VALUE = OFF
+};
+
 struct HolderIP
 {
   IPSolverMode solverMode = IPSolverMode::LPSOLVE;
   IPSubSolverMode subSolverMode = IPSubSolverMode::NONE;
   IPFormulation formulation = IPFormulation::SHORTER;
   IPPrefixConstraints prefixConstraints = IPPrefixConstraints::NONE;
+  IPHeuristicMode heuristicMode = IPHeuristicMode::OFF;
 };
 
 struct HolderVerify
