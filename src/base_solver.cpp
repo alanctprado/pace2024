@@ -32,9 +32,11 @@ BaseSolver::BaseSolver(graph::BipartiteGraph graph) : m_graph(graph)
   const auto &ip_sub_solver = Environment::options().ip.subSolverMode;
   switch (ip_solver)
   {
+  #ifdef USE_LPSOLVE
   case options::IPSolverMode::LPSOLVE:
     m_ipSolver = std::make_unique<ip::LPSolveSolver>(graph);
     break;
+  #endif
   #ifdef USE_GUROBI
   case options::IPSolverMode::GUROBI:
     m_ipSolver = std::make_unique<ip::GurobiSolver>(graph);

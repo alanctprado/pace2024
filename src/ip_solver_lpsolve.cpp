@@ -13,6 +13,8 @@
  * LPSolve extension of the integer programming solver
  */
 
+#ifdef USE_LPSOLVE
+
 #include "ip_solver_lpsolve.h"
 #include "../lp_solve_5.5/lp_lib.h"
 #include "approximation_routine.h"
@@ -406,7 +408,7 @@ int LPSolveSolver::shorter()
   // we add a constraint saying that the objective value (reusing the
   // values of from the objective loop) is less than or equal to the
   // best objective value from the heuristics
-  add_constraint(lp, c.data(), LE, best_heuristic_objective);
+  add_constraint(lp, c.data(), LE, best_heuristic_objective - objective_offset);
 
 
   /** Transitivity constraints */
@@ -1017,3 +1019,5 @@ int LPSolveSolver::vini()
 } // namespace ip
 } // namespace solver
 } // namespace banana
+
+#endif
