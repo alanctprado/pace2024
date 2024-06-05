@@ -13,6 +13,8 @@
  * LPSolve extension of the integer programming solver
  */
 
+#ifdef USE_GUROBI
+
 #include "ip_solver_gurobi.h"
 #include "../gurobi/include/gurobi_c++.h"
 
@@ -205,3 +207,5 @@ int GurobiSolver::vini() { throw std::runtime_error("Not implemented.\n"); }
 } // namespace ip
 } // namespace solver
 } // namespace banana
+
+#endif

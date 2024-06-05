@@ -35,12 +35,19 @@ BaseSolver::BaseSolver(graph::BipartiteGraph graph) : m_graph(graph)
   case options::IPSolverMode::LPSOLVE:
     m_ipSolver = std::make_unique<ip::LPSolveSolver>(graph);
     break;
+  #ifdef USE_GUROBI
   case options::IPSolverMode::GUROBI:
     m_ipSolver = std::make_unique<ip::GurobiSolver>(graph);
     break;
+  #endif
+  #ifdef USE_OR_TOOLS
   case options::IPSolverMode::OR_TOOLS:
     m_ipSolver = std::make_unique<ip::OrToolsSolver>(graph, ip_sub_solver);
     break;
+  #endif
+  default:
+    throw std::invalid_argument("Invalid IP Solver!");
+
   }
 }
 

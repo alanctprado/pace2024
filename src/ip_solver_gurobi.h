@@ -16,6 +16,8 @@
 #ifndef __PACE2024__GUROBI_SOLVER_HPP
 #define __PACE2024__GUROBI_SOLVER_HPP
 
+#ifdef USE_GUROBI
+
 #include "bipartite_graph.h"
 #include "ip_solver.h"
 #include "../gurobi/include/gurobi_c++.h"
@@ -46,4 +48,6 @@ public:
 } // namespace solver
 } // namespace banana
 
-#endif // __PACE2024__GUROBI_SOLVER_HPP
+#endif  // USE_GUROBI
+
+#endif //  __PACE2024__GUROBI_SOLVER_HPP
