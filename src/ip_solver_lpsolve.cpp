@@ -15,7 +15,10 @@
 
 #include "ip_solver_lpsolve.h"
 #include "../lp_solve_5.5/lp_lib.h"
+#include "approximation_routine.h"
+#include "barycenter_heuristic.h"
 #include "crossing_matrix.h"
+#include "median_heuristic.h"
 
 #include <numeric>
 #include <stdexcept>
@@ -107,6 +110,32 @@ int LPSolveSolver::simple()
     }
   }
   set_obj_fn(lp, c.data());
+
+  /** Heuristic constraints */
+  // TODO: Create flag that controls whether this is active
+
+  std::vector<std::unique_ptr<heuristic::ApproximationRoutine>> heuristics;
+
+  // check barycenter heuristic
+  heuristics.push_back(std::make_unique<heuristic::barycenter::BarycenterHeuristic>(m_graph));
+  heuristics.push_back(std::make_unique<heuristic::median::MedianHeuristic>(m_graph));
+
+  int best_heuristic_objective = -1;
+
+  for (const auto& h : heuristics)
+  {
+    int obj = h->solve();
+    if (best_heuristic_objective == -1 ||
+        best_heuristic_objective > obj)
+    {
+      best_heuristic_objective = obj;
+    }
+  }
+
+  // we add a constraint saying that the objective value (reusing the
+  // values of from the objective loop) is less than or equal to the
+  // best objective value from the heuristics
+  add_constraint(lp, c.data(), LE, best_heuristic_objective);
 
   /** Transitivity constraints */
   // NOTE: It can be shown that the first variable can always be assumed to be
@@ -355,6 +384,33 @@ int LPSolveSolver::shorter()
     objective_offset += cm(j, i);
   }
   set_obj_fn(lp, c.data());
+
+  /** Heuristic constraints */
+  // TODO: Create flag that controls whether this is active
+
+  std::vector<std::unique_ptr<heuristic::ApproximationRoutine>> heuristics;
+
+  // check barycenter heuristic
+  heuristics.push_back(std::make_unique<heuristic::barycenter::BarycenterHeuristic>(m_graph));
+  heuristics.push_back(std::make_unique<heuristic::median::MedianHeuristic>(m_graph));
+
+  int best_heuristic_objective = -1;
+
+  for (const auto& h : heuristics)
+  {
+    int obj = h->solve();
+    if (best_heuristic_objective == -1 ||
+        best_heuristic_objective > obj)
+    {
+      best_heuristic_objective = obj;
+    }
+  }
+
+  // we add a constraint saying that the objective value (reusing the
+  // values of from the objective loop) is less than or equal to the
+  // best objective value from the heuristics
+  add_constraint(lp, c.data(), LE, best_heuristic_objective);
+
 
   /** Transitivity constraints */
   std::fill(c.begin(), c.end(), 0);
