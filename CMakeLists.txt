@@ -8,11 +8,17 @@ project(pace2024)
 set (pace2024_VERSION_MAJOR 1)
 set (pace2024_VERSION_MINOR 0)
 
+option(USE_OR_TOOLS "Use OR-Tools interface" OFF)
+option(USE_GUROBI "Use Gurobi IP Solver" OFF)
+
 # Headers
 include(ExternalProject)
 include_directories(src)
 include_directories(lp_solve_5.5)
-include_directories(gurobi/include)
+
+if(USE_GUROBI)
+  include_directories(gurobi/include)
+endif()
 
 file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/deps")
 
@@ -22,36 +28,42 @@ execute_process(
   WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
 )
 
-message("Building Gurobi")
-execute_process(
-  COMMAND sh compile_gurobi.sh
-  WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
-)
+if(USE_GUROBI)
+  message("Building Gurobi")
+  execute_process(
+    COMMAND sh compile_gurobi.sh
+    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+  )
+endif()
 
-# Define the OR-Tools version and repository
-set(ORTOOLS_VERSION "9.10")
-set(ORTOOLS_REPO "https://github.com/google/or-tools.git")
-
-# Define the installation prefix for OR-Tools
-set(ORTOOLS_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/deps/or-tools")
-
-# Add the external project for OR-Tools
-ExternalProject_Add(
-    or-tools-ep
-    PREFIX ${ORTOOLS_INSTALL_PREFIX}
-    GIT_REPOSITORY ${ORTOOLS_REPO}
-    GIT_TAG v${ORTOOLS_VERSION}
-    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${ORTOOLS_INSTALL_PREFIX} -DBUILD_DEPS=ON
-    BUILD_IN_SOURCE 0
-    UPDATE_DISCONNECTED 1
-    INSTALL_DIR ${EXTERNAL_INSTALL_PREFIX}
-)
-
-# Add the include directories
-include_directories(${ORTOOLS_INSTALL_PREFIX}/include)
-
-# Find the OR-Tools library
-find_library(ORTOOLS_LIB ortools PATHS ${ORTOOLS_INSTALL_PREFIX}/lib)
+if(USE_OR_TOOLS)
+  add_definitions(-DUSER_OR_TOOLS)
+  
+  # Define the OR-Tools version and repository
+  set(ORTOOLS_VERSION "9.10")
+  set(ORTOOLS_REPO "https://github.com/google/or-tools.git")
+  
+  # Define the installation prefix for OR-Tools
+  set(ORTOOLS_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/deps/or-tools")
+  
+  # Add the external project for OR-Tools
+  ExternalProject_Add(
+      or-tools-ep
+      PREFIX ${ORTOOLS_INSTALL_PREFIX}
+      GIT_REPOSITORY ${ORTOOLS_REPO}
+      GIT_TAG v${ORTOOLS_VERSION}
+      CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${ORTOOLS_INSTALL_PREFIX} -DBUILD_DEPS=ON
+      BUILD_IN_SOURCE 0
+      UPDATE_DISCONNECTED 1
+      INSTALL_DIR ${EXTERNAL_INSTALL_PREFIX}
+  )
+  
+  # Add the include directories
+  include_directories(${ORTOOLS_INSTALL_PREFIX}/include)
+  
+  # Find the OR-Tools library
+  find_library(ORTOOLS_LIB ortools PATHS ${ORTOOLS_INSTALL_PREFIX}/lib)
+endif()
 
 set(SRC_FILES
   "${PROJECT_SOURCE_DIR}/src/barycenter_heuristic.cpp"
@@ -81,12 +93,18 @@ add_library(common OBJECT ${SRC_FILES})
 set(CMAKE_CXX_FLAGS "-Ofast")
 SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 add_executable(pace $<TARGET_OBJECTS:common> "${PROJECT_SOURCE_DIR}/src/main.cpp")
-add_dependencies(pace or-tools-ep)
-target_link_libraries(pace "${PROJECT_SOURCE_DIR}/lp_solve_5.5/lpsolve55/bin/ux64/liblpsolve55.a" dl)
-target_link_libraries(pace "${PROJECT_SOURCE_DIR}/gurobi/src/build/libgurobi_c++.a" dl)
-target_link_libraries(pace "${PROJECT_SOURCE_DIR}/gurobi/lib/libgurobi110.so" dl)
-target_link_libraries(pace "${PROJECT_SOURCE_DIR}/build/deps/or-tools/lib/libortools.so.9" dl)
 
+if(USE_OR_TOOLS)
+  add_dependencies(pace or-tools-ep)
+  target_link_libraries(pace "${PROJECT_SOURCE_DIR}/build/deps/or-tools/lib/libortools.so.9" dl)
+endif()
+
+if(USE_GUROBI)
+  target_link_libraries(pace "${PROJECT_SOURCE_DIR}/gurobi/src/build/libgurobi_c++.a" dl)
+  target_link_libraries(pace "${PROJECT_SOURCE_DIR}/gurobi/lib/libgurobi110.so" dl)
+endif()
+
+target_link_libraries(pace "${PROJECT_SOURCE_DIR}/lp_solve_5.5/lpsolve55/bin/ux64/liblpsolve55.a" dl)
 
 add_custom_target(run_tiny
   COMMAND sh run_set.sh tiny-set "$(ARGS)"

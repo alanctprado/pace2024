@@ -16,6 +16,8 @@
 #ifndef __PACE2024__OR_TOOLS_SOLVER_HPP
 #define __PACE2024__OR_TOOLS_SOLVER_HPP
 
+#ifdef USE_OR_TOOLS
+
 #include "bipartite_graph.h"
 #include "ip_solver.h"
 #include "options.h"
@@ -53,4 +55,6 @@ protected:
 } // namespace solver
 } // namespace banana
 
-#endif // __PACE2024__OR_TOOLS_SOLVER_HPP
+#endif  //
+
+#endif  // __PACE2024__OR_TOOLS_SOLVER_HPP

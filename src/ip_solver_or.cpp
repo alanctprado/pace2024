@@ -13,6 +13,8 @@
  * Or Tools extension of the integer programming solver
  */
 
+#ifdef USE_OR_TOOLS
+
 #include "ip_solver_or.h"
 
 #include "options.h"
@@ -223,3 +225,5 @@ void OrToolsSolver::yPrefix(MPSolver *model, std::vector<MPVariable> &vars)
 } // namespace ip
 } // namespace solver
 } // namespace banana
+
+#endif
