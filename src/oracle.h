@@ -57,9 +57,14 @@ public:
     std::vector<std::pair<int, int>>
     getIntervals(std::vector<int> b_vertices) const;
 
+    /** Returns [min, max] neighbors as 2 unordered_maps */
+    std::array<std::unordered_map<int, int>, 2>
+    getIntervalMaps(const SubProblem &instance) const;
+
     std::vector<std::pair<int, int>> getIntervals(SubProblem b_vertices) const;
 
-    /** Returns the number of crossings of a permutation of vertices from the partition B */
+    /** Returns the number of crossings of a permutation of vertices from the
+     * partition B */
     int numberOfCrossings(const std::vector<Vertex> &order) const;
 
     /** Checks if the order has the expected number of crossings */
@@ -68,19 +73,21 @@ public:
     /** Number of crossings between i and j */
     int getCrossings(Vertex v_i, Vertex v_j) const;
 
-    std::vector<std::pair<int, int>> getCompressedIntervals(const SubProblem& instance) const;
+    std::vector<std::pair<int, int>>
+    getCompressedIntervals(const SubProblem &instance) const;
 
     /** get all orientable pairs of some subinstance P */
-    std::vector<std::pair<int, int>> getOrientablePairs(const std::vector<int> &p) const;
+    std::vector<std::pair<int, int>>
+    getOrientablePairs(const std::vector<int> &p) const;
 
     /** get all orientable pairs of some subinstance P */
-    std::vector<std::pair<int, int>> getOrientablePairs(const SubProblem& instance) const;
+    std::vector<std::pair<int, int>>
+    getOrientablePairs(const SubProblem &instance) const;
 
-protected:
+  protected:
     graph::BipartiteGraph m_graph;
     crossing::CrossingMatrix m_crossing_matrix;
 };
-
 
 } // namespace solver
 } // namespace banana

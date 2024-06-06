@@ -24,7 +24,7 @@
 namespace banana {
 namespace crossing {
 
-std::vector<std::unordered_map<int, int>>
+std::array<std::unordered_map<int, int>, 2>
 CrossingMatrix::getIntervals(const graph::BipartiteGraph &graph)
 {
 

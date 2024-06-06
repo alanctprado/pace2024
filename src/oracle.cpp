@@ -58,6 +58,17 @@ std::vector<std::pair<int, int>> Oracle::getIntervals(SubProblem b_vertices) con
     return intervals;
 }
 
+
+std::array<std::unordered_map<int, int>, 2>
+Oracle::getIntervalMaps(const SubProblem& instance) const
+{
+  std::unordered_map<int, int> l, r;
+  for (auto b : instance) {
+    std::tie(l[b.first], r[b.first]) = getInterval(b.first);
+  }
+  return {l, r};
+}
+
 /** TODO: Verify how to use crossing_matrix */
 int Oracle::getCrossings(Vertex v_i, Vertex v_j) const {
     auto &[i, w_i] = v_i;

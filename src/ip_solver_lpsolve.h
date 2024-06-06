@@ -31,7 +31,7 @@ class LPSolveSolver
     : public IntegerProgrammingSolver<lprec, std::vector<double>>
 {
 public:
-  LPSolveSolver(graph::BipartiteGraph G);
+  LPSolveSolver(Oracle::SubProblem instance);
   ~LPSolveSolver() = default;
 
   int simple() override;

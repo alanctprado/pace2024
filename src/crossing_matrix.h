@@ -33,7 +33,7 @@ public:
 
   // NOTE: returns -1 if pair is not orientable
   int operator()(int u, int v) const;
-  static std::vector<std::unordered_map<int, int>>
+  static std::array<std::unordered_map<int, int>, 2>
   getIntervals(const graph::BipartiteGraph &graph);
   std::vector<std::pair<int, int>> getOrientablePairs();
 

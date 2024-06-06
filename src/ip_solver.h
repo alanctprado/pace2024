@@ -28,11 +28,11 @@ namespace solver {
 namespace ip {
 
 class IntegerProgrammingSolverBase
-    : public MetaSolver<graph::BipartiteGraph, int>
+    : public MetaSolver
 {
 public:
-  IntegerProgrammingSolverBase(graph::BipartiteGraph G)
-      : MetaSolver<graph::BipartiteGraph, int>(G){};
+  IntegerProgrammingSolverBase(Oracle::SubProblem G)
+      : MetaSolver(G){};
   ~IntegerProgrammingSolverBase() = default;
   virtual int solve() = 0;
 };
@@ -41,7 +41,8 @@ public:
  * This class defines an integer programming solver for the OSCM problem. It is
  * an abstract class which will be extended by each solver.
  */
-class IntegerProgrammingSolver : public MetaSolver
+template <class T, class U>
+class IntegerProgrammingSolver : public IntegerProgrammingSolverBase
 {
 public:
   IntegerProgrammingSolver(Oracle::SubProblem G);
@@ -96,6 +97,7 @@ protected:
    * Quadratic formulation
    *
    * TODO: explain @mvkaio?
+   * mvkaio> no :(
    */
   virtual int quadratic() = 0;
 
@@ -103,6 +105,7 @@ protected:
    * Vinicius' formulation
    *
    * TODO: explain @mvkaio?
+   * mvkaio> no :(
    */
   virtual int vini() = 0;
 
@@ -133,12 +136,12 @@ protected:
 };
 
 template <class T, class U>
-IntegerProgrammingSolver<T, U>::IntegerProgrammingSolver(
-    graph::BipartiteGraph graph)
-    : IntegerProgrammingSolverBase(graph)
+IntegerProgrammingSolver<T, U>::IntegerProgrammingSolver(Oracle::SubProblem instance)
+    : IntegerProgrammingSolverBase(instance)
 {}
 
-template <class T, class U> int IntegerProgrammingSolver<T, U>::solve()
+template <class T, class U>
+int IntegerProgrammingSolver<T, U>::solve()
 {
   options::HolderIP ip_options = Environment::options().ip;
   switch (ip_options.formulation)
@@ -158,12 +161,11 @@ template <class T, class U> int IntegerProgrammingSolver<T, U>::solve()
   default:
     break;
   }
-  throw std::runtime_error("Do the L");
+  throw std::runtime_error("Invalid IP Formulation");
 }
 
 template <class T, class U>
-std::pair<int, bool> IntegerProgrammingSolver<T, U>::triangularIndex(int i,
-                                                                     int j)
+std::pair<int, bool> IntegerProgrammingSolver<T, U>::triangularIndex(int i, int j)
 {
   assert(i != j);
   int index = (i > j) ? i * (i - 1) / 2 + j : j * (j - 1) / 2 + i;

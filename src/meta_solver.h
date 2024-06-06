@@ -43,7 +43,7 @@ public:
 
 protected:
   Oracle::SubProblem const m_instance;
-  std::vector<Oracle::Vertex> m_order;
+  Oracle::SubProblem m_order;
 };
 
 } // namespace solver
