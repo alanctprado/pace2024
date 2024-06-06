@@ -37,6 +37,14 @@ public:
   virtual int solve() = 0;
 };
 
+enum class PAIR_STATE
+  {
+    FREE,
+    OR,
+    PRE,
+    POS,
+  };
+
 /**
  * This class defines an integer programming solver for the OSCM problem. It is
  * an abstract class which will be extended by each solver.
@@ -45,9 +53,16 @@ template <class T, class U>
 class IntegerProgrammingSolver : public IntegerProgrammingSolverBase
 {
 public:
+
   IntegerProgrammingSolver(Oracle::SubProblem G);
   ~IntegerProgrammingSolver() = default;
   int solve() override;
+
+  int search_pair(std::vector<std::pair<int, int>> &orientable_pairs,
+                  std::pair<int, int> key);
+
+  PAIR_STATE pair_state(std::unordered_map<int, int> &l,
+                        std::unordered_map<int, int> &r, std::pair<int, int> key);
 
 protected:
   /**
@@ -185,6 +200,43 @@ int IntegerProgrammingSolver<T, U>::yIndex(int i, int j, int n, int offset)
   int index = i * n + j;
   index += offset;
   return index;
+}
+
+template <class T, class U>
+int IntegerProgrammingSolver<T, U>::search_pair(std::vector<std::pair<int, int>> &orientable_pairs,
+                std::pair<int, int> key)
+{
+  auto it =
+      std::lower_bound(orientable_pairs.begin(), orientable_pairs.end(), key);
+
+  if (it == orientable_pairs.end() or *it != key)
+    return -1;
+
+  return std::distance(orientable_pairs.begin(), it);
+}
+
+template <class T, class U>
+PAIR_STATE IntegerProgrammingSolver<T, U>::pair_state(std::unordered_map<int, int> &l,
+                      std::unordered_map<int, int> &r, std::pair<int, int> key)
+{
+  auto [i, j] = key;
+
+  if (l[i] == l[j] and r[i] == r[j] and l[i] == r[i])
+  {
+    return PAIR_STATE::FREE;
+  }
+  else if (r[i] <= l[j])
+  {
+    return PAIR_STATE::PRE; // forced ij
+  }
+  else if (r[j] <= l[i])
+  {
+    return PAIR_STATE::POS; // forced ji
+  }
+  else
+  {
+    return PAIR_STATE::OR;
+  }
 }
 
 } // namespace ip

@@ -32,49 +32,6 @@ namespace banana {
 namespace solver {
 namespace ip {
 
-int search_pair(std::vector<std::pair<int, int>> &orientable_pairs,
-                std::pair<int, int> key)
-{
-  auto it =
-      std::lower_bound(orientable_pairs.begin(), orientable_pairs.end(), key);
-
-  if (it == orientable_pairs.end() or *it != key)
-    return -1;
-
-  return std::distance(orientable_pairs.begin(), it);
-}
-
-enum class PAIR_STATE
-{
-  FREE,
-  OR,
-  PRE,
-  POS,
-};
-
-PAIR_STATE pair_state(std::unordered_map<int, int> &l,
-                      std::unordered_map<int, int> &r, std::pair<int, int> key)
-{
-  auto [i, j] = key;
-
-  if (l[i] == l[j] and r[i] == r[j] and l[i] == r[i])
-  {
-    return PAIR_STATE::FREE;
-  }
-  else if (r[i] <= l[j])
-  {
-    return PAIR_STATE::PRE; // forced ij
-  }
-  else if (r[j] <= l[i])
-  {
-    return PAIR_STATE::POS; // forced ji
-  }
-  else
-  {
-    return PAIR_STATE::OR;
-  }
-}
-
 LPSolveSolver::LPSolveSolver(Oracle::SubProblem instance)
     : IntegerProgrammingSolver<lprec, std::vector<double>>(instance)
 {}

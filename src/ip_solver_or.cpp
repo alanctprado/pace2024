@@ -41,10 +41,25 @@ int OrToolsSolver::simple() { throw std::runtime_error("Not implemented.\n"); }
 
 int OrToolsSolver::shorter()
 {
-  std::vector<std::vector<int>> cm = m_graph.buildCrossingMatrix();
+  const auto& m_oracle = Environment::oracle();
+  auto pairs = m_oracle.getOrientablePairs(m_instance);
+  auto orientable_pairs = pairs;
+  for (auto [i, j] : pairs) orientable_pairs.emplace_back(j, i);
+  std::sort(orientable_pairs.begin(), orientable_pairs.end());
 
+  auto intervals = m_oracle.getIntervalMaps(m_instance);
+
+  std::unordered_map<int, int> l, r;
+  l = intervals[0], r = intervals[1];
+
+  auto cm = [&] (int i, int j) {
+    const auto& _vi = m_vertex_map[i];
+    const auto& _vj = m_vertex_map[j];
+    return m_oracle.getCrossings(_vi, _vj);
+  };
+  
   unsigned n = m_graph.countVerticesB();
-  unsigned columns = n * (n - 1) / 2;
+  const int number_vars = pairs.size();
 
   std::unique_ptr<MPSolver> model;
 
@@ -79,23 +94,57 @@ int OrToolsSolver::shorter()
   }
 
   std::vector<MPVariable *> variables;
-  model->MakeBoolVarArray((int)columns, std::string{"x"}, &variables);
+  model->MakeBoolVarArray((int)number_vars, std::string{"x"}, &variables);
 
   MPObjective *const objective = model->MutableObjective();
 
   int objective_offset = 0;
-  for (int i = 0; i < n; i++)
+  for (int idx = 0; idx < number_vars; idx++)
   {
-    for (int j = 0; j < i; j++)
-    {
-      objective->SetCoefficient(variables[triangularIndex(i, j).first],
-                                cm[i][j] - cm[j][i]);
-      objective_offset += cm[j][i];
-    }
+    auto [i, j] = pairs[idx];
+    assert(i < j);
+
+    objective->SetCoefficient(variables[idx], cm(i, j) - cm(j, i));
+    objective_offset += cm(j, i);
   }
 
   objective->SetMinimization();
   objective->SetOffset(objective_offset);
+
+  /** Heuristic constraints */
+
+  const auto &opt = Environment::options().ip.heuristicMode;
+
+  if (opt == options::IPHeuristicMode::ON)
+  {
+
+    const auto& obj_ref = model->Objective();
+    const auto& var_ref = model->Variables();
+
+    std::vector<std::unique_ptr<heuristic::ApproximationRoutine>> heuristics;
+
+    heuristics.push_back(
+        std::make_unique<heuristic::barycenter::BarycenterHeuristic>(m_instance));
+    heuristics.push_back(
+        std::make_unique<heuristic::median::MedianHeuristic>(m_instance));
+
+    int best_heuristic_objective = -1;
+
+    for (const auto &h : heuristics)
+    {
+      int obj = h->solve();
+      if (best_heuristic_objective == -1 || best_heuristic_objective > obj)
+      {
+        best_heuristic_objective = obj;
+      }
+    }
+
+    // we add a constraint saying that the objective value (reusing the
+    // values of from the objective loop) is less than or equal to the
+    // best objective value from the heuristics
+    MPConstraint *constraint = model->MakeRowConstraint();
+    add_constraint(lp, c.data(), LE, best_heuristic_objective);
+  }
 
   /** Transitivity constraints */
   int index, b;

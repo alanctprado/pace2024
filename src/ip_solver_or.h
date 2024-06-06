@@ -35,7 +35,7 @@ class OrToolsSolver
     : public IntegerProgrammingSolver<MPSolver, std::vector<MPVariable>>
 {
 public:
-  OrToolsSolver(graph::BipartiteGraph G,
+  OrToolsSolver(Oracle::Subproblem instance,
                 const options::IPSubSolverMode &subSolver);
   ~OrToolsSolver() = default;
 

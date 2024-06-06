@@ -8,7 +8,7 @@ project(pace2024)
 set (pace2024_VERSION_MAJOR 1)
 set (pace2024_VERSION_MINOR 0)
 
-option(USE_OR_TOOLS "Use OR-Tools interface" OFF)
+option(USE_OR_TOOLS "Use OR-Tools interface" ON)
 option(USE_GUROBI "Use Gurobi IP Solver" OFF)
 option(USE_LPSOLVE "Use LPSolve IP Solver" ON)
 
@@ -45,9 +45,33 @@ if(USE_OR_TOOLS)
   add_definitions(-DUSE_OR_TOOLS)
   
   # Specify the path to the or-tools library and include directories
-  set(ORTOOLS_ROOT /or-tools)
-  include_directories(${ORTOOLS_ROOT}/include)
-  link_directories(${ORTOOLS_ROOT}/lib)
+  # set(ORTOOLS_ROOT /or-tools)
+  # include_directories(${ORTOOLS_ROOT}/include)
+  # link_directories(${ORTOOLS_ROOT}/lib)
+  # Define the OR-Tools version and repository
+  set(ORTOOLS_VERSION "9.10")
+  set(ORTOOLS_REPO "https://github.com/google/or-tools.git")
+
+  # Define the installation prefix for OR-Tools
+  set(ORTOOLS_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/deps/or-tools")
+
+  # Add the external project for OR-Tools
+  ExternalProject_Add(
+    or-tools-ep
+    PREFIX ${ORTOOLS_INSTALL_PREFIX}
+    GIT_REPOSITORY ${ORTOOLS_REPO}
+    GIT_TAG v${ORTOOLS_VERSION}
+    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${ORTOOLS_INSTALL_PREFIX} -DBUILD_DEPS=ON
+    BUILD_IN_SOURCE 0
+    UPDATE_DISCONNECTED 1
+    INSTALL_DIR ${EXTERNAL_INSTALL_PREFIX}
+  )
+
+  # Add the include directories
+  include_directories(${ORTOOLS_INSTALL_PREFIX}/include)
+
+  # Find the OR-Tools library
+  find_library(ORTOOLS_LIB ortools PATHS ${ORTOOLS_INSTALL_PREFIX}/lib)
 endif()
 
 set(SRC_FILES
