@@ -65,19 +65,39 @@ Oracle::getIntervalMaps(const SubProblem& instance) const
 {
   std::unordered_map<int, int> l, r;
   for (auto b : instance) {
-    std::tie(l[b.first], r[b.first]) = getInterval(b.first);
+    auto [li, ri] = getInterval(b.first);
+    l[b.first] = li;
+    r[b.first] = ri;
   }
   return {l, r};
+}
+
+int Oracle::degree(int b_vertex) const {
+  return m_graph.neighborhood(b_vertex + countVerticesA()).size();
 }
 
 /** TODO: Verify how to use crossing_matrix */
 int Oracle::getCrossings(Vertex v_i, Vertex v_j) const {
     auto &[i, w_i] = v_i;
     auto &[j, w_j] = v_j;
-    F answer = w_i * w_j * F(m_crossing_matrix(i, j));
+    if (i == j) return 0;
+    int cm = m_crossing_matrix(i + countVerticesA(), j + countVerticesA());
+    F answer = w_i * w_j * F(cm);
+
+    if (cm == -1) {
+      auto [li, ri] = getInterval(i);
+      auto [lj, rj] = getInterval(j);
+      if (ri <= lj) return 0;
+      else {
+        assert(rj <= li);
+        answer = w_i * w_j * F(degree(i)) * F(degree(j));
+      }
+    }
+
     assert(answer.den() == 1);
     return answer.num();
 }
+
 
 int Oracle::numberOfCrossings(const std::vector<Vertex> &order) const
 {
@@ -207,8 +227,8 @@ std::vector<std::pair<int, int>> Oracle::getOrientablePairs(const SubProblem &p)
   std::vector<std::tuple<int, State, int>> events; // coordinate, (termino/inicio), vertice
   for (int i = 0; i < p.size(); ++i) {
     auto [l, r] = getInterval(p[i].first);
-    events.emplace_back(l, START, i);
-    events.emplace_back(r, FINISH, i);
+    events.emplace_back(l, START, p[i].first);
+    events.emplace_back(r, FINISH, p[i].first);
   }
   std::sort(begin(events), end(events));
   std::vector<std::pair<int, int>> answer;

@@ -402,7 +402,6 @@ int LPSolveSolver::shorter()
   for (auto [i, j] : orientable_pairs)
   {
     PAIR_STATE st_ij = pair_state(l, r, {i, j});
-    std::cerr << i << " " << j << std::endl;
     assert(st_ij == PAIR_STATE::OR);
 
     for (auto [k, _] : m_instance)

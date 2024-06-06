@@ -8,7 +8,7 @@ project(pace2024)
 set (pace2024_VERSION_MAJOR 1)
 set (pace2024_VERSION_MINOR 0)
 
-option(USE_OR_TOOLS "Use OR-Tools interface" ON)
+option(USE_OR_TOOLS "Use OR-Tools interface" OFF)
 option(USE_GUROBI "Use Gurobi IP Solver" OFF)
 option(USE_LPSOLVE "Use LPSolve IP Solver" ON)
 

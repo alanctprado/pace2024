@@ -79,9 +79,9 @@ void BaseSolver::runBanana()
   }
 
   // this solves the instance! :D
-  //Preprocessing::kill_isolated(subProblem);
-  // Preprocessing::twins(subProblem);
-  BaseSolver::recursiveSolver(subProblem);
+  Preprocessing::kill_isolated(subProblem);
+  //Preprocessing::twins(subProblem);
+  //BaseSolver::recursiveSolver(subProblem);
   
   if (Environment::options().verify.verifyMode ==
       banana::options::VerifyMode::COMPLETE)
@@ -97,7 +97,7 @@ void BaseSolver::runBanana()
 void BaseSolver::recursiveSolver(Oracle::SubProblem &instance) {
   if (instance.size() <= 1) return;
   //if (Preprocessing::lmr_reduction(instance)) return;
-  //if (Preprocessing::cut_by_pieces(instance)) return;
+  if (Preprocessing::cut_by_pieces(instance)) return;
   std::sort(instance.begin(), instance.end());
 
   const auto &ip_solver = Environment::options().ip.solverMode;
@@ -106,6 +106,7 @@ void BaseSolver::recursiveSolver(Oracle::SubProblem &instance) {
   int expected_crossings = m_ipSolver->solve();
   instance.clear();
   m_ipSolver->explain(instance);
+  //std::cout << "expected_crossings = " << expected_crossings << std::endl;
   assert(Environment::oracle().verify(instance, expected_crossings));
 }
 

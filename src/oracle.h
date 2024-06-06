@@ -57,6 +57,8 @@ public:
     std::vector<std::pair<int, int>>
     getIntervals(std::vector<int> b_vertices) const;
 
+    int degree(int b_vertex) const;
+
     /** Returns [min, max] neighbors as 2 unordered_maps */
     std::array<std::unordered_map<int, int>, 2>
     getIntervalMaps(const SubProblem &instance) const;

@@ -18,6 +18,7 @@
 
 #include "bipartite_graph.h"
 #include <unordered_map>
+#include <array>
 #include <map>
 
 namespace banana {
