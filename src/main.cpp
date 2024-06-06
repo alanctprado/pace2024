@@ -13,11 +13,12 @@
  * Main.
  */
 
-#include "base_solver.h"
 #include "bipartite_graph.h"
 #include "environment.h"
+#include "meta_solver.h"
 #include "utils.h"
-#include <iostream>
+#include "oracle.h"
+#include "dp_solver.h"
 #include <memory>
 
 /** Remove assertions before submitting!! */
@@ -29,7 +30,16 @@ int main(int argc, char *argv[])
   std::unique_ptr<banana::graph::BipartiteGraph> input_graph;
   banana::utils::readBipartiteGraph(input_graph);
   env.initOracle(*input_graph);
-  banana::solver::BaseSolver bananao(*input_graph.get());
-  bananao.runBanana();
+
+  banana::solver::Oracle::SubProblem subProblem;
+  for (int i = 0; i < input_graph->countVerticesB(); i++)
+    subProblem.emplace_back(i, 1);
+  banana::solver::MetaSolver* bananasso = new banana::solver::dp::DPSolver(subProblem);
+  int ans2 = bananasso->solve();
+  std::vector<banana::solver::Oracle::Vertex> ans;
+  bananasso->explain(ans);
+  for (auto[v, f] : ans)
+    std::cout << v + input_graph->countVerticesA() + 1 << "\n";
+  
   exit(0);
 }
