@@ -8,9 +8,9 @@ project(pace2024)
 set (pace2024_VERSION_MAJOR 1)
 set (pace2024_VERSION_MINOR 0)
 
-option(USE_OR_TOOLS "Use OR-Tools interface" ON)
+option(USE_OR_TOOLS "Use OR-Tools interface" OFF)
 option(USE_GUROBI "Use Gurobi IP Solver" OFF)
-option(USE_LPSOLVE "Use LPSolve IP Solver" OFF)
+option(USE_LPSOLVE "Use LPSolve IP Solver" ON)
 
 # Headers
 include(ExternalProject)
@@ -62,6 +62,7 @@ set(SRC_FILES
   "${PROJECT_SOURCE_DIR}/src/ip_solver_gurobi.cpp"
   "${PROJECT_SOURCE_DIR}/src/ip_solver_or.cpp"
   "${PROJECT_SOURCE_DIR}/src/options.cpp"
+  "${PROJECT_SOURCE_DIR}/src/preprocessing.cpp"
   "${PROJECT_SOURCE_DIR}/src/meta_solver.cpp"
   "${PROJECT_SOURCE_DIR}/src/oracle.cpp"
   "${PROJECT_SOURCE_DIR}/src/wlgraph.cpp"

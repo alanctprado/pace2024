@@ -41,7 +41,7 @@ namespace median {
 class MedianHeuristic : public ApproximationRoutine
 {
 public:
-  MedianHeuristic(graph::BipartiteGraph graph);
+  MedianHeuristic(Oracle::SubProblem instance);
   ~MedianHeuristic() override = default;
   int solve() override;
 

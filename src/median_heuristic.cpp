@@ -14,6 +14,7 @@
  */
 
 #include "median_heuristic.h"
+#include "environment.h"
 #include <algorithm>
 
 namespace banana {
@@ -21,8 +22,8 @@ namespace solver {
 namespace heuristic {
 namespace median {
 
-MedianHeuristic::MedianHeuristic(graph::BipartiteGraph graph)
-    : ApproximationRoutine(graph)
+MedianHeuristic::MedianHeuristic(Oracle::SubProblem instance)
+    : ApproximationRoutine(instance)
 {}
 
 int MedianHeuristic::median(std::vector<int> &neighbors)
@@ -38,18 +39,18 @@ int MedianHeuristic::median(std::vector<int> &neighbors)
 
 int MedianHeuristic::solve()
 {
-  int n0 = m_graph.countVerticesA();
-  int n1 = m_graph.countVerticesB();
-  std::vector<std::vector<int>> med_layer(n0);
+  const auto& m_oracle = Environment::oracle();
+  int n0 = m_oracle.countVerticesA();
+  std::vector<std::vector<Oracle::Vertex>> med_layer(n0);
 
-  for (int i = n0; i < n1 + n0; i++)
+  for (auto [i, frac] : m_instance)
   {
-    std::vector<int> neighborhood = m_graph.neighborhood(i);
+    std::vector<int> neighborhood = m_oracle.neighborhood(i);
     int med = MedianHeuristic::median(neighborhood);
-    med_layer[med].push_back(i);
+    med_layer[med].push_back({i, frac});
   }
 
-  std::vector<int> b_layer;
+  std::vector<Oracle::Vertex> b_layer;
   for (int i = 0; i < n0; i++)
   {
     for (int j = 0; j < med_layer[i].size(); j++)
@@ -58,7 +59,7 @@ int MedianHeuristic::solve()
     }
   }
 
-  return numberOfCrossings(b_layer);
+  return m_oracle.numberOfCrossings(b_layer);
 }
 
 } // namespace median

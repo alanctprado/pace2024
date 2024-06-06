@@ -24,6 +24,7 @@
 #include "options.h"
 
 #include <numeric>
+#include <array>
 #include <stdexcept>
 #include <iostream>
 
@@ -81,8 +82,11 @@ LPSolveSolver::LPSolveSolver(Oracle::SubProblem instance)
 int LPSolveSolver::simple()
 {
   const auto& m_oracle = Environment::oracle();
-  auto orientable_pairs = m_oracle.getOrientablePairs(m_instance);
-  auto intervals = m_oracle.getIntervalMaps(m_instance);
+  auto pairs = m_oracle.getOrientablePairs(m_instance);
+  auto orientable_pairs = pairs;
+  for (auto [i, j] : pairs) orientable_pairs.emplace_back(j, i);
+  std::sort(orientable_pairs.begin(), orientable_pairs.end());
+  std::array<std::unordered_map<int, int>, 2> intervals = m_oracle.getIntervalMaps(m_instance);
 
   std::unordered_map<int, Oracle::Vertex> m_vertex_map;
   for (auto vertex : m_instance) {
@@ -129,9 +133,9 @@ int LPSolveSolver::simple()
     std::vector<std::unique_ptr<heuristic::ApproximationRoutine>> heuristics;
 
     heuristics.push_back(
-        std::make_unique<heuristic::barycenter::BarycenterHeuristic>(m_graph));
+        std::make_unique<heuristic::barycenter::BarycenterHeuristic>(m_instance));
     heuristics.push_back(
-        std::make_unique<heuristic::median::MedianHeuristic>(m_graph));
+        std::make_unique<heuristic::median::MedianHeuristic>(m_instance));
 
     int best_heuristic_objective = -1;
 
@@ -356,7 +360,11 @@ int LPSolveSolver::simple()
 int LPSolveSolver::shorter()
 {
   const auto& m_oracle = Environment::oracle();
-  auto orientable_pairs = m_oracle.getOrientablePairs(m_instance);
+  auto pairs = m_oracle.getOrientablePairs(m_instance);
+  auto orientable_pairs = pairs;
+  for (auto [i, j] : pairs) orientable_pairs.emplace_back(j, i);
+  std::sort(orientable_pairs.begin(), orientable_pairs.end());
+
   auto intervals = m_oracle.getIntervalMaps(m_instance);
 
   std::unordered_map<int, Oracle::Vertex> m_vertex_map;
@@ -372,14 +380,6 @@ int LPSolveSolver::shorter()
 
   std::unordered_map<int, int> l, r;
   l = intervals[0], r = intervals[1];
-
-  // Extract ordered list of indexes where i < j
-  std::vector<std::pair<int, int>> pairs;
-  for (auto [i, j] : orientable_pairs)
-  {
-    if (i < j)
-      pairs.push_back({i, j});
-  }
 
   const int number_vars = pairs.size();
 
@@ -417,9 +417,9 @@ int LPSolveSolver::shorter()
     std::vector<std::unique_ptr<heuristic::ApproximationRoutine>> heuristics;
 
     heuristics.push_back(
-        std::make_unique<heuristic::barycenter::BarycenterHeuristic>(m_graph));
+        std::make_unique<heuristic::barycenter::BarycenterHeuristic>(m_instance));
     heuristics.push_back(
-        std::make_unique<heuristic::median::MedianHeuristic>(m_graph));
+        std::make_unique<heuristic::median::MedianHeuristic>(m_instance));
 
     int best_heuristic_objective = -1;
 
@@ -438,11 +438,6 @@ int LPSolveSolver::shorter()
     add_constraint(lp, c.data(), LE, best_heuristic_objective);
   }
 
-  // we add a constraint saying that the objective value (reusing the
-  // values of from the objective loop) is less than or equal to the
-  // best objective value from the heuristics
-  add_constraint(lp, c.data(), LE, best_heuristic_objective - objective_offset);
-
   /** Transitivity constraints */
   std::fill(c.begin(), c.end(), 0);
   // NOTE: This iterates over orientable_pairs, not pairs, because it needs to
@@ -450,6 +445,7 @@ int LPSolveSolver::shorter()
   for (auto [i, j] : orientable_pairs)
   {
     PAIR_STATE st_ij = pair_state(l, r, {i, j});
+    std::cerr << i << " " << j << std::endl;
     assert(st_ij == PAIR_STATE::OR);
 
     for (auto [k, _] : m_instance)
