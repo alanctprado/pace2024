@@ -86,6 +86,8 @@ public:
     std::vector<std::pair<int, int>>
     getOrientablePairs(const SubProblem &instance) const;
 
+    std::vector<std::pair<int, int>> getOrientablePairsIdx(const SubProblem &p) const;
+
   protected:
     graph::BipartiteGraph m_graph;
     crossing::CrossingMatrix m_crossing_matrix;

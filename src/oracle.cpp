@@ -269,6 +269,53 @@ std::vector<std::pair<int, int>> Oracle::getOrientablePairs(const SubProblem &p)
   return answer;
 }
 
+std::vector<std::pair<int, int>> Oracle::getOrientablePairsIdx(const SubProblem &p) const {
+  enum State { FINISH, START };
+  std::vector<std::tuple<int, State, int>> events; // coordinate, (termino/inicio), vertice
+  for (int i = 0; i < p.size(); ++i) {
+    auto [l, r] = getInterval(p[i].first);
+    events.emplace_back(l, START, i);
+    events.emplace_back(r, FINISH, i);
+  }
+  std::sort(begin(events), end(events));
+  std::vector<std::pair<int, int>> answer;
+  std::set<int> alive;
+  for (int l = 0, r = 0; l < (int)events.size(); l = r) {
+    while (r < (int)events.size() &&
+        std::get<0>(events[l]) == std::get<0>(events[r]) &&
+        std::get<1>(events[l]) == std::get<1>(events[r])) r++;
+
+    auto type = std::get<1>(events[l]);
+    if (type == FINISH) {
+      for (int i = l; i < r; i++) {
+        auto [coord, _, vertex] = events[i];
+        alive.erase(vertex);
+      }
+      for (int i = l; i < r; i++) {
+        auto [coord, _, vertex] = events[i];
+        auto [l1, r1] = getInterval(vertex);
+        if (l1 == r1) {
+          for (auto v : alive)
+            answer.emplace_back(vertex, v);
+        }
+      }
+    } else {
+      for (int i = l; i < r; i++) {
+        auto [coord, _, vertex] = events[i];
+        auto [l1, r1] = getInterval(vertex);
+        if (l1 != r1) {
+          for (auto v : alive)
+            answer.emplace_back(vertex, v);
+          alive.insert(vertex);
+        }
+      }
+    }
+  }
+  for (auto &[i, j] : answer) if (i > j) std::swap(i, j);
+  std::sort(answer.begin(), answer.end());
+  return answer;
+}
+
 std::vector<std::pair<int, int>> Oracle::getCompressedIntervals(const SubProblem& instance) const {
 
   std::vector<int> c;

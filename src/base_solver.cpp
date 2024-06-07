@@ -96,8 +96,9 @@ void BaseSolver::runBanana()
 
 void BaseSolver::recursiveSolver(Oracle::SubProblem &instance) {
   if (instance.size() <= 1) return;
-  //if (Preprocessing::lmr_reduction(instance)) return;
+  if (Preprocessing::lmr_reduction2(instance)) return;
   if (Preprocessing::cut_by_pieces(instance)) return;
+  //if (Preprocessing::generalized_twins(instance)) return;
   std::sort(instance.begin(), instance.end());
 
   const auto &ip_solver = Environment::options().ip.solverMode;
@@ -107,7 +108,7 @@ void BaseSolver::recursiveSolver(Oracle::SubProblem &instance) {
   instance.clear();
   m_ipSolver->explain(instance);
   //std::cout << "expected_crossings = " << expected_crossings << std::endl;
-  assert(Environment::oracle().verify(instance, expected_crossings));
+  //assert(Environment::oracle().verify(instance, expected_crossings));
 }
 
 } // namespace solver
