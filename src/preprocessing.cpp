@@ -15,6 +15,7 @@
 
 #include <iostream>
 #include <set>
+#include <stdexcept>
 
 namespace banana {
 namespace solver {
@@ -24,7 +25,6 @@ bool Preprocessing::lmr_reduction(Oracle::SubProblem &instance) {
 
   int m = 0, n = instance.size(), tam_ini = instance.size();
 
-  auto instance2 = instance;
   auto intervals = m_oracle.getCompressedIntervals(instance);
       
   for (auto [l, r] : intervals) m = std::max({m, l, r});
@@ -209,7 +209,7 @@ void Preprocessing::twins(Oracle::SubProblem &instance) {
 
       sort(begin(twins_repr), end(twins_repr));
 
-      instance = move(new_instance);
+      instance = std::move(new_instance);
 
       BaseSolver::recursiveSolver(instance);
 
@@ -227,7 +227,7 @@ void Preprocessing::twins(Oracle::SubProblem &instance) {
       }
 
 
-      instance = move(new_instance);
+      instance = std::move(new_instance);
 
       int tam_fim = instance.size();
 
@@ -235,11 +235,12 @@ void Preprocessing::twins(Oracle::SubProblem &instance) {
 }
 
 bool Preprocessing::lmr_reduction2(Oracle::SubProblem &instance) {
+  instance.erase(std::unique(instance.begin(), instance.end()), instance.end());
   const auto& m_oracle = Environment::oracle();
 
   int m = 0, n = instance.size(), tam_ini = instance.size();
+  Oracle::SubProblem original = instance;
 
-  auto instance2 = instance;
   auto intervals = m_oracle.getCompressedIntervals(instance);
       
   for (auto [l, r] : intervals) m = std::max({m, l, r});
@@ -259,21 +260,21 @@ bool Preprocessing::lmr_reduction2(Oracle::SubProblem &instance) {
   };
 
   auto get_left = [&] (auto&& self, int l, int r, int p, int a, int b) -> int {
-	if (b < l or r < a or segtree[0][p] == 0) return m+1;
-	if (r == l) return l;
-	int md = (l+r)/2;
-	int x = self(self, l, md, 2*p, a, b);
-	if (x != m+1) return x;
-	return self(self, md+1, r, 2*p+1, a, b);
+    if (b < l or r < a or segtree[0][p] == 0) return m+1;
+    if (r == l) return l;
+    int md = (l+r)/2;
+    int x = self(self, l, md, 2*p, a, b);
+    if (x != m+1) return x;
+    return self(self, md+1, r, 2*p+1, a, b);
   };
 
-   auto get_right = [&] (auto&& self, int l, int r, int p, int a, int b) -> int {
-	if (b < l or r < a or segtree[1][p] == 0) return -1;
-	if (r == l) return l;
-	int m = (l+r)/2;
-	int x = self(self, m+1, r, 2*p+1, a, b);
-	if (x != -1) return x;
-	return self(self, l, m, 2*p, a, b);
+  auto get_right = [&] (auto&& self, int l, int r, int p, int a, int b) -> int {
+    if (b < l or r < a or segtree[1][p] == 0) return -1;
+    if (r == l) return l;
+    int m = (l+r)/2;
+    int x = self(self, m+1, r, 2*p+1, a, b);
+    if (x != -1) return x;
+    return self(self, l, m, 2*p, a, b);
   };
 
   for (auto [l, r] : intervals) {
@@ -388,30 +389,31 @@ bool Preprocessing::lmr_reduction2(Oracle::SubProblem &instance) {
   new_instance.clear();
   // TODO: checar se o compilador ta desaparecendo com memoria desnecessaria
   
-  BaseSolver::recursiveSolver(instance); 
+  BaseSolver::recursiveSolver(instance);
 
-      for (int i = (int) removidos.size() - 1; i >= 0; --i) {
-            BaseSolver::recursiveSolver(removidos[i]);
-            int l_max = -1;
-            for (int j = 0; j < instance.size(); ++j) {
-                  for (auto k : removidos[i]) {
-                        int uv = m_oracle.getCrossings(k, instance[j]), vu = m_oracle.getCrossings(instance[j], k);
-                        if (vu < uv) l_max = j;
-                  }
-            } 
-            if (instance.empty()) {
-                  for (auto u : removidos[i]) instance.push_back(u);
-            }
-            else {
-                  for (int j = (int) removidos[i].size() - 1; j >= 0; --j) {
-                        instance.insert(begin(instance)+l_max+1, removidos[i][j]);
-                  }
-            }
-      }
-      // std::cout<<"TANKEI TUDO!!!"<<std::endl;
-      int tam_fim = instance.size();
-      assert(tam_fim == tam_ini);
+  for (int i = (int) removidos.size() - 1; i >= 0; --i) {
+        BaseSolver::recursiveSolver(removidos[i]);
+        int l_max = -1;
+        for (int j = 0; j < instance.size(); ++j) {
+              for (auto k : removidos[i]) {
+                    int uv = m_oracle.getCrossings(k, instance[j]), vu = m_oracle.getCrossings(instance[j], k);
+                    if (vu < uv) l_max = j;
+              }
+        } 
+        if (instance.empty()) {
+              for (auto u : removidos[i]) instance.push_back(u);
+        }
+        else {
+              for (int j = (int) removidos[i].size() - 1; j >= 0; --j) {
+                    instance.insert(begin(instance)+l_max+1, removidos[i][j]);
+              }
+        }
+  }
+  // std::cout<<"TANKEI TUDO!!!"<<std::endl;
+  instance.erase(std::unique(instance.begin(), instance.end()), instance.end());
+  int tam_fim = instance.size();
 
+  assert(tam_fim == tam_ini);
   return true;
 }
 
@@ -472,7 +474,7 @@ void Preprocessing::kill_isolated(Oracle::SubProblem &instance) {
             if (m_oracle.neighborhood(vertex.first).empty()) isolated.push_back(vertex);
             else new_instance.push_back(vertex);
       }
-      instance = move(new_instance);
+      instance = std::move(new_instance);
       // BaseSolver::recursiveSolver(instance);
       Preprocessing::twins(instance);
       for (auto vertex : isolated) instance.push_back(vertex);
