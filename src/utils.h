@@ -47,6 +47,17 @@ readBipartiteGraph(std::unique_ptr<graph::BipartiteGraph> &input_graph)
   int n_a, n_b, edge_count;
   in >> discard >> discard >> n_a >> n_b >> edge_count;
 
+  // NOTE: read parametrized track's extra input
+  int cutwidth;
+  if (in >> cutwidth) {
+    std::vector<int> order(n_a+n_b);
+    for (int &i : order)
+    {
+      readNextLine(in);
+      in >> i;
+    }
+  }
+
   input_graph = std::make_unique<graph::BipartiteGraph>(n_a, n_b);
 
   for (unsigned i = 0; i < (unsigned)edge_count; i++)
